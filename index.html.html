@@ -1,0 +1,2459 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Yiyi — SyMEC (Onyx)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes floaty { 0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)} }
+    .floaty{ animation: floaty 3s ease-in-out infinite; }
+    .typing-dots span{ display:inline-block; width:6px; height:6px; margin:0 3px; border-radius:999px; background:rgba(255,255,255,0.6); transform:scale(0.6); animation: blink 1s infinite; }
+    .typing-dots span:nth-child(2){ animation-delay:.15s } .typing-dots span:nth-child(3){ animation-delay:.3s }
+    @keyframes blink { 0%{transform:scale(0.6);opacity:0.4}50%{transform:scale(1);opacity:1}100%{transform:scale(0.6);opacity:0.4} }
+
+    .bubble-user{ background: linear-gradient(90deg,#a5f3fc,#60a5fa); color:#03203C; }
+    .bubble-assistant{ background: linear-gradient(90deg,#f3f4f6,#e6e9ef); color:#0b1220; }
+
+    .card-anim{ transform-origin:center; transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s; }
+    .card-anim:hover{ transform: translateY(-6px) scale(1.01); box-shadow: 0 14px 35px rgba(8,15,30,0.12); }
+
+    .glass{ background: rgba(255,255,255,0.06); backdrop-filter: blur(6px); }
+    .scrollbar-thin::-webkit-scrollbar{ height:8px; width:8px; }
+    .scrollbar-thin::-webkit-scrollbar-thumb{ background: rgba(255,255,255,0.12); border-radius:8px; }
+
+    pre { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace; font-size:13px; }
+
+    /* Catalog utils */
+    .hiddenItem { display:none; }
+    .toggleBtn { background: #ff6ad5; color: white; padding: 6px 10px; border: none; border-radius: 8px; margin-top: 6px; cursor: pointer; }
+    .catalog-item { transition: all .18s ease; }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-indigo-900 to-purple-900 text-slate-100 min-h-screen">
+
+  <div class="max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+    <!-- Left: Branding & quick actions -->
+    <aside class="lg:col-span-1 rounded-2xl p-5 glass border border-white/6">
+      <div class="flex items-center gap-3">
+        <div class="w-16 h-16 rounded-xl bg-gradient-to-r from-pink-500 to-violet-500 flex items-center justify-center floaty overflow-hidden">
+          <!-- Replace `1.png` with your actual logo path if needed -->
+          <img src="1.png" class="w-12 h-12 object-contain" alt="Yiyi logo"/>
+        </div>
+        <div>
+          <h1 class="text-xl font-semibold">Yiyi — SyMEC Hub</h1>
+          <p class="text-sm text-slate-300">Soporte y Mantenimiento de Equipo de Cómputo</p>
+        </div>
+      </div>
+
+      <div class="mt-5">
+        <input id="kbSearch" aria-label="Buscar en KB" class="w-full rounded-xl p-2 bg-white/5 placeholder:text-slate-300 outline-none" placeholder="Buscar en la base local (ej: 'SSD', 'BIOS', 'imaging')" />
+      </div>
+
+      <div class="mt-4 grid grid-cols-2 gap-3">
+        <button id="openChat" class="rounded-xl py-2 bg-gradient-to-r from-sky-500 to-indigo-500 text-sm font-medium">Abrir Chat</button>
+        <button id="openKB" class="rounded-xl py-2 bg-gradient-to-r from-rose-500 to-orange-400 text-sm font-medium">Abrir Catálogo</button>
+      </div>
+
+      <div class="mt-6 text-xs text-slate-400 space-y-2">
+        <div class="flex items-start gap-2">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+          <div>
+            <strong class="text-slate-100">Modo offline</strong>
+            <div class="text-slate-400">Toda la información está guardada localmente.</div>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-2">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v20M2 12h20"/></svg>
+          <div>
+            <strong class="text-slate-100">Importar / Exportar</strong>
+            <div class="text-slate-400">Guarda o restaura tu KB en JSON.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6">
+        <small class="text-slate-500">Versión:</small>
+        <div class="mt-1 text-xs text-slate-300">Yiyi SyMEC 2.4 · Onyx</div>
+      </div>
+    </aside>
+
+    <!-- Middle: Chat area -->
+    <main id="chatPanel" class="lg:col-span-2 rounded-2xl p-5 glass border border-white/6 flex flex-col min-h-[520px]">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-lg font-semibold">Chat técnico</h2>
+          <p class="text-sm text-slate-400">Pregúntale a Yiyi sobre procedimientos, comandos y consejos prácticos.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <button id="btnVoice" title="Reconocimiento de voz" class="p-2 rounded-xl bg-white/6 hover:bg-white/8">🎙️</button>
+          <button id="btnClear" title="Borrar historial" class="p-2 rounded-xl bg-white/6 hover:bg-white/8">🧹 Limpiar</button>
+        </div>
+      </div>
+
+      <div id="messages" class="mt-4 overflow-auto flex-1 space-y-3 p-3 rounded-xl bg-gradient-to-b from-white/2 to-transparent scrollbar-thin" aria-live="polite"></div>
+
+      <div class="mt-4 flex gap-3 items-end">
+        <textarea id="inputMsg" rows="2" class="flex-1 rounded-2xl p-3 resize-none bg-white/5 outline-none" placeholder="Escribe aquí... (ej: '¿Cómo clono un disco a otro SSD?')"></textarea>
+        <div class="flex flex-col gap-2">
+          <button id="sendBtn" class="px-4 py-2 rounded-2xl bg-gradient-to-r from-emerald-400 to-teal-400 text-black font-semibold">Enviar</button>
+          <button id="btnQuick" class="px-3 py-2 rounded-2xl bg-white/6 text-sm">Plantillas</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Right: Knowledge base catalog -->
+    <aside id="kbPanel" class="lg:col-span-1 rounded-2xl p-5 glass border border-white/6 overflow-auto min-h-[520px]">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-semibold">Catálogo SyMEC</h3>
+          <p class="text-sm text-slate-400">Categorías, guías paso a paso y cheatsheets.</p>
+        </div>
+        <div>
+          <button id="exportKB" class="text-xs px-2 py-1 rounded-xl bg-white/6">Exportar JSON</button>
+        </div>
+      </div>
+
+      <div id="kbList" class="mt-4 space-y-3"></div>
+
+      <div class="mt-4">
+        <h4 class="text-sm font-medium">Modo de estudio</h4>
+        <p class="text-xs text-slate-400">Genera tarjetas de repaso desde cualquier tema.</p>
+        <button id="studyBtn" class="mt-2 px-3 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 text-sm">Iniciar flashcards</button>
+      </div>
+
+      <div class="mt-4 text-xs text-slate-400">
+        <strong>Atajos:</strong>
+        <ul class="list-disc ml-5 mt-2">
+          <li>Ctrl+K: foco en búsqueda</li>
+          <li>Ctrl+Enter: enviar mensaje</li>
+        </ul>
+      </div>
+    </aside>
+
+  </div>
+
+  <div id="modalRoot"></div>
+
+  <script>
+    /* ---------------------------
+       UTILIDADES Y DATOS
+    --------------------------- */
+    const $ = (id) => document.getElementById(id);
+    function uid(prefix='id'){ return prefix + Math.random().toString(36).slice(2,9); }
+
+    const kbSearch = $('kbSearch');
+    const messagesEl = $('messages');
+    const inputMsg = $('inputMsg');
+    const sendBtn = $('sendBtn');
+    const openChat = $('openChat');
+    const openKB = $('openKB');
+    const kbList = $('kbList');
+    const exportKB = $('exportKB');
+    const studyBtn = $('studyBtn');
+    const btnClear = $('btnClear');
+    const btnVoice = $('btnVoice');
+    const btnQuick = $('btnQuick');
+    const modalRoot = $('modalRoot');
+
+    const KB_KEY = 'yiyi_kb_v2';
+    const MSG_KEY = 'yiyi_msgs_v2';
+    const MAX_VISIBLE_ITEMS = 2; // límite por categoría
+
+    /* ---------- Base de conocimiento local (ejemplo) ---------- */    
+
+let kbModules = [
+      {
+        id: 'hardware-basics',
+        title: 'Hardware — Conceptos y Diagnóstico',
+        items: [
+          { id:'cpu-identify', title:'Identificación de CPU y sockets', tags:['CPU','socket'], summary:'Cómo identificar el procesador y socket', content: `*En Windows:*
+1. Abre "Administrador de dispositivos" > "Procesadores".
+2. Usa el comando en CMD: wmic cpu get name
+3. Usa software como CPU-Z (pestaña CPU).
+
+*En Linux:*
+lscpu o cat /proc/cpuinfo | grep "model name"
+
+*Identificar el Socket:*
+Una vez que tengas el modelo de CPU (ej: AMD Ryzen 5 5600X, Intel Core i7-12700K), busca su ficha técnica en la web del fabricante. El socket para el Ryzen 5 5600X es AM4, y para el i7-12700K es LGA 1700.
+`},
+          {
+            id:'ram-troubleshoot', title:'Diagnóstico y test de memoria RAM', tags:['RAM','memtest'], summary:'Detectar fallas en memoria', content: `*Síntomas de RAM defectuosa:*
+- Pantallazos azules (BSOD) frecuentes
+- Aplicaciones se cierran inesperadamente
+- Equipo no enciende o emite beeps
+- Archivos se corrompen
+
+*Procedimiento de diagnóstico:*
+1. MemTest86: Crear USB booteable, ejecutar mínimo 4 pases
+2. Prueba física: Probar módulos individualmente en diferentes slots
+3. Limpieza: Limpiar contactos con borrador de goma blanda
+4. BIOS/UEFI: Verificar configuración XMP/DOCP y voltajes
+
+*Soluciones comunes:*
+- Reacomodar módulos en slots diferentes
+- Restablecer configuración BIOS a valores por defecto
+- Actualizar BIOS/UEFI a la última versión
+`},
+          { id:'psu-check', title:'Comprobar fuente de alimentación (PSU)', tags:['PSU','fuente'], summary:'Pruebas para diagnosticar estado de la fuente de poder', content:`*Señales de alarma:*
+      - Equipo se reinicia bajo carga alta
+      - Olores a quemado o chispas
+      - Voltajes inestables (medir con multímetro)
+
+      *Pruebas básicas:*
+      1. *Test del clip/jumper:* Conectar pin verde (PS_ON) a negro (GND) en conector 24-pin
+      2. *Multímetro:* Verificar voltajes en rails principales:
+         - +12V (amarillo): 11.4V - 12.6V
+         - +5V (rojo): 4.75V - 5.25V  
+         - +3.3V (naranja): 3.14V - 3.47V
+
+      *Factores de reemplazo:*
+      - Edad mayor a 5-7 años
+      - Capacidad insuficiente para componentes actuales
+      - Marcas de baja calidad o sin certificación 80 Plus` },
+
+          { id:'motherboard-components', title:'Componentes críticos de la placa base', tags:['motherboard','placa base'], summary:'Identificación y función de los componentes principales', content:`*Componentes esenciales y su función:*
+
+      *1. Socket CPU:* Determina compatibilidad con procesadores
+      *2. Slots RAM:* DDR4/DDR5, canales dual/quad
+      *3. PCIe Slots:* Para GPU y tarjetas de expansión
+      *4. Conectores SATA/Power:* Alimentación y almacenamiento
+      *5. BIOS/UEFI Chip:* Firmware que controla hardware básico
+      *6. CMOS Battery:* Mantiene configuración y hora del sistema
+
+      *Problemas comunes:*
+      - *BIOS corrupto:* Equipo no POST, recovery mode necesario
+      - *CMOS agotada:* Configuración BIOS no se guarda
+      - *Capacitores inflados:* Fallas de energía, inestabilidad`
+    },
+        
+{
+      id:'cooling-solutions',
+      title:'Sistemas de refrigeración y mantenimiento',
+      tags:['refrigeración', 'temperaturas', 'ventiladores', 'thermal-paste'], summary:'Tipos de refrigeración y mantenimiento preventivo',
+      content:`*Tipos de refrigeración:*
+
+      *Aire:*
+      - *Stock cooler:* Incluido con CPU, suficiente para uso básico
+      - *Aftermarket:* Mejor rendimiento acústico y térmico
+
+      *Líquida:*
+      - *AIO (All-in-One):* Fácil instalación, buen rendimiento
+      - *Custom Loop:* Máximo rendimiento, mantenimiento complejo
+
+      *Mantenimiento preventivo:*
+      1. *Limpieza:* Soplador de aire cada 3-6 meses
+      2. *Pasta térmica:* Cambiar cada 2-3 años
+      3. *Filtros:* Limpiar mensualmente en ambientes polvorientos
+
+      *Temperaturas normales:*
+      - CPU: 35-45°C idle, 65-85°C bajo carga
+      - GPU: 40-50°C idle, 70-85°C gaming`
+    },
+{
+      id:'post-beep-codes',
+      title:'Códigos POST y beeps de diagnóstico',
+      tags:['POST', 'beeps', 'diagnóstico', 'bios', 'motherboard'],
+      summary:'Interpretación de códigos audibles durante el arranque',
+      content:`*Códigos POST comunes (patrones de beeps):*
+
+      *AMI BIOS:*
+      - 1 beep: POST exitoso
+      - 2 beeps: Error de paridad RAM
+      - 3 beeps: Error en primeros 64KB de RAM
+      - 5 beeps: Error de CPU
+      - 8 beeps: Error de GPU
+
+      *Award/Phoenix BIOS:*
+      - 1 beep largo: Error de memoria
+      - 1 beep largo, 2 cortos: Error de GPU
+      - Beeps continuos: Problema de alimentación
+
+      *Procedimiento:*
+      1. Anotar patrón exacto de beeps
+      2. Consultar manual de la motherboard
+      3. Probar componentes mínimos (CPU, 1 RAM, PSU)`
+    },
+{
+      id: 'thermal-paste-application',
+      title: 'Aplicación correcta de pasta térmica',
+      tags: ['pasta térmica', 'cpu', 'refrigeración', 'aplicación'],
+      summary: 'Técnicas adecuadas para aplicar pasta térmica en diferentes tipos de CPU',
+      content: `*Métodos de aplicación recomendados:*
+
+      *Para CPUs cuadradas (Intel):*
+      - *Método del guisante:* Pea-sized dot en el centro
+      - *Método de la línea:* Línea vertical para CPUs largas
+      - *Método de la X:* Para distribución más uniforme
+
+      *Para CPUs rectangulares (AMD Ryzen):*
+      - *Método de la línea:* Línea horizontal en el centro
+      - *Método de la doble línea:* Para CPUs más grandes
+
+      *Cantidad correcta:*
+      - Demasiada poco: Sobrecalentamiento
+      - Demasiada mucho: Derrames y posibles cortocircuitos
+      - Cantidad ideal: 1-2 granos de arroz
+
+      *Tipos de pasta térmica:*
+      - Basada en silicona: Fácil aplicación, duración media
+      - Metálica: Mejor conductividad, pero conductora eléctrica
+      - Cerámica: No conductora, buen rendimiento`
+    },
+{
+      id: 'cable-management',
+      title: 'Gestión de cables y flujo de aire',
+      tags: ['cables', 'gestión', 'flujo de aire', 'temperaturas'],
+      summary: 'Técnicas para organizar cables y optimizar la refrigeración del sistema',
+      content: `*Beneficios de buena gestión de cables:*
+      - Mejor flujo de aire y menores temperaturas
+      - Más fácil mantenimiento y upgrades
+      - Mejor estética y menos acumulación de polvo
+
+      *Técnicas básicas:*
+      1. *Planificación:* Route cables antes de atar
+      2. *Uso de espacios:* Behind motherboard tray
+      3. *Agrupación:* Bundle similar cables together
+      4. *Atención a ventiladores:* Don't block intake/exhaust
+
+      *Herramientas recomendadas:*
+      - Velcro straps (reutilizables)
+      - Zip ties (permanentes pero ordenados)
+      - Cable combs para cables modulares
+      - Extensiones cableadas para mejor routing`
+    },
+{
+      id: 'bios-update-guide',
+      title: 'Actualización segura del BIOS/UEFI',
+      tags: ['bios', 'uefi', 'actualización', 'motherboard'],
+      summary: 'Procedimiento paso a paso para actualizar el firmware de la placa base',
+      content: `*Pre-requisitos IMPORTANTES:*
+      - Energía estable (UPS recomendado)
+      - No interrumpir el proceso bajo ninguna circunstancia
+      - Descargar BIOS correcto para modelo exacto de motherboard
+
+      *Métodos de actualización:*
+      
+      *1. Desde BIOS con USB:*
+      - Formatear USB FAT32
+      - Copiar archivo BIOS renombrado según instrucciones
+      - Usar utility de actualización en BIOS
+
+      *2. Desde Windows (menos seguro):*
+      - Usar herramient@ del fabricante (@BIOS, Live Update)
+      - Cerrar todas las aplicaciones antes
+
+      *3. Flashback Button (alta gama):*
+      - Solo USB, sin CPU/RAM necesarios
+      - Botón dedicado en posterior I/O
+
+      *Razones para actualizar:*
+      - Soporte para nuevos CPUs
+      - Corrección de vulnerabilidades
+      - Mejora de estabilidad/compatibilidad`
+    },
+{
+      id: 'psu-wattage-calculation',
+      title: 'Cálculo de potencia necesaria para PSU',
+      tags: ['psu', 'potencia', 'cálculo', 'watts', 'fuente'],
+      summary: 'Cómo calcular los watts necesarios para tu configuración de hardware',
+      content: `*Factores a considerar:*
+      - CPU TDP (Thermal Design Power)
+      - GPU consumo máximo
+      - Número de discos duros/SSD
+      - Ventiladores y periféricos
+      - Overclocking planeado
+
+      *Métodos de cálculo:*
+      
+      *1. Calculadoras online:*
+      - OuterVision PSU Calculator
+      - Newegg PSU Calculator
+      - Be Quiet! PSU Calculator
+
+      *2. Cálculo manual aproximado:*
+      - CPU: TDP + 20% para overhead
+      - GPU: Consumo máximo según especificaciones
+      - Base: +100W para motherboard, RAM, almacenamiento
+      - Overclocking: +20-30% adicional
+
+      *Ejemplo práctico:*
+      Ryzen 5 5600X (65W) + RTX 3060 (170W)
+      = 235W + 100W base = 335W → Recomendado 550-650W
+
+      *Margen de seguridad:* Siempre +20-30% sobre cálculo teórico`
+    },
+    {
+      id: 'fan-connector-types',
+      title: 'Tipos de conectores de ventiladores',
+      tags: ['ventiladores', 'conectores', 'pwm', 'control'],
+      summary: 'Identificación y diferencias entre conectores de ventiladores',
+      content: `*Tipos principales de conectores:*
+
+      *1. 3-pin (Voltage Control):*
+      - Pin 1: Tierra (GND)
+      - Pin 2: +12V (alimentación)
+      - Pin 3: Tachometer (RPM sensing)
+      - Control por variación de voltaje
+
+      *2. 4-pin (PWM Control):*
+      - Pines 1-3: Iguales a 3-pin
+      - Pin 4: PWM signal (control preciso)
+      - Mantiene 12V constante, modula pulsos
+
+      *3. Conectores especiales:*
+      - *AIO_PUMP:* Para bombas de refrigeración líquida
+      - *CPU_OPT:* Segundo ventilador de CPU cooler
+      - *SYS_FAN:* Ventiladores de chasis
+
+      *Compatibilidades:*
+      - 3-pin → 4-pin header (funciona sin PWM)
+      - 4-pin → 3-pin header (funciona a velocidad máxima)
+      - Usar splitters para múltiples ventiladores`
+    },
+    {
+      id: 'front-panel-connections',
+      title: 'Conexiones del panel frontal',
+      tags: ['panel frontal', 'conexiones', 'motherboard', 'cables'],
+      summary: 'Guía para conectar correctamente los cables del panel frontal del chasis',
+      content: `*Cables del panel frontal:*
+
+      *Conector de Power Button:*
+      - PWR+ y PWR- (polaridad generalmente no importa)
+      - Conecta a pins PWR_BTN en motherboard
+
+      *Conector de Reset Button:*
+      - RESET+ y RESET-
+      - Conecta a pins RESET en motherboard
+
+      *LEDs de actividad:*
+      - *HDD LED:* + y - (importa polaridad)
+      - *Power LED:* + y - (importa polaridad)
+
+      *USB headers:*
+      - *USB 2.0:* 9-pin con un pin bloqueado
+      - *USB 3.0:* 19-pin azul
+      - *USB-C:* Keyed connector específico
+
+      *Audio frontal:*
+      - HD Audio: 9-pin (generalmente en esquina inferior izquierda)
+      - AC'97: Legacy, menos común
+
+      *IMPORTANTE:* Consultar manual de la motherboard para pinout exacto`
+    },
+    {
+      id: 'multimeter-basic-usage',
+      title: 'Uso básico del multímetro para diagnóstico',
+      tags: ['multímetro', 'mediciones', 'voltaje', 'continuidad'],
+      summary: 'Guía de uso del multímetro para pruebas básicas de hardware',
+      content: `*Configuraciones básicas del multímetro:*
+
+      *1. Voltaje DC (Direct Current):*
+      - Para medir fuentes de poder
+      - Rango: 20V DC para rails de PC
+      - Negro en COM, Rojo en VΩmA
+
+      *2. Continuidad:*
+      - Para verificar cables y fusibles
+      - Emite sonido si hay conexión
+      - Útil para diagnosticar cables rotos
+
+      *3. Resistencia (Ohms):*
+      - Para verificar resistencias y detectar cortos
+      - Valor 0Ω = cortocircuito
+      - Valor ∞Ω = circuito abierto
+
+      *Mediciones seguras en PC:*
+      - Siempre equipo apagado y desenchufado para resistencia/continuidad
+      - Solo medir voltajes con equipo encendido si tienes experiencia
+      - Nunca tocar probes con las manos en mediciones de voltaje`
+    },
+    {
+      id: 'grounding-static-prevention',
+      title: 'Prevención de descargas estáticas (ESD)',
+      tags: ['estática', 'esd', 'protección', 'grounding'],
+      summary: 'Técnicas para prevenir daños por electricidad estática al trabajar con hardware',
+      content: `*Riesgos de ESD (ElectroStatic Discharge):*
+      - Daño invisible a componentes electrónicos
+      - Fallas intermitentes difíciles de diagnosticar
+      - Reducción de vida útil de componentes
+
+      *Métodos de prevención:*
+
+      *Básico (mínimo indispensable):*
+      - Tocar metal del chasis antes de tocar componentes
+      - Trabajar en superficie sin alfombras
+      - Evitar ropa sintética que genera estática
+
+      *Profesional:*
+      - Pulsera antiestática conectada a tierra
+      - Alfombrilla conductiva en mesa de trabajo
+      - Humedad ambiental controlada (40-60%)
+
+      *Buenas prácticas:*
+      - Manipular componentes por los bordes
+      - Mantener componentes en bolsas antiestáticas
+      - Usar zapatos con suela de cuero/no aislantes`
+    },
+    {
+      id: 'boot-priority-order',
+      title: 'Configuración del orden de arranque',
+      tags: ['arranque', 'boot', 'bios', 'uefi', 'prioridad'],
+      summary: 'Cómo configurar correctamente el orden de dispositivos de arranque',
+      content: `*Tipos de dispositivos de arranque:*
+
+      *Dispositivos comunes:*
+      - Windows Boot Manager (UEFI)
+      - Hard Disk (Legacy)
+      - USB Device
+      - CD/DVD Drive
+      - Network (PXE)
+
+      *Configuración en BIOS/UEFI:*
+      1. Entrar a BIOS (Del, F2, F12 durante POST)
+      2. Buscar sección "Boot" o "Arranque"
+      3. Establecer orden de prioridad
+      4. Guardar cambios y salir (F10)
+
+      *Escenarios comunes:*
+
+      *Instalar Windows/Linux:*
+      1. USB/DVD como primer dispositivo
+      2. Después de instalación: Windows Boot Manager como primero
+
+      *Arranque dual:*
+      - Windows Boot Manager primero
+      - Usar GRUB para seleccionar SO
+
+      *Problemas frecuentes:*
+      - "No boot device found" → Revisar orden y conexiones
+      - Arranca directamente a Windows sin mostrar GRUB → Orden incorrecto`
+    },
+    {
+      id: 'hardware-benchmarking-tools',
+      title: 'Herramientas de benchmarking y estrés',
+      tags: ['benchmark', 'estrés', 'rendimiento', 'temperaturas'],
+      summary: 'Software para probar estabilidad y rendimiento del hardware',
+      content: `*Herramientas por componente:*
+
+      *CPU:*
+      - *Cinebench R23:* Rendimiento multi-core y single-core
+      - *Prime95:* Prueba de estrés máxima (cuidado con temperaturas)
+      - *AIDA64:* Prueba integral del sistema
+
+      *GPU:*
+      - *3DMark:* Benchmark gaming y rendimiento gráfico
+      - *FurMark:* Prueba de estrés intensiva (usar con precaución)
+      - *Heaven Benchmark:* Prueba básica y gratuita
+
+      *RAM:*
+      - *MemTest86:* Detección de errores (USB booteable)
+      - *AIDA64 Memory Benchmark:* Rendimiento y latencias
+
+      *Almacenamiento:*
+      - *CrystalDiskMark:* Velocidades de lectura/escritura
+      - *AS SSD Benchmark:* Específico para SSD
+
+      *Procedimiento de testing:*
+      1. Monitorear temperaturas con HWMonitor
+      2. Ejecutar benchmarks por 15-30 minutos
+      3. Verificar estabilidad y que no hay throttling`
+  },
+{
+      id:'gpu-troubleshoot',
+      title:'Diagnóstico de problemas en tarjeta gráfica',
+      tags:['GPU', 'gráficos', 'artefactos', 'drivers', 'temperatura'],
+      summary:'Identificación y solución de fallos en GPU integrada o dedicada',
+      content:`*Síntomas de GPU defectuosa:*
+      - Artefactos gráficos (puntos, líneas, texturas corruptas)
+      - Pantallazos azules relacionados con controladores gráficos
+      - Equipo no da video pero enciende
+      - Sobrecalentamiento constante
+
+      *Proceso de diagnóstico:*
+      1. *Controladores:* Usar DDU en modo seguro y reinstalar versión estable
+      2. *Temperaturas:* Monitorear con HWMonitor/MSI Afterburner
+      3. *Conexiones:* Verificar cables de alimentación PCIe
+      4. *Prueba en otro equipo:* Confirmar si la falla persiste
+
+      *Soluciones:*
+      - Reflow/reballing (solo técnicos especializados)
+      - Reemplazo de pasta térmica y pads
+      - Actualización VBIOS (avanzado)`
+    },
+{
+      id:'hdd-health-check',
+      title:'Verificación de salud en discos duros HDD/SSD',
+      tags:['HDD', 'SSD', 'SMART', 'salud', 'diagnóstico'],
+      summary:'Uso de herramientas para verificar estado de discos duros y sólidos',
+      content:`*Herramientas de diagnóstico:*
+
+      *Para HDD (mecánicos):*
+      - *CrystalDiskInfo:* Monitoreo SMART (temperatura, sectores defectuosos)
+      - *HDDScan:* Pruebas superficiales y profundas
+      - Ruidos anormales (clic, raspado) indican falla mecánica inminente
+
+      *Para SSD:*
+      - *SSD Life:* Predicción de vida útil basada en TBW
+      - *CrystalDiskMark:* Pruebas de velocidad y rendimiento
+      - *Herramientas del fabricante:* Samsung Magician, WD Dashboard
+
+      *Parámetros SMART críticos:*
+      - Reallocated Sectors Count (sectores reasignados)
+      - Current Pending Sector Count (sectores pendientes)
+      - Uncorrectable Sector Count (sectores no corregibles)`
+    }
+
+        ]
+      },
+      {
+        id: 'storage-networking',
+        title: 'Almacenamiento y Redes',
+        items: [
+          
+      {
+      id: 'clone-ssd',
+      title: 'Clonar un disco a SSD',
+      tags: ['clonar', 'ssd', 'migración', 'hdd', 'copia'],
+      summary: 'Clonar HDD a SSD sin perder datos ni sistema operativo',
+      content: `*PRE-CLONACIÓN - Preparación esencial:*
+      - Verificar que SSD tiene capacidad mayor a datos USADOS en HDD
+      - Realizar backup de datos críticos antes de empezar
+      - Descargar e instalar software de clonación
+      - Conectar SSD (SATA interno o via USB con adaptador)
+
+      *HERRAMIENTAS RECOMENDADAS:*
+      - *Windows:* Macrium Reflect Free, Clonezilla, AOMEI Backupper
+      - *Linux:* dd (avanzado), Clonezilla, GParted
+      - *macOS:* Carbon Copy Cloner, SuperDuper!
+
+      *PROCESO MACRIUM REFLECT (Windows):*
+      1. Seleccionar disco de origen (HDD actual)
+      2. Seleccionar disco destino (SSD nuevo)
+      3. *OPCIÓN CRÍTICA:* "Copy partitions" y marcar "Copy only used sectors"
+      4. En "Slide partitions" dejar habilitado para optimizar espacio
+      5. Programar clonación y reiniciar cuando solicite
+      6. *POST-CLONACIÓN:* Cambiar orden de arranque en BIOS o intercambiar discos físicamente
+
+      *PROBLEMAS COMUNES:*
+      - Error "not enough space" → Limpiar archivos temporales o usar SSD más grande
+      - No arranca desde SSD → Verificar orden de boot en BIOS/UEFI
+      - Partición de recuperación no copiada → Usar herramienta del fabricante`
+    },
+    {
+      id: 'network-troubleshoot',
+      title: 'Resolución de problemas de red',
+      tags: ['red', 'dhcp', 'dns', 'ping', 'wifi', 'troubleshoot'],
+      summary: 'Diagnóstico sistemático de problemas de conectividad de red',
+      content: `*METODOLOGÍA POR CAPAS OSI:*
+
+      *CAPA 1 - Física (Cables/Hardware):*
+      - Verificar LEDs en router/tarjeta de red
+      - Probar diferentes cables Ethernet
+      - Reiniciar router y equipo
+      - Verificar interruptor WiFi activado
+
+      *CAPA 2 - Enlace de Datos (MAC/Driver):*
+      - *Windows:* \ipconfig /all\ → Si no muestra adaptador, problema de driver
+      - Actualizar drivers de tarjeta de red
+      - Verificar si adaptador está habilitado en Administrador de dispositivos
+
+      *CAPA 3 - Red (IP/DHCP):*
+      - *IP Correcta:* \ipconfig\ → Debe ser 192.168.x.x, 10.x.x.x, 172.16.x.x
+      - *IP 169.254.x.x:* Falló DHCP → Ejecutar \ipconfig /release\ y \ipconfig /renew\
+      - *Ping al Gateway:* \ping 192.168.1.1\ (usar IP de tu router)
+      - *Ping a IP pública:* \ping 8.8.8.8\ → Si funciona, problema es DNS
+
+      *CAPA 7 - Aplicación (DNS/Navegador):*
+      - *Problema DNS:* \ping google.com\ falla pero \ping 8.8.8.8\ funciona
+      - Cambiar DNS: 8.8.8.8 (Google) o 1.1.1.1 (Cloudflare)
+      - Limpiar cache DNS: \ipconfig /flushdns\
+
+      *HERRAMIENTAS AVANZADAS:*
+      - \tracert 8.8.8.8\ → Ver donde se pierden paquetes
+      - \netsh winsock reset\ → Resetear stack de red
+      - \nslookup google.com\ → Verificar resolución DNS`
+    },
+    {
+      id: 'raid-types',
+      title: 'Configuraciones RAID',
+      tags: ['RAID', 'almacenamiento', 'redundancia', 'rendimiento', 'backup'],
+      summary: 'Descripción detallada de niveles RAID y configuración práctica',
+      content: `*CONCEPTOS BÁSICOS RAID:*
+      - *Striping (Distribución):* Mejora rendimiento
+      - *Mirroring (Espejo):* Proporciona redundancia
+      - *Parity (Paridad):* Balance entre rendimiento y redundancia
+
+      *NIVELES RAID COMUNES:*
+
+      *RAID 0 (Striping):*
+      - *Ventaja:* Máximo rendimiento (velocidad combinada)
+      - *Desventaja:* Cero tolerancia a fallos
+      - *Mínimo discos:* 2
+      - *Capacidad útil:* 100% del total
+      - *Uso:* Editing video, gaming, donde velocidad > seguridad
+
+      *RAID 1 (Mirroring):*
+      - *Ventaja:* Redundancia completa, lectura más rápida
+      - *Desventaja:* Capacidad útil = disco más pequeño
+      - *Mínimo discos:* 2
+      - *Capacidad útil:* 50% del total
+      - *Uso:* Servidores críticos, almacenamiento importante
+
+      *RAID 5 (Striping con Paridad Distribuida):*
+      - *Ventaja:* Rendimiento + redundancia, eficiencia de espacio
+      - *Desventaja:* Lento en escrituras, reconstrucción compleja
+      - *Mínimo discos:* 3
+      - *Capacidad útil:* (N-1) discos
+      - *Uso:* Servidores de archivos, NAS empresariales
+
+      *RAID 10 (1+0):*
+      - *Ventaja:* Alto rendimiento + alta tolerancia a fallos
+      - *Desventaja:* Coste elevado (necesita muchos discos)
+      - *Mínimo discos:* 4
+      - *Capacidad útil:* 50% del total
+      - *Uso:* Bases de datos, entornos críticos de alto rendimiento
+
+      *IMPLEMENTACIÓN:*
+      - *Hardware RAID:* Controlador dedicado, mejor rendimiento
+      - *Software RAID:* Windows Storage Spaces, Linux mdadm, macOS Disk Utility
+      - *Fake RAID:* BIOS RAID, no recomendado`
+    },
+{
+      id: 'ssd-optimization',
+      title: 'Optimización y mantenimiento de SSD',
+      tags: ['ssd', 'optimización', 'trim', 'rendimiento', 'vida-útil'],
+      summary: 'Configuraciones para maximizar rendimiento y vida útil de SSD',
+      content: `*CONFIGURACIONES WINDOWS PARA SSD:*
+      - *TRIM:* Verificar activado → \fsutil behavior query DisableDeleteNotify\
+      - *Desfragmentación:* DESACTIVADA para SSD (usar optimización)
+      - *Archivo de paginación:* Dejar en SSD para rendimiento
+      - *Prefetch/Superfetch:* Desactivar o dejar que Windows gestione
+      - *Hibernación:* Considerar desactivar si no se usa para ahorrar espacio
+
+      *HERRAMIENTAS DE MONITOREO:*
+      - *CrystalDiskInfo:* Salud SMART del SSD
+      - *SSD Manufacturer Tools:* Samsung Magician, WD Dashboard
+      - *TBW (Total Bytes Written):* Monitorear escritura total
+
+      *PRÁCTICAS PARA EXTENDER VIDA ÚTIL:*
+      - Dejar 10-20% de espacio libre
+      - Evitar escrituras innecesarias (temp files en RAM disk)
+      - No llenar por completo el SSD
+      - Actualizar firmware regularmente`
+    },
+    {
+      id: 'hdd-bad-sectors',
+      title: 'Reparación de sectores defectuosos en HDD',
+      tags: ['hdd', 'sectores', 'defectuosos', 'reparación', 'chkdsk'],
+      summary: 'Detección y reparación de bad sectors en discos duros mecánicos',
+      content: `*SÍNTOMAS DE BAD SECTORS:*
+      - Ruidos de clic o raspado
+      - Archivos que no se abren o se corrompen
+      - Sistema operativo muy lento
+      - Errores de CRC o I/O device
+
+      *HERRAMIENTAS DE DIAGNÓSTICO:*
+      - *Windows:* CHKDSK → \chkdsk C: /f /r /x\
+      - *CrystalDiskInfo:* Ver parámetros SMART (Reallocated Sectors)
+      - *HDDScan:* Pruebas superficiales y profundas
+      - *Manufacturer Tools:* Herramientas específicas del fabricante
+
+      *PROCESO DE REPARACIÓN:*
+      1. *CHKDSK Completo:* Identifica y marca sectores como malos
+      2. *Herramientas de bajo nivel:* Solo para usuarios avanzados
+      3. *Reasignación de sectores:* El firmware del disco lo hace automáticamente
+
+      *DECISIONES CRÍTICAS:*
+      - *Pocos bad sectors:* Continuar usando con monitoreo
+      - *Aumento constante de bad sectors:* Reemplazar inmediatamente
+      - *SMART status "Caution" o "Bad":* Hacer backup y reemplazar`
+    },
+    {
+      id: 'nas-setup-basic',
+      title: 'Configuración básica de NAS casero',
+      tags: ['nas', 'almacenamiento', 'red', 'servidor', 'casero'],
+      summary: 'Guía para implementar almacenamiento en red básico',
+      content: `*OPCIONES DE IMPLEMENTACIÓN NAS:*
+
+      *1. NAS Preensamblado (Synology/QNAP):*
+      - Ventaja: Fácil configuración, software incluido
+      - Desventaja: Menor flexibilidad, más costoso
+
+      *2. NAS Casero con PC Viejo:*
+      - *Software:* TrueNAS, OpenMediaVault, UnRAID
+      - *Hardware:* Mínimo 4GB RAM, múltiples bahías HDD
+      - *RAID:* Recomendado RAID 1, 5 o 6 para redundancia
+
+      *3. Raspberry Pi NAS:*
+      - *Ventaja:* Bajo consumo, silencioso
+      - *Limitación:* Velocidad USB, solo para uso básico
+
+      *CONFIGURACIÓN BÁSICA:*
+      1. Instalar sistema operativo NAS
+      2. Configurar RAID según necesidades
+      3. Crear shares SMB/CIFS (Windows) o NFS (Linux)
+      4. Configurar usuarios y permisos
+      5. Establecer backups automáticos
+
+      *SERVICIOS ADICIONALES:*
+      - Plex Media Server
+      - Nextcloud (nube personal)
+      - Time Machine backups (macOS)`
+    },
+{
+      id: 'external-hdd-troubleshoot',
+      title: 'Diagnóstico de discos duros externos',
+      tags: ['externo', 'hdd', 'usb', 'diagnóstico', 'reparación'],
+      summary: 'Solución de problemas comunes en discos externos y USB',
+      content: `*PROBLEMAS COMUNES Y SOLUCIONES:*
+
+      *1. No es reconocido por la computadora:*
+      - Probar en otro puerto USB
+      - Probar en otra computadora
+      - Verificar si necesita alimentación externa
+      - Escuchar si el disco gira (sonido mecánico)
+
+      *2. Reconocido pero no muestra datos:*
+      - Verificar en Administración de discos (Windows)
+      - Verificar en Disk Utility (macOS)
+      - Probar con \lsblk\ o \fdisk -l\ (Linux)
+
+      *3. Error "Device not recognized" o "Unknown Device":*
+      - Actualizar drivers USB
+      - Probar cable USB diferente
+      - Verificar si el puerto USB proporciona suficiente energía
+
+      *4. Disco hace clic repetitivo:*
+      - Falla mecánica grave
+      - Apagar inmediatamente
+      - Considerar recuperación profesional si datos son críticos
+
+      *HERRAMIENTAS ESPECÍFICAS:*
+      - *USBDeview:* Ver todos dispositivos USB conectados
+      - *ChipGenius:* Identificar controlador USB de discos externos`
+    },
+    {
+      id: 'partition-management',
+      title: 'Gestión avanzada de particiones',
+      tags: ['particiones', 'gestión', 'gparted', 'disk-management'],
+      summary: 'Operaciones avanzadas con particiones y sistemas de archivos',
+      content: `*HERRAMIENTAS DE PARTICIONADO:*
+
+      *Windows:*
+      - *Disk Management:* Herramienta nativa básica
+      - *MiniTool Partition Wizard:* Características avanzadas gratis
+      - *AOMEI Partition Assistant:* Alternativa completa
+
+      *Linux:*
+      - *GParted:* Estándar de la industria (GUI)
+      - *fdisk/parted:* Herramientas de línea de comandos
+      - *GNOME Disks:* Utilidad gráfica integrada
+
+      *macOS:*
+      - *Disk Utility:* Herramienta nativa
+      - *iPartition:* Alternativa de pago con más funciones
+
+      *OPERACIONES AVANZADAS:*
+      - *Redimensionar particiones:* Mover inicio/fin sin perder datos
+      - *Convertir MBR a GPT:* Para discos >2TB y UEFI
+      - *Alinear particiones SSD:* Optimizar para SSD
+      - *Recuperar particiones eliminadas:* TestDisk, PhotoRec
+
+      *SISTEMAS DE ARCHIVOS COMUNES:*
+      - *NTFS:* Windows (compatible lectura macOS/Linux)
+      - *APFS:* macOS (optimizado para SSD)
+      - *ext4:* Linux (estándar)
+      - *exFAT:* Compatibilidad multiplataforma`
+    },
+    {
+      id: 'backup-strategies',
+      title: 'Estrategias de backup efectivas',
+      tags: ['backup', 'copia-seguridad', 'estrategia', 'recuperación'],
+      summary: 'Planificación e implementación de estrategias de backup robustas',
+      content: `*REGLA 3-2-1 DEL BACKUP:*
+      - *3* copias de tus datos
+      - *2* medios de almacenamiento diferentes
+      - *1* copia fuera del sitio (off-site)
+
+      *TIPOS DE BACKUP:*
+
+      *1. Completo (Full):*
+      - Copia todos los datos seleccionados
+      - Lento, requiere mucho espacio
+      - Más fácil recuperación
+
+      *2. Incremental:*
+      - Copia solo lo cambiado desde último backup
+      - Rápido, menos espacio
+      - Recuperación más lenta (necesita cadena completa)
+
+      *3. Diferencial:*
+      - Copia lo cambiado desde último backup completo
+      - Balance entre espacio y velocidad de recuperación
+
+      *HERRAMIENTAS RECOMENDADAS:*
+      - *Windows:* Veeam Agent, Macrium Reflect, Windows Backup
+      - *macOS:* Time Machine, Carbon Copy Cloner
+      - *Linux:* rsync, Timeshift, Deja Dup
+
+      *AUTOMATIZACIÓN:*
+      - Programar backups regulares
+      - Verificar integridad de backups
+      - Pruebas de recuperación periódicas`
+    },
+{
+      id: 'wifi-optimization',
+      title: 'Optimización de red WiFi',
+      tags: ['wifi', 'optimización', 'router', 'canales', 'señal'],
+      summary: 'Mejora de cobertura y rendimiento de redes inalámbricas',
+      content: `*FACTORES QUE AFECTAN SEÑAL WiFi:*
+
+      *Interferencias:*
+      - Otros routers WiFi en canales cercanos
+      - Dispositivos Bluetooth, microondas
+      - Espejos, paredes gruesas, muebles metálicos
+
+      *OPTIMIZACIÓN BÁSICA:*
+      1. *Elegir canal correcto:* Usar WiFi Analyzer para ver canales menos usados
+      2. *Posición del router:* Central, elevado, sin obstrucciones
+      3. *Actualizar firmware:* Router y adaptadores WiFi
+      4. *Bandas:* Usar 5GHz para velocidad, 2.4GHz para alcance
+
+      *MEJORAS AVANZADAS:*
+      - *Access Points adicionales:* Extender cobertura
+      - *Sistemas Mesh:* Solución profesional para casas grandes
+      - *Antenas direccionales:* Para enlaces punto a punto
+      - *Powerline adapters:* Usar cableado eléctrico como extensión
+
+      *HERRAMIENTAS DE DIAGNÓSTICO:*
+      - *WiFi Analyzer (Android/Windows):* Análisis de canales y señal
+      - *NetSpot:* Mapeo de cobertura profesional
+      - *speedtest.net:* Velocidad real de internet`
+    },
+    {
+      id: 'vpn-setup-home',
+      title: 'Configuración de VPN casera',
+      tags: ['vpn', 'seguridad', 'red', 'openvpn', 'wireguard'],
+      summary: 'Implementación de VPN para acceso remoto seguro',
+      content: `*TIPOS DE VPN CASERAS:*
+
+      *1. VPN de Acceso Remoto:*
+      - Conectarte a tu red doméstica desde fuera
+      - Acceso seguro a NAS, cámaras IP, otros dispositivos
+
+      *2. VPN Comercial:*
+      - Encriptar todo tu tráfico para privacidad
+      - Acceder a contenido georestringido
+
+      *IMPLEMENTACIÓN VPN CASERA:*
+
+      *Opción 1 - Router con soporte VPN:*
+      - Configurar OpenVPN/WireGuard en router compatible
+      - Más simple, siempre disponible
+
+      *Opción 2 - Raspberry Pi/VPS:*
+      - *OpenVPN:* Estándar de la industria, amplia compatibilidad
+      - *WireGuard:* Moderno, más rápido, menos configuración
+      - *Tailscale:* Fácil configuración, ideal para beginners
+
+      *PASOS BÁSICOS OPENVPN:*
+      1. Instalar OpenVPN en servidor (Pi o VPS)
+      2. Generar certificados y configuraciones
+      3. Configurar port forwarding en router (puerto 1194)
+      4. Instalar cliente OpenVPN en dispositivos móviles/PC
+
+      *SEGURIDAD:*
+      - Usar autenticación por certificados, no solo usuario/contraseña
+      - Mantener software actualizado
+      - Usar puertos no estándar para evitar scans automáticos`
+    },
+    {
+      id: 'port-forwarding',
+      title: 'Configuración de Port Forwarding',
+      tags: ['port-forwarding', 'router', 'nat', 'servidores'],
+      summary: 'Guía para redireccionar puertos en el router',
+      content: `*QUÉ ES PORT FORWARDING:*
+      - Redirige tráfico de internet a un dispositivo específico en tu red local
+      - Necesario para servidores web, juegos, VPN, acceso remoto
+
+      *PROCESO BÁSICO:*
+      1. *IP estática local:* Asignar IP fija al dispositivo destino
+      2. *Acceder al router:* Normalmente 192.168.1.1 o 192.168.0.1
+      3. *Encontrar sección:* "Port Forwarding", "NAT", "Virtual Servers"
+      4. *Configurar regla:*
+         - Puerto externo: Lo que recibe el router desde internet
+         - Puerto interno: Puerto del servicio en el dispositivo local
+         - Protocolo: TCP, UDP o ambos
+         - IP destino: IP estática del dispositivo local
+
+      *EJEMPLOS COMUNES:*
+      - *Minecraft Server:* TCP 25565
+      - *Web Server:* TCP 80 (HTTP) y 443 (HTTPS)
+      - *VPN:* UDP 1194 (OpenVPN)
+      - *Remote Desktop:* TCP 3389
+
+      *SEGURIDAD:*
+      - Solo abrir puertos necesarios
+      - Mantener software actualizado
+      - Considerar VPN en lugar de port forwarding directo`
+    },
+    {
+      id: 'dns-configuration',
+      title: 'Configuración y optimización de DNS',
+      tags: ['dns', 'resolución', 'optimización', 'servidores'],
+      summary: 'Optimización de servidores DNS para mejor rendimiento y seguridad',
+      content: `*QUÉ HACE EL DNS:*
+      - Convierte nombres de dominio (google.com) en direcciones IP (172.217.0.0)
+      - Primera línea de defensa contra malware y phishing
+
+      *SERVIDORES DNS RECOMENDADOS:*
+
+      *Rendimiento:*
+      - *Cloudflare:* 1.1.1.1 y 1.0.0.1 → Generalmente más rápido
+      - *Google:* 8.8.8.8 y 8.8.4.4 → Buena infraestructura global
+      - *Quad9:* 9.9.9.9 → Enfocado en seguridad
+
+      *Características especiales:*
+      - *OpenDNS:* 208.67.222.222 → Filtrado de contenido familiar
+      - *AdGuard DNS:* 94.140.14.14 → Bloqueo de anuncios a nivel DNS
+
+      *CÓMO CONFIGURAR:*
+
+      *En Router (recomendado):*
+      - Afecta a todos los dispositivos de la red
+      - Configurar en administración del router
+
+      *En Windows:*
+      - Network Connections → Adaptador → Properties → TCP/IPv4
+
+      *En Linux:*
+      - Editar /etc/resolv.conf o usar systemd-resolved
+
+      *HERRAMIENTAS DE TEST:*
+      - \nslookup google.com\ → Ver servidor DNS usado
+      - \dnslookup-performance.tools\ → Comparar velocidad de diferentes DNS`
+    },
+    {
+      id: 'network-monitoring',
+      title: 'Monitoreo de red y ancho de banda',
+      tags: ['monitoreo', 'ancho-de-banda', 'tráfico', 'herramientas'],
+      summary: 'Herramientas para monitorear uso de red y diagnosticar problemas',
+      content: `*HERRAMIENTAS DE MONITOREO:*
+
+      *Uso en Tiempo Real:*
+      - *Windows:* Task Manager → Performance → Ethernet/WiFi
+      - *Linux:* \nload\, \iftop\, \bmon\
+      - *Multiplataforma:* NetWorx, BitMeter
+
+      *Análisis de Tráfico:*
+      - *Wireshark:* Análisis profundo de paquetes (avanzado)
+      - *GlassWire:* Monitorización visual y detección de amenazas
+      - *PRTG Network Monitor:* Solución empresarial gratuita para uso personal
+
+      *Monitoreo de Ancho de Banda por Dispositivo:*
+      - *Router con firmware avanzado:* OpenWrt, DD-WRT
+      - *ntopng:* Herramienta profesional de análisis de tráfico
+
+      *DETECCIÓN DE PROBLEMAS:*
+      - *Uso alto constante:* Backup en la nube, streaming, updates
+      - *Picos inesperados:* Malware, dispositivos no autorizados
+      - *Latencia alta:* Congestión de red, problemas de ISP
+
+      *OPTIMIZACIÓN:*
+      - Programar backups y updates para horas de poco uso
+      - Usar QoS en router para priorizar tráfico crítico
+      - Identificar y limitar aplicaciones que consumen mucho ancho de banda`
+    },
+    {
+      id: 'static-ip-configuration',
+      title: 'Configuración de IP estática',
+      tags: ['ip', 'estática', 'configuración', 'red-local'],
+      summary: 'Asignación de direcciones IP fijas en red local',
+      content: `*CUÁNDO USAR IP ESTÁTICA:*
+      - Servidores (web, NAS, impresoras)
+      - Port forwarding
+      - Acceso remoto consistente
+      - Dispositivos de red críticos
+
+      *MÉTODOS DE CONFIGURACIÓN:*
+
+      *1. Reserva DHCP en Router (Recomendado):*
+      - El router asigna siempre la misma IP al dispositivo por MAC address
+      - Ventaja: Centralizado, fácil gestión
+      - Configurar en administración del router
+
+      *2. IP Estática en Dispositivo:*
+      - Configurar manualmente en adaptador de red
+      - *Windows:* Network Connections → Properties → TCP/IPv4
+      - *Linux:* nmtui o editar /etc/netplan/
+      - *macOS:* System Preferences → Network → Advanced → TCP/IP
+
+      *CONFIGURACIÓN CORRECTA:*
+      - *IP:* Mismo rango que red (ej: 192.168.1.50)
+      - *Máscara:* Normalmente 255.255.255.0
+      - *Gateway:* IP del router (ej: 192.168.1.1)
+      - *DNS:* Router o servidores públicos (8.8.8.8, 1.1.1.1)
+
+      *EVITAR CONFLICTOS:*
+      - Usar IPs fuera del rango DHCP del router
+      - Documentar todas las IPs estáticas asignadas`
+    },
+    {
+      id: 'network-security-basic',
+      title: 'Seguridad básica de red doméstica',
+      tags: ['seguridad', 'red', 'wifi', 'router', 'firewall'],
+      summary: 'Protección esencial para red doméstica contra amenazas comunes',
+      content: `*CONFIGURACIONES DE SEGURIDAD ESENCIALES:*
+
+      *Router:*
+      1. *Cambiar contraseña admin:* No dejar credenciales por defecto
+      2. *Actualizar firmware:* Parchear vulnerabilidades conocidas
+      3. *WPA2/WPA3:* Nunca WEP o WPA original
+      4. *Contraseña WiFi fuerte:* Mínimo 12 caracteres, mezcla de tipos
+      5. *Deshabilitar WPS:* Vulnerable a ataques de fuerza bruta
+      6. *Firewall habilitado:* Generalmente activado por defecto
+
+      *WiFi:*
+      1. *SSID no identificable:* No usar dirección o nombres personales
+      2. *Ocultar SSID (opcional):* Seguridad por oscuridad, no muy efectiva
+      3. *Filtrado MAC:* Solo dispositivos autorizados pueden conectarse
+      4. *Guest network:* Para visitas, aislada de red principal
+
+      *Dispositivos:*
+      1. *Firewall activado:* Windows Firewall o equivalente
+      2. *Actualizaciones automáticas:* SO y aplicaciones
+      3. *Antivirus:* Esencial en Windows, recomendado en otros SO
+
+      *HERRAMIENTAS DE VERIFICACIÓN:*
+      - *ShieldsUP!:* Escanear puertos abiertos hacia internet
+      - *F-Secure Router Checker:* Verificar configuración de seguridad`
+    },
+    {
+      id: 'qos-configuration',
+      title: 'Configuración de Calidad de Servicio (QoS)',
+      tags: ['qos', 'calidad-servicio', 'prioridad', 'ancho-banda'],
+      summary: 'Optimización del tráfico de red para priorizar aplicaciones críticas',
+      content: `*QUÉ ES QoS:*
+      - Controla cómo el router prioriza diferentes tipos de tráfico
+      - Evita que una descarga grande afecte llamadas VoIP o gaming
+
+      *TIPOS DE QoS:*
+
+      *1. Basado en Dispositivo:*
+      - Priorizar tráfico de dispositivos específicos (consola, teléfono trabajo)
+      - Útil cuando sabes qué dispositivos son críticos
+
+      *2. Basado en Aplicación:*
+      - Priorizar tipos de tráfico (VoIP, gaming, video streaming)
+      - Más inteligente, se adapta al uso real
+
+      *CONFIGURACIÓN TÍPICA:*
+
+      *Aplicaciones ALTA prioridad:*
+      - Llamadas VoIP (Skype, Zoom)
+      - Juegos online
+      - Video conferencias
+
+      *Aplicaciones MEDIA prioridad:*
+      - Video streaming (YouTube, Netflix)
+      - Navegación web
+
+      *Aplicaciones BAJA prioridad:*
+      - Descargas grandes
+      - Updates de software
+      - Backup en la nube
+
+      *IMPLEMENTACIÓN:*
+      - Activar en administración del router
+      - Establecer límites de ancho de banda si es necesario
+      - Monitorizar y ajustar según resultados`
+    },
+{
+      id: 'mesh-vs-extender',
+      title: 'Sistemas Mesh vs Extensores WiFi',
+      tags: ['mesh', 'extender', 'wifi', 'cobertura', 'rendimiento'],
+      summary: 'Comparación y selección entre sistemas Mesh y extensores tradicionales',
+      content: `*EXTENSORES WIFI TRADICIONALES:*
+
+      *Ventajas:*
+      - Más económicos
+      - Fáciles de instalar
+      - Compatibles con cualquier router
+
+      *Desventajas:*
+      - Crean red separada (normalmente)
+      - Pérdida de velocidad significativa
+      - Gestión separada del router principal
+
+      *SISTEMAS MESH:*
+
+      *Ventajas:*
+      - Red unificada (mismo SSID)
+      - Handoff automático entre nodos
+      - Mejor gestión centralizada
+      - Generalmente mejor rendimiento
+
+      *Desventajas:*
+      - Más costosos
+      - Normalmente requieren reemplazar router existente
+
+      *CUÁNDO ELEGIR CADA UNO:*
+
+      *Extensor:*
+      - Presupuesto limitado
+      - Necesidad puntual de cobertura en área pequeña
+      - Router actual funciona bien y no quieres cambiarlo
+
+      *Mesh:*
+      - Casa grande o múltiples pisos
+      - Múltiples usuarios y dispositivos
+      - Necesidad de roaming sin interrupciones
+      - Presupuesto disponible para mejor solución
+
+      *RECOMENDACIONES:*
+      - *Extensores buenos:* TP-Link RE series, Netgear EX series
+      - *Mesh económicos:* TP-Link Deco, Google Nest WiFi
+      - *Mesh profesionales:* Ubiquiti AmpliFi, ASUS ZenWiFi`
+    },
+    {
+      id: 'internet-speed-troubleshoot',
+      title: 'Diagnóstico de problemas de velocidad de internet',
+      tags: ['velocidad', 'internet', 'diagnóstico', 'isp', 'lentitud'],
+      summary: 'Metodología para identificar y resolver problemas de velocidad',
+      content: `*PRUEBAS INICIALES:*
+      1. *Speedtest:* speedtest.net o fast.com
+      2. *Velocidad contratada vs obtenida:* Considerar 80-90% como normal por overhead
+      3. *Comparar cable vs WiFi:* Identificar si problema es inalámbrico
+
+      *PROBLEMAS COMUNES Y SOLUCIONES:*
+
+      *Velocidad baja por WiFi:*
+      - Cambiar canal WiFi (usar analyzer)
+      - Acercarse al router o mejorar posición
+      - Actualizar drivers adaptador WiFi
+      - Cambiar a banda 5GHz si está disponible
+
+      *Velocidad baja por cable:*
+      - Probar diferentes cables Ethernet
+      - Verificar negociación de velocidad (debe ser 1Gbps)
+      - Actualizar drivers tarjeta de red
+
+      *Velocidad baja en todos los dispositivos:*
+      - Reiniciar router y módem
+      - Probar directamente conectado al módem (bypass router)
+      - Contactar ISP: Puede haber problema en línea
+
+      *HERRAMIENTAS AVANZADAS:*
+      - *PingPlotter:* Monitoreo continuo de latencia y packet loss
+      - *Router stats:* Ver SNR margin y línea quality en administración
+      - *Traceroute:* Identificar donde ocurren cuellos de botella
+
+      *CUÁNDO CONTACTAR ISP:*
+      - Velocidad consistentemente <80% de lo contratado
+      - Alta packet loss (>1-2%)
+      - Latencia muy variable
+      - Problemas a horas específicas (congestión de área)`
+    },
+    {
+      id: 'network-protocols-explained',
+      title: 'Protocolos de red explicados',
+      tags: ['protocolos', 'tcp', 'udp', 'http', 'ftp'],
+      summary: 'Descripción de protocolos de red comunes y sus usos',
+      content: `*PROTOCOLOS FUNDAMENTALES:*
+
+      *TCP (Transmission Control Protocol):*
+      - *Conexión orientada:* Handshake antes de transmitir
+      - *Fiabilidad:* Retransmite paquetes perdidos, entrega en orden
+      - *Overhead:* Más lento pero confiable
+      - *Usos:* Web (HTTP/S), email, transferencia de archivos
+
+      *UDP (User Datagram Protocol):*
+      - *Sin conexión:* Envía datos sin handshake
+      - *No fiable:* Sin retransmisión, puede llegar desordenado
+      - *Bajo overhead:* Más rápido para tiempo real
+      - *Usos:* Video streaming, VoIP, gaming online, DNS
+
+      *PROTOCOLOS DE APLICACIÓN:*
+
+      *HTTP/HTTPS (Web):*
+      - HTTP: No encriptado
+      - HTTPS: Encriptado con SSL/TLS
+
+      *FTP/SFTP (Transferencia archivos):*
+      - FTP: No seguro
+      - SFTP: Seguro sobre SSH
+
+      *SSH (Secure Shell):*
+      - Conexión segura remota a servidores
+
+      *DNS (Domain Name System):*
+      - Resolución nombres dominio a IP
+
+      *DHCP (Dynamic Host Configuration):*
+      - Asignación automática de IPs en red local
+
+      *PUERTOS COMUNES:*
+      - 80: HTTP | 443: HTTPS | 22: SSH | 53: DNS
+      - 25: SMTP | 110: POP3 | 143: IMAP
+      - 25565: Minecraft | 27015: Steam`
+    },       
+        
+        ]
+      },
+      {
+        id: 'os-maintenance',
+        title: 'Sistemas Operativos',
+        items: [
+{ id:'win-install', title:'Instalar Windows 10/11 desde USB', tags:['windows','instalación'], summary:'Creación de USB booteable y consideraciones UEFI', content:`*PRE-INSTALACIÓN - PREPARACIÓN ESENCIAL:*
+      
+      *1. Backup de Datos:*
+      - Documentos, fotos, videos, descargas
+      - Favoritos del navegador, contraseñas guardadas
+      - Licencias de software, claves de producto
+      - Configuraciones de aplicaciones importantes
+
+      *2. Herramientas Necesarias:*
+      - USB de 8GB+ para crear medio de instalación
+      - Herramienta Media Creation Tool de Microsoft
+      - Drivers actualizados (especialmente red y chipset)
+      - Software esencial post-instalación listo para instalar
+
+      *PROCESO DE INSTALACIÓN DETALLADO:*
+
+      *Paso 1 - Crear USB Booteable:*
+      - Descargar Media Creation Tool desde Microsoft
+      - Ejecutar como administrador, seleccionar "Crear medio de instalación"
+      - Elegir idioma, edición y arquitectura (64-bit recomendado)
+      - Seleccionar USB flash drive y esperar a que se cree
+
+      *Paso 2 - Configurar BIOS/UEFI:*
+      - Reiniciar y entrar a BIOS (F2, Del, F12 según motherboard)
+      - Deshabilitar Secure Boot temporalmente
+      - Habilitar arranque desde USB como primera opción
+      - Guardar cambios y reiniciar
+
+      *Paso 3 - Instalación Windows:*
+      - Presionar cualquier tecla cuando aparezca "Press any key to boot from USB"
+      - Seleccionar idioma, formato hora y teclado
+      - Hacer clic en "Instalar ahora"
+      - Introducir clave de producto o elegir "No tengo clave de producto"
+      - Seleccionar edición de Windows (Home/Pro)
+      - Aceptar términos de licencia
+
+      *Paso 4 - Particionado Avanzado:*
+      - En "Tipo de instalación" elegir "Personalizada"
+      - *ELIMINAR TODAS LAS PARTICIONES* hasta que quede "Espacio no asignado"
+      - Seleccionar espacio no asignado y hacer clic en "Siguiente"
+      - Windows creará automáticamente particiones necesarias (EFI, MSR, Primaria)
+
+      *POST-INSTALACIÓN - CONFIGURACIÓN ESENCIAL:*
+      1. *Actualizaciones Windows:* Instalar todas las actualizaciones disponibles
+      2. *Controladores:* Instalar chipset, audio, red, gráficos desde fabricante
+      3. *Windows Settings:* Configurar privacidad, energía, rendimiento
+      4. *Software Essential:* Navegador, office, antivirus, utilidades
+
+      *PROBLEMAS COMUNES Y SOLUCIONES:*
+      - "No se encontraron controladores": Usar USB 2.0 o cambiar puertos
+      - Error de instalación: Verificar integridad del ISO/USB
+      - No reconoce SSD NVMe: Habilitar RAID/AHCI en BIOS`
+    },
+          { id:'linux-basics', title:'Instalación básica de Linux', tags:['linux','grub'], summary:'Tareas post-instalación esenciales', content:`*PROBLEMAS COMUNES DE ARRANQUE LINUX:*
+
+*1. Windows sobrescribe GRUB:*
+- Síntoma: Arranca directamente a Windows sin mostrar GRUB
+- Solución: Reparar GRUB desde Live USB
+
+*2. GRUB Rescue Prompt:*
+- Síntoma: Aparece consola grub rescue
+- Causa: Partición de arranque no encontrada o corrupta
+
+*3. Error: "No such device" o "Unknown filesystem"*
+- Causa: UUID cambiado o particiones modificadas
+
+*PROCEDIMIENTO DE RECUPERACIÓN GRUB:*
+
+*Desde Live USB (Método Estándar):*
+1. Bootear desde Live USB de tu distribución
+2. Abrir terminal y identificar particiones:
+\\\`bash
+sudo fdisk -l
+\\\`
+3. Montar partición raíz:
+\\\`bash
+sudo mount /dev/sdXY /mnt
+\\\`
+4. Montar sistemas especiales:
+\\\`bash
+sudo mount --bind /dev /mnt/dev
+sudo mount --bind /dev/pts /mnt/dev/pts
+sudo mount --bind /proc /mnt/proc
+sudo mount --bind /sys /mnt/sys
+\\\`
+5. Chroot:
+\\\`bash
+sudo chroot /mnt
+\\\`
+6. Reinstalar GRUB:
+\\\`bash
+grub-install /dev/sdX
+\\\`
+7. Actualizar configuración:
+\\\`bash
+update-grub
+\\\`
+8. Salir y reiniciar
+
+*UEFI SPECIFIC:*
+- Verificar modo UEFI/BIOS
+- Ver entradas UEFI:
+\\\`bash
+efibootmgr -v
+\\\`
+
+*HERRAMIENTAS ALTERNATIVAS:*
+- Boot-Repair
+- Super GRUB2 Disk
+- GRUB Customizer
+
+*PREVENCIÓN:*
+- Instalar Linux después de Windows
+- Crear partición /boot separada
+- Backup de configuración GRUB`
+ },
+
+]
+      }
+
+    ];
+
+/* =========================
+   Knowledge (conceptos sueltos)
+   ========================= */
+const KNOW_KEY = 'yiyi_knowledge_v1';
+
+let knowledge = [
+
+{
+  id:"que-es-ram",
+  title:"¿Qué es la RAM?",
+  tags:["ram","memoria ram","memoria volatil","ddr","modulos"],
+  content:`
+La RAM (Random Access Memory) es una memoria volátil donde se almacenan datos temporales.
+Sirve para que el sistema operativo y los programas accedan a información rápidamente.
+
+Características:
+- Tipos: DDR3, DDR4, DDR5
+- Es volátil: si se apaga el equipo, se borra
+- Afecta directamente el rendimiento del sistema
+  `
+},
+
+{
+  id:"tipos-ram",
+  title:"Tipos de memoria RAM",
+  tags:["ddr","ddr2","ddr3","ddr4","ddr5","memoria"],
+  content:`
+Tipos de RAM de uso común:
+- DDR2: Obsoleta, 533-800 MHz
+- DDR3: 1066-1866 MHz
+- DDR4: 2133-3200+ MHz
+- DDR5: 4800-6400+ MHz
+
+Diferencias clave:
+- Voltaje
+- Frecuencia
+- Cantidad de pines
+- Compatibilidad con motherboard
+  `
+},
+
+{
+  id:"que-es-rom",
+  title:"¿Qué es la ROM?",
+  tags:["rom","memoria rom","bios","uefi"],
+  content:`
+La ROM (Read Only Memory) es memoria no volátil.
+Contiene firmware del sistema como la BIOS/UEFI.
+Es esencial para el arranque del equipo.
+  `
+},
+
+{
+  id:"chipset",
+  title:"¿Qué es el chipset?",
+  tags:["chipset","placa madre","motherboard","northbridge","southbridge"],
+  content:`
+El chipset controla la comunicación entre CPU, RAM, GPU, almacenamiento y puertos.
+Define:
+- Compatibilidad de procesadores
+- Tipo de RAM soportada
+- Cantidad de líneas PCIe
+- Conectividad (USB, SATA, NVMe)
+  `
+},
+
+{
+  id:"bios-def",
+  title:"¿Qué es la BIOS?",
+  tags:["bios","uefi","firmware","arranque","post"],
+  content:`
+La BIOS (Basic Input/Output System) es el firmware base que inicializa el hardware.
+Funciones:
+- POST (Power-On Self Test)
+- Configuración de hardware
+- Orden de arranque
+- Control básico del sistema
+  `
+},
+
+{
+  id:"uefi",
+  title:"¿Qué es UEFI?",
+  tags:["uefi","bios moderna","gpt","secure boot"],
+  content:`
+UEFI es la versión moderna de la BIOS.
+Ventajas:
+- Soporte para discos de más de 2 TB
+- Interfaz gráfica
+- Secure Boot
+- Arranque más rápido
+- Compatibilidad con GPT
+  `
+},
+
+{
+  id:"gpt-vs-mbr",
+  title:"Diferencias entre GPT y MBR",
+  tags:["gpt","mbr","particiones","uefi","bios"],
+  content:`
+GPT:
+- Hasta 128 particiones
+- Requiere UEFI
+- Más seguro y moderno
+
+MBR:
+- Máx. 4 particiones primarias
+- Compatible con BIOS tradicional
+- Hasta 2 TB por disco
+
+Hoy se usa GPT como estándar.
+  `
+},
+
+{
+  id:"tipos-disco",
+  title:"Tipos de almacenamiento",
+  tags:["hdd","ssd","nvme","sata","disco duro","almacenamiento"],
+  content:`
+Tipos:
+1. **HDD** – Mecanico, barato, lento
+2. **SSD SATA** – Rápido, económico
+3. **SSD NVMe** – Muy rápido, PCIe
+4. **M.2 SATA** – Forma M.2 pero velocidad SATA
+
+Comparación aproximada:
+- HDD: 80–150 MB/s
+- SSD SATA: 500 MB/s
+- NVMe PCIe 3.0: 1500–3500 MB/s
+- NVMe PCIe 4.0: 5000–7000 MB/s
+  `
+},
+
+{
+  id:"tipos-fuentes",
+  title:"Tipos de fuentes de poder",
+  tags:["psu","fuente","80 plus","corriente","energia"],
+  content:`
+Una PSU convierte la corriente AC en DC.
+
+Certificaciones:
+- 80 Plus White
+- 80 Plus Bronze
+- 80 Plus Silver
+- 80 Plus Gold
+- 80 Plus Platinum
+
+Formato:
+- ATX
+- SFX
+- Flex ATX
+
+Se recomienda usar mínimo 80 Plus Bronze.
+  `
+},
+
+{
+  id:"fuente-watts",
+  title:"Cuántos watts necesita una PC",
+  tags:["psu","watts","consumo","energia"],
+  content:`
+Reglas generales:
+- Oficinas: 250–350 W
+- PCs gaming mid-range: 550–650 W
+- Gaming alta gama: 750–850 W
+- Estaciones de trabajo: 850–1200 W
+
+Siempre dejar 25–30% de margen.
+  `
+},
+
+{
+  id:"gpu",
+  title:"¿Qué es una GPU?",
+  tags:["gpu","tarjeta grafica","video","nvidia","amd"],
+  content:`
+La GPU procesa gráficos, juegos, video y aceleración de IA.
+
+Tipos:
+- Integrada: usa la RAM del sistema
+- Dedicada: memoria VRAM propia
+
+Usos modernos:
+- Juegos
+- Edición
+- IA
+- Machine Learning
+- Diseño 3D
+  `
+},
+
+{
+  id:"cpu",
+  title:"¿Qué es el procesador (CPU)?",
+  tags:["cpu","procesador","nucleos","threads"],
+  content:`
+La CPU ejecuta instrucciones y coordina todo el sistema.
+
+Conceptos clave:
+- Núcleos
+- Hilos (threads)
+- Frecuencia (GHz)
+- Caché L1/L2/L3
+
+Fabricantes principales:
+- Intel
+- AMD
+  `
+},
+
+{
+  id:"tipos-cpu",
+  title:"Tipos de procesadores actuales",
+  tags:["cpu","intel","amd","ryzen","core"],
+  content:`
+AMD Ryzen:
+- Series 3000, 5000, 7000
+
+Intel Core:
+- 10th → 14th gen
+
+Diferencias:
+- Arquitectura
+- Núcleos/hilos
+- Eficiencia
+- Soporte para DDR4/DDR5
+  `
+},
+
+{
+  id:"vrm",
+  title:"¿Qué es un VRM?",
+  tags:["vrm","motherboard","energia","cpu"],
+  content:`
+El VRM (Voltage Regulator Module) regula el voltaje del CPU.
+
+Importancia:
+- Estabilidad
+- Overclock
+- Durabilidad
+- Rendimiento bajo carga
+  `
+},
+
+{
+  id:"post-codes",
+  title:"Códigos POST y beeps",
+  tags:["post","beeps","motherboard","errores","diagnostico"],
+  content:`
+Significados comunes:
+- 1 beep: Arranque normal
+- Repetidos: RAM defectuosa
+- 3 largos: Falla de GPU
+- Pitidos continuos: CPU o motherboard
+
+Cada fabricante puede variar.
+  `
+},
+
+{
+  id:"sistema-operativo",
+  title:"¿Qué es un sistema operativo?",
+  tags:["os","windows","linux","sistema operativo"],
+  content:`
+El sistema operativo gestiona recursos del hardware y comunica usuario ↔ máquina.
+
+Ejemplos:
+- Windows 10/11
+- Linux (Ubuntu, Mint, Debian)
+- macOS
+  `
+},
+
+{
+  id:"drivers",
+  title:"¿Qué son los drivers?",
+  tags:["drivers","controladores","software"],
+  content:`
+Los drivers permiten que el hardware funcione correctamente.
+
+Tipos:
+- GPU
+- Audio
+- Red
+- Chipset
+- USB
+
+Siempre mantenerlos actualizados.
+  `
+},
+
+{
+  id:"overheating",
+  title:"Causas del sobrecalentamiento",
+  tags:["calentamiento","temperaturas","overheat"],
+  content:`
+Causas comunes:
+- Pasta térmica seca
+- Polvo acumulado
+- Mala ventilación
+- Fan curve incorrecto
+- Fuente inestable
+  `
+},
+
+{
+  id:"pasta-termica",
+  title:"¿Qué es la pasta térmica?",
+  tags:["pasta termica","cooler","cpu","temperaturas"],
+  content:`
+Es un compuesto que mejora la transferencia de calor entre CPU y disipador.
+Debe cambiarse cada 1–2 años.
+  `
+},
+
+{
+  id:"ip",
+  title:"¿Qué es una dirección IP?",
+  tags:["ip","red","ipv4","ipv6"],
+  content:`
+Dirección única que identifica dispositivos en una red.
+
+Tipos:
+- Privada
+- Pública
+- Estática
+- Dinámica
+
+Ejemplo IPv4: 192.168.1.10
+  `
+},
+
+{
+  id:"latencia-red",
+  title:"¿Qué es la latencia?",
+  tags:["red","latencia","ping"],
+  content:`
+La latencia es el tiempo que tarda un paquete en viajar.
+Se mide en ms.
+Valores buenos: 1–40 ms.
+  `
+},
+
+{
+  id:"dns",
+  title:"¿Qué es el DNS?",
+  tags:["dns","nombres de dominio","red"],
+  content:`
+DNS traduce nombres como google.com a direcciones IP.
+Es como la agenda telefónica de Internet.
+  `
+},
+
+{
+  id:"cable-utp",
+  title:"Tipos de cable UTP",
+  tags:["utp","cable","ethernet"],
+  content:`
+Categorías:
+- Cat5e → 1 Gbps
+- Cat6 → 1–10 Gbps
+- Cat6a → 10 Gbps
+- Cat7/8 → alta gama
+
+Usos:
+- Redes LAN
+- Conexiones de PC a router
+  `
+},
+
+{
+  id:"router",
+  title:"¿Qué es un router?",
+  tags:["router","red","wifi"],
+  content:`
+Dispositivo que distribuye internet entre dispositivos.
+
+Funciones:
+- DHCP
+- NAT
+- Firewall
+- WiFi
+  `
+},
+
+{
+  id:"switch",
+  title:"¿Qué es un switch?",
+  tags:["switch","red","lan"],
+  content:`
+Un switch conecta dispositivos en una red local.
+
+Tipos:
+- No gestionado
+- Gestionado
+- PoE (Power over Ethernet)
+  `
+},
+
+{
+  id:"formateo",
+  title:"¿Qué es formatear una PC?",
+  tags:["formateo","reinstalar windows","limpiar pc"],
+  content:`
+Proceso donde se reinstala el sistema operativo.
+
+Razones:
+- Virus
+- Lentitud
+- Corrupción del sistema
+- Cambio de disco
+
+Precaución: siempre respaldar datos.
+  `
+},
+
+{
+  id:"backup",
+  title:"¿Qué es un respaldo?",
+  tags:["backup","respaldo","copia de seguridad"],
+  content:`
+Copia de datos para prevenir pérdida.
+
+Métodos:
+- Cloud
+- USB
+- Disco externo
+- NAS
+  `
+},
+
+{
+  id:"windows-def",
+  title:"Versiones de Windows más usadas",
+  tags:["windows","os","sistemas"],
+  content:`
+Windows 10:
+- Estable, soporte amplio
+
+Windows 11:
+- Requiere TPM 2.0
+- Mejor rendimiento en hardware moderno
+  `
+},
+
+{
+  id:"linux-def",
+  title:"Distribuciones Linux populares",
+  tags:["linux","ubuntu","mint","debian"],
+  content:`
+Principales distribuciones:
+- Ubuntu
+- Linux Mint
+- Debian
+- Fedora
+
+Ventajas:
+- Gratis
+- Seguro
+- Ideal para servidores
+  `
+},
+
+{
+  id:"antivirus",
+  title:"¿Qué es un antivirus?",
+  tags:["antivirus","seguridad","defender"],
+  content:`
+Detecta y elimina malware.
+
+Opciones:
+- Windows Defender
+- Bitdefender
+- Kaspersky
+- ESET
+  `
+},
+
+{
+  id:"malware",
+  title:"Tipos de malware",
+  tags:["malware","virus","gusanos","troyanos"],
+  content:`
+Tipos:
+- Virus
+- Gusanos
+- Troyanos
+- Ransomware
+- Spyware
+
+Prevención:
+- Antivirus
+- Actualizaciones
+- No abrir adjuntos sospechosos
+  `
+},
+
+{
+  id:"ping",
+  title:"¿Qué es un ping?",
+  tags:["ping","red","latencia"],
+  content:`
+Ping mide el tiempo que tarda un paquete en ir y regresar.
+Sirve para diagnosticar problemas de red.
+  `
+},
+
+{
+  id:"tracert",
+  title:"¿Qué es tracert?",
+  tags:["tracert","traceroute","red"],
+  content:`
+Tracert muestra la ruta que toman los paquetes.
+Útil para identificar dónde se generan retrasos o caídas.
+  `
+},
+
+{
+  id:"firewall",
+  title:"¿Qué es un firewall?",
+  tags:["firewall","seguridad","red"],
+  content:`
+Sistema que bloquea accesos no autorizados.
+Puede ser:
+- Software
+- Hardware
+  `
+},
+
+{
+  id:"ipconfig",
+  title:"Comandos útiles de red",
+  tags:["ipconfig","ifconfig","comandos","diagnostico"],
+  content:`
+Windows:
+- ipconfig /all
+- ping
+- tracert
+
+Linux:
+- ifconfig
+- ip a
+- ping
+  `
+},
+
+{
+  id:"ram-diagnostico",
+  title:"Diagnóstico de RAM (ampliado)",
+  tags:["ram","memtest","errores","diag"],
+  content:`
+Síntomas:
+- BSOD
+- Aplicaciones cerrándose
+- Reinicios aleatorios
+
+Herramientas:
+- MemTest86
+- Windows Memory Diagnostic
+
+Soluciones:
+- Probar módulos individualmente
+- Limpiar contactos
+- Cambiar ranuras
+  `
+},
+
+{
+  id:"psu-diagnostico",
+  title:"Diagnóstico de fuente de poder",
+  tags:["psu","voltaje","tester"],
+  content:`
+Procedimientos:
+- Multímetro: medir 12V, 5V, 3.3V
+- Tester ATX
+- Verificar cables flojos
+  `
+},
+
+{
+  id:"gpu-fallas",
+  title:"Fallas comunes de GPU",
+  tags:["gpu","artefactos","pantalla negra"],
+  content:`
+Síntomas:
+- Artefactos
+- Pantalla negra
+- Drivers fallando
+
+Soluciones:
+- Reinstalar drivers
+- Cambiar cable/video
+- Bajar temperaturas
+- Limpiar polvo
+  `
+},
+
+{
+  id:"cpu-fallas",
+  title:"Fallas en CPU",
+  tags:["cpu","temperatura","rendimiento"],
+  content:`
+Causas de fallas:
+- Altas temperaturas
+- Overclock inestable
+- Pasta térmica seca
+  `
+}
+
+];
+
+// Cargar knowledge desde localStorage (si existe)
+try {
+  const rawK = localStorage.getItem(KNOW_KEY);
+  if(rawK){ const parsedK = JSON.parse(rawK); if(Array.isArray(parsedK) && parsedK.length) knowledge = parsedK; }
+} catch(e){ console.warn('Knowledge parse error', e); }
+
+// Funciones para guardar knowledge si lo editas dinámicamente
+function saveKnowledge(){ localStorage.setItem(KNOW_KEY, JSON.stringify(knowledge)); }
+
+
+
+    // Cargar KB desde localStorage si existe
+    try {
+      const rawKb = localStorage.getItem(KB_KEY);
+      if(rawKb){ const parsed = JSON.parse(rawKb); if(Array.isArray(parsed) && parsed.length) kbModules = parsed; }
+    } catch(e){ console.warn('KB parse error', e); }
+
+    // Chat history
+    let chatHistory = [];
+    try { chatHistory = JSON.parse(localStorage.getItem(MSG_KEY) || '[]'); } catch(e){ chatHistory = []; }
+
+    /* ---------- Helpers ---------- */
+    function escapeHTML(s){ return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('\"','&quot;'); }
+    function formatBubbleText(s){
+      if(!s) return '';
+      return escapeHTML(s).replace(/(\r\n|\r|\n){2,}/g,'<br><br>').replace(/(\r\n|\r|\n)/g,'<br>');
+    }
+    function nowString(){ return new Date().toLocaleString(); }
+
+    function saveHistory(){ localStorage.setItem(MSG_KEY, JSON.stringify(chatHistory)); }
+    function saveKB(){ localStorage.setItem(KB_KEY, JSON.stringify(kbModules)); }
+
+    /* ---------- Render mensajes ---------- */
+    function renderMessages(){
+      messagesEl.innerHTML = '';
+      chatHistory.forEach(m=>{
+        const wrap = document.createElement('div');
+        wrap.className = 'max-w-[78%] ';
+        if(m.role==='user'){
+          wrap.className += 'ml-auto text-right';
+          wrap.innerHTML = `
+            <div class="inline-block p-3 rounded-2xl bubble-user card-anim shadow-sm">
+              <div class="text-sm whitespace-pre-wrap">${formatBubbleText(m.text)}</div>
+              <div class="text-[10px] mt-2 text-white/70">${escapeHTML(m.time)}</div>
+            </div>`;
+        } else {
+          wrap.className += 'mr-auto text-left';
+          wrap.innerHTML = `
+            <div class="inline-block p-3 rounded-2xl bubble-assistant card-anim shadow-sm">
+              <div class="text-sm whitespace-pre-wrap">${formatBubbleText(m.text)}</div>
+              <div class="text-[10px] mt-2 text-slate-500">${escapeHTML(m.time)}</div>
+            </div>`;
+        }
+        messagesEl.appendChild(wrap);
+      });
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function addMessage(role, text){
+      const entry = { id: uid('m'), role, text, time: nowString() };
+      chatHistory.push(entry);
+      saveHistory();
+      renderMessages();
+    }
+
+    /* ---------- Lógica local y búsqueda ---------- */
+    function detectGreeting(text){
+      const t = String(text).toLowerCase();
+      const saludos = ['hola','buenos días','buenas tardes','buenas noches','buen día','buenas','qué tal'];
+      for(const s of saludos) if(t.includes(s)) return true;
+      return false;
+    }
+    function detectFarewell(text){ const t = String(text).toLowerCase(); const bye = ['adiós','chao','hasta luego','nos vemos']; for(const b of bye) if(t.includes(b)) return true; return false; }
+    function detectThanks(text){ const t = String(text).toLowerCase(); const thanks = ['gracias','muchas gracias']; for(const w of thanks) if(t.includes(w)) return true; return false; }
+
+   function localAnswer(prompt){
+  const q = String(prompt).trim();
+  if(!q) return "¡Hola! Soy Yiyi. ¿En qué puedo ayudarte hoy? 😊";
+
+  // Respuestas de cortesía
+  if(detectGreeting(q)) return "¡Hola! 😊 Soy Yiyi, tu asistente de Soporte y Mantenimiento. ¿En qué te ayudo?";
+  if(detectFarewell(q)) return "¡Hasta luego! 😊";
+  if(detectThanks(q)) return "Con gusto ✨";
+
+  const ql = q.toLowerCase();
+  let matches = [];
+
+  // 1) Buscar en kbModules (estructura de catálogo/módulos)
+  kbModules.forEach(mod=>{
+    mod.items.forEach(it=>{
+      const hay = (it.title + ' ' + (it.tags||[]).join(' ') + ' ' + (it.summary||'') + ' ' + (it.content||'')).toLowerCase();
+      if(hay.includes(ql)) matches.push({source: 'module', mod: mod.title, item: it});
+    });
+  });
+
+  // 2) Buscar en knowledge (conceptos sueltos)
+  knowledge.forEach(k=>{
+    const hay = (k.title + ' ' + (k.tags||[]).join(' ') + ' ' + (k.content||'')).toLowerCase();
+    if(hay.includes(ql)) matches.push({source: 'concept', item: k});
+  });
+
+  // Si hay resultados, priorizar y formatear salida
+  if(matches.length > 0){
+    // Opcional: ordenar por fuente (modules primero) o por relevancia simple
+    const modulesMatches = matches.filter(m=>m.source === 'module');
+    const conceptMatches = matches.filter(m=>m.source === 'concept');
+
+    const ordered = modulesMatches.concat(conceptMatches);
+    const top = ordered.slice(0,6); // mostrar hasta 6 resultados
+
+    let out = `Encontré ${matches.length} resultado(s) relacionados:\n\n`;
+    top.forEach(m => {
+      if(m.source === 'module'){
+        out += `— ${m.item.title} (${m.mod}):\n${m.item.summary}\nDetalle:\n${m.item.content}\n\n`;
+      } else { // concept
+        out += `— ${m.item.title} (Concepto):\n${m.item.content}\n\n`;
+      }
+    });
+
+    if(matches.length > top.length) out += `Y ${matches.length - top.length} resultado(s) más. Afina tu búsqueda para verlos.\n`;
+    return out;
+  }
+
+  // Si no encontró nada, sugerencias
+  return `No encontré información directa para "${prompt}". Prueba con alguna de estas sugerencias:\n• "clonar SSD"\n• "diagnóstico RAM"\n• "instalar Windows desde USB"`;
+}
+
+    /* ---------- Envío y flujo de chat ---------- */
+    function sendUserMessage(text){
+      if(!text || !String(text).trim()) return;
+      addMessage('user', text);
+      inputMsg.value = '';
+      const typingWrap = document.createElement('div');
+      typingWrap.className = 'mr-auto';
+      typingWrap.innerHTML = `<div class="inline-block p-3 rounded-2xl bg-white/6 text-slate-200"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+      messagesEl.appendChild(typingWrap);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+
+      const thinkDelay = 400 + Math.min(1500, text.length * 6);
+      setTimeout(()=> {
+        if(typingWrap && typingWrap.parentNode) typingWrap.parentNode.removeChild(typingWrap);
+        const ans = localAnswer(text);
+        addMessage('assistant', ans);
+        // speak (with voice selection)
+        try { speak(ans.replace(/\*/g,'')); } catch(e){}
+      }, thinkDelay);
+    }
+
+    // handlers
+    sendBtn.addEventListener('click', ()=> sendUserMessage(inputMsg.value));
+    inputMsg.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendUserMessage(inputMsg.value); }
+    });
+
+    btnQuick.addEventListener('click', ()=>{
+      const templates = [
+        'Diagnóstico rápido: equipo no enciende',
+        'Checklist preventivo para laptop (aula)',
+        'Comandos para comprobar red en Windows',
+        'Pasos para clonar HDD a SSD'
+      ];
+      const selection = prompt('Elige plantilla (escribe número):\n' + templates.map((v,i)=>`${i+1}. ${v}`).join('\n'));
+      const idx = parseInt(selection)-1;
+      if(!isNaN(idx) && templates[idx]) inputMsg.value = templates[idx];
+    });
+
+    // keyboard shortcuts
+    document.addEventListener('keydown', (e)=>{
+      if(e.ctrlKey && e.key.toLowerCase()==='k'){ e.preventDefault(); kbSearch.focus(); }
+      if(e.ctrlKey && (e.key === 'Enter')){ e.preventDefault(); sendBtn.click(); }
+    });
+
+    // clear chat
+    btnClear.addEventListener('click', ()=> {
+      if(confirm('¿Borrar historial de chat?')) {
+        chatHistory = [];
+        localStorage.removeItem(MSG_KEY);
+        renderMessages();
+      }
+    });
+
+    /* voice: prefer female, fallback to any Spanish voice */
+    let selectedVoice = null;
+    function loadVoices(){
+      const voices = speechSynthesis.getVoices();
+      if (!voices.length) return;
+      // Try to find a female voice (common names or labels)
+      selectedVoice = voices.find(v =>
+        v.lang && v.lang.toLowerCase().includes('es') &&
+        (v.name.toLowerCase().includes('sabina') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('maria') || v.name.toLowerCase().includes('soledad') || v.name.toLowerCase().includes('laura') || v.name.toLowerCase().includes('lina'))
+      );
+      if (!selectedVoice) selectedVoice = voices.find(v => v.lang && v.lang.toLowerCase().includes('es'));
+    }
+    speechSynthesis.onvoiceschanged = loadVoices;
+    loadVoices();
+
+    function speak(text){
+      if (!('speechSynthesis' in window)) return;
+      // ensure voices are loaded (Chrome/Edge may delay)
+      if (!speechSynthesis.getVoices().length) {
+        // try reloading once
+        loadVoices();
+      }
+      const msg = new SpeechSynthesisUtterance(text);
+      msg.lang = 'es-MX';
+      if (selectedVoice) msg.voice = selectedVoice;
+      // adjust rate/volume if you want
+      msg.rate = 1;
+      msg.volume = 1;
+      speechSynthesis.cancel();
+      try { speechSynthesis.speak(msg); } catch(e){}
+    }
+
+    /* ---------- Render KB (UI) with MAX_VISIBLE_ITEMS behavior ---------- */
+    function renderKB(filter=''){
+      kbList.innerHTML = '';
+      kbModules.forEach(mod=>{
+        const matchingItems = mod.items.filter(it=>{
+          const hay = (it.title + ' ' + (it.tags||[]).join(' ') + ' ' + (it.summary||'') + ' ' + (it.content||'')).toLowerCase();
+          return hay.includes(filter.toLowerCase());
+        });
+        if(matchingItems.length === 0) return;
+
+        const card = document.createElement('div');
+        card.className = 'p-3 rounded-xl bg-white/4 border border-white/6 card-anim';
+
+        card.innerHTML = `<div class="flex items-center justify-between">
+            <div>
+              <h4 class="text-md font-semibold">${escapeHTML(mod.title)}</h4>
+              <p class="text-xs text-slate-300">${matchingItems.length} entrada(s)</p>
+            </div>
+            <div>
+              <button class="px-2 py-1 text-xs rounded-lg bg-white/6 viewBtn">Ver</button>
+            </div>
+          </div>
+          <div class="mt-3 grid gap-2 items-container"></div>`;
+
+        kbList.appendChild(card);
+
+        const container = card.querySelector('.items-container');
+        matchingItems.forEach((it, index) => {
+          const hiddenClass = index >= MAX_VISIBLE_ITEMS ? 'hiddenItem' : '';
+          const itemHtml = document.createElement('div');
+          itemHtml.className = `p-2 rounded-lg bg-white/5 ${hiddenClass} catalog-item`;
+          itemHtml.setAttribute('data-mod', mod.id);
+          itemHtml.innerHTML = `
+            <div class="flex items-start justify-between">
+              <div>
+                <div class="text-sm font-medium">${escapeHTML(it.title)}</div>
+                <div class="text-[11px] text-slate-300">${escapeHTML(it.summary)}</div>
+              </div>
+              <div class="text-xs text-slate-400 ml-3">${it.tags ? escapeHTML(it.tags.slice(0,2).join(', ')) : ''}</div>
+            </div>
+          `;
+          container.appendChild(itemHtml);
+        });
+
+        if (matchingItems.length > MAX_VISIBLE_ITEMS) {
+          const toggle = document.createElement('div');
+          toggle.className = 'mt-2';
+          toggle.innerHTML = `<button class="toggleBtn" data-mod="${escapeHTML(mod.id)}">Ver más</button>`;
+          card.appendChild(toggle);
+        }
+
+        // bind view button
+        card.querySelectorAll('.viewBtn').forEach(b=>{
+          b.addEventListener('click', ()=> openModuleModal(mod));
+        });
+      });
+    }
+
+    // Toggle behavior for Ver más / Ver menos
+    document.addEventListener('click', (e) => {
+      if (!e.target.classList.contains('toggleBtn')) return;
+      const modId = e.target.getAttribute('data-mod');
+      const selector = `.catalog-item[data-mod="${modId}"]`;
+      const items = Array.from(document.querySelectorAll(selector));
+      if (!items.length) return;
+      const anyHidden = items.some(it => it.classList.contains('hiddenItem'));
+      if (anyHidden) {
+        items.forEach(it => it.classList.remove('hiddenItem'));
+        e.target.textContent = 'Ver menos';
+      } else {
+        items.forEach((it, idx) => { if (idx >= MAX_VISIBLE_ITEMS) it.classList.add('hiddenItem'); });
+        e.target.textContent = 'Ver más';
+      }
+    });
+
+    function openModuleModal(mod){
+      modalRoot.innerHTML = `
+        <div id="modalOverlay" class="fixed inset-0 bg-black/50 flex items-center justify-center z-40">
+          <div class="w-[95%] max-w-3xl bg-gradient-to-b from-white/6 to-white/2 p-4 rounded-2xl border border-white/8">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-lg font-semibold">${escapeHTML(mod.title)}</h3>
+                <p class="text-xs text-slate-300">${mod.items.length} entradas</p>
+              </div>
+              <div><button id="closeModal" class="px-3 py-1 rounded-lg bg-white/6">Cerrar</button></div>
+            </div>
+            <div id="modalContent" class="mt-4 space-y-3 max-h-[60vh] overflow-auto pr-2">
+              ${mod.items.map(it=>`
+                <div class="p-3 rounded-xl bg-white/5">
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <div class="font-medium">${escapeHTML(it.title)}</div>
+                      <div class="text-xs text-slate-300">${escapeHTML(it.summary)}</div>
+                    </div>
+                    <div class="text-xs text-slate-400">${it.tags ? escapeHTML(it.tags.join(', ')) : ''}</div>
+                  </div>
+                  <details class="mt-2 text-sm"><summary class="cursor-pointer">Ver detalle</summary><pre class="whitespace-pre-wrap text-[13px] mt-2">${escapeHTML(it.content)}</pre></details>
+                  <div class="mt-2 flex gap-2">
+                    <button class="px-2 py-1 rounded-lg bg-indigo-500 text-sm copyBtn">Copiar</button>
+                    <button class="px-2 py-1 rounded-lg bg-emerald-500 text-sm insertBtn">Enviar al chat</button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+      const closeModal = $('closeModal');
+      if(closeModal) closeModal.addEventListener('click', ()=> modalRoot.innerHTML = '');
+
+      const copyBtns = modalRoot.querySelectorAll('.copyBtn');
+      const insertBtns = modalRoot.querySelectorAll('.insertBtn');
+      copyBtns.forEach((b,i)=> b.addEventListener('click', ()=> {
+        const text = mod.items[i].content;
+        navigator.clipboard.writeText(text).then(()=> alert('Copiado al portapapeles'), ()=> alert('No se pudo copiar'));
+      }));
+      insertBtns.forEach((b,i)=> b.addEventListener('click', ()=> {
+        addMessage('user', `Solicito: ${mod.items[i].title}`);
+        addMessage('assistant', mod.items[i].content);
+        modalRoot.innerHTML = '';
+      }));
+    }
+
+    kbSearch.addEventListener('input', (e)=> renderKB(e.target.value.trim()));
+
+    exportKB.addEventListener('click', ()=> {
+      const blob = new Blob([JSON.stringify(kbModules, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'yiyi_kb_export.json'; document.body.appendChild(a); a.click();
+      a.remove(); URL.revokeObjectURL(url);
+    });
+
+    // flashcards / estudio
+    studyBtn.addEventListener('click', ()=> {
+      const pool = kbModules.flatMap(m=>m.items).slice(0,120);
+      if(pool.length === 0){ alert('No hay contenido para estudiar.'); return; }
+      let idx = 0;
+      modalRoot.innerHTML = `
+        <div class="fixed inset-0 bg-black/60 flex items-center justify-center z-40">
+          <div class="w-[92%] max-w-2xl p-4 rounded-2xl bg-gradient-to-b from-white/6 to-white/3 border border-white/8">
+            <div class="flex items-center justify-between mb-4">
+              <h4 class="text-lg font-semibold">Flashcards — Modo Estudio</h4>
+              <button id="closeStudy" class="px-2 py-1 rounded-lg bg-white/6">Cerrar</button>
+            </div>
+            <div id="cardArea" class="min-h-[220px] flex items-center justify-center p-6"></div>
+            <div class="mt-4 flex justify-between">
+              <div><button id="prevCard" class="px-3 py-2 rounded-lg bg-white/6">Anterior</button></div>
+              <div class="flex gap-2">
+                <button id="flipCard" class="px-3 py-2 rounded-lg bg-indigo-500">Mostrar respuesta</button>
+                <button id="nextCard" class="px-3 py-2 rounded-lg bg-emerald-500">Siguiente</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      function renderCard(i, showAnswer=false){
+        const it = pool[i];
+        const area = $('cardArea');
+        area.innerHTML = `<div class="p-6 rounded-xl bg-white/5 w-full">
+          <div class="text-sm text-slate-300">Tema: ${escapeHTML(it.title)}</div>
+          <div class="mt-3 text-base">${showAnswer ? '<pre class="whitespace-pre-wrap text-[14px]">' + escapeHTML(it.content) + '</pre>' : '<div class="font-medium">' + escapeHTML(it.summary) + '</div>'}</div>
+        </div>`;
+      }
+      renderCard(idx,false);
+      $('closeStudy').addEventListener('click', ()=> modalRoot.innerHTML = '');
+      $('flipCard').addEventListener('click', ()=> renderCard(idx, true));
+      $('nextCard').addEventListener('click', ()=> { idx = (idx+1) % pool.length; renderCard(idx, false); });
+      $('prevCard').addEventListener('click', ()=> { idx = (idx-1 + pool.length) % pool.length; renderCard(idx, false); });
+    });
+
+    // Open buttons
+    openChat.addEventListener('click', ()=> { window.scrollTo({ top: 0, behavior: 'smooth' }); $('chatPanel').scrollIntoView({ behavior:'smooth' }); });
+    openKB.addEventListener('click', ()=> { window.scrollTo({ top: 0, behavior: 'smooth' }); $('kbPanel').scrollIntoView({ behavior:'smooth' }); });
+
+    // allow import via paste (JSON)
+    window.addEventListener('paste', (e)=> {
+      try {
+        const txt = (e.clipboardData || window.clipboardData).getData('text');
+        if(!txt) return;
+        const parsed = JSON.parse(txt);
+        if(Array.isArray(parsed)){
+          if(confirm('JSON detectado en portapapeles. ¿Importar como base de conocimiento?')) {
+            kbModules = parsed;
+            saveKB();
+            renderKB();
+            alert('Importación completada.');
+          }
+        }
+      } catch(e){}
+    });
+
+    /* Inicialización */
+    renderKB();
+    renderMessages();
+
+    // Saludo proactivo
+    if(chatHistory.length === 0){
+      addMessage('assistant', '¡Hola! 😊 Soy Yiyi, tu asistente de Soporte y Mantenimiento. ¿En qué puedo ayudarte hoy?');
+    }
+  </script>
+</body>
+</html>
