@@ -180,6 +180,638 @@ lscpu o cat /proc/cpuinfo | grep "model name"
 *Identificar el Socket:*
 Una vez que tengas el modelo de CPU (ej: AMD Ryzen 5 5600X, Intel Core i7-12700K), busca su ficha técnica en la web del fabricante. El socket para el Ryzen 5 5600X es AM4, y para el i7-12700K es LGA 1700.
 `},
+{
+  id: "st-presencial-diagnostico-rapido",
+  title: "Diagnóstico rápido en sitio",
+  tags: ["soporte", "presencial", "diagnóstico"],
+  summary: "Cómo realizar un diagnóstico rápido al llegar con el cliente.",
+  content: `
+**OBJETIVO:** Identificar fallas en menos de 5 minutos al llegar al equipo.
+
+**PASOS:**
+1. Preguntar al usuario la descripción del problema (qué hizo antes, qué vio, qué cambió).
+2. Verificar conexiones visibles: energía, cables sueltos, pantallas apagadas.
+3. Revisar luces de estado del equipo: PSU, motherboard, disco, monitor.
+4. Hacer un arranque de prueba: escuchar beeps, ventiladores, comportamiento.
+5. Entrar a BIOS si es posible para detectar hardware.
+6. Anotar síntomas y proceder al diagnóstico avanzado.
+
+**UTILIDAD:** Acelera la reparación al descartar problemas básicos.`
+},
+{
+  id: "st-presencial-revision-fisica",
+  title: "Revisión física del equipo",
+  tags: ["física", "soporte", "hardware"],
+  summary: "Proceso para revisar físicamente un equipo en sitio.",
+  content: `
+**PASO A PASO:**
+1. Apagar equipo y desconectar el cable de energía.
+2. Retirar tapa lateral o inferior.
+3. Revisar presencia de polvo compacto en ventiladores, disipadores, PSU.
+4. Verificar capacitores inflados o derramados.
+5. Revisar conectores SATA, ATX, EPS, ventiladores.
+6. Verificar que la RAM esté bien asentada.
+7. Revisar si algún componente huele a quemado.
+8. Tomar fotos para evidencia.
+
+**RESULTADO:** Determinar si la falla es física, eléctrica o de software.`
+},
+{
+  id: "st-presencial-multimetro",
+  title: "Pruebas rápidas con multímetro",
+  tags: ["multimetro", "voltajes", "psu"],
+  summary: "Cómo medir voltajes esenciales para diagnóstico.",
+  content: `
+**PASOS:**
+1. Colocar multímetro en DCV (20V o automático).
+2. Identificar conector ATX de 24 pines.
+3. Medir:
+   - Línea 12V (amarillo)
+   - Línea 5V (rojo)
+   - Línea 3.3V (naranja)
+4. Comparar con tolerancias ATX (+/- 5%).
+5. Revisar continuidad en cable de poder.
+6. Confirmar si hay caída de voltaje bajo carga.
+
+**CONCLUSIÓN:** Determina si la PSU tiene fallas críticas.`
+},
+{
+  id: "st-presencial-test-ram",
+  title: "Testeo rápido de RAM en sitio",
+  tags: ["ram", "diagnóstico", "memoria"],
+  summary: "Cómo probar la RAM sin herramientas avanzadas.",
+  content: `
+**PASOS:**
+1. Apagar equipo y desconectar.
+2. Quitar módulo(s) de RAM.
+3. Limpiar contactos con goma blanca.
+4. Probar cada módulo individualmente.
+5. Alternar ranuras para descartar slot dañado.
+6. Encender y comprobar si arranca sin beeps.
+7. Entrar a BIOS → verificar memoria detectada.
+
+**RESULTADO:** Detecta módulos defectuosos o ranuras dañadas.`
+},
+{
+  id: "st-presencial-drivers",
+  title: "Reinstalación rápida de drivers críticos",
+  tags: ["drivers", "soporte", "windows"],
+  summary: "Reinstalar drivers sin formatear.",
+  content: `
+**PASOS:**
+1. Abrir Administrador de dispositivos.
+2. Identificar controladores con advertencias.
+3. Desinstalar → marcar "Eliminar software del controlador".
+4. Reiniciar equipo.
+5. Instalar drivers correctos del fabricante.
+6. Evitar drivers genéricos en GPU, red y chipset.
+
+**APLICA PARA:** fallas de red, pantalla, sonido, USB.`
+},
+{
+  id: "st-presencial-limpieza-express",
+  title: "Limpieza express del sistema",
+  tags: ["limpieza", "software", "mantenimiento"],
+  summary: "Optimización ligera sin formateo.",
+  content: `
+**PASOS:**
+1. Ejecutar "cleanmgr" → limpiar archivos temporales.
+2. Borrar %temp% y prefetch.
+3. Revisar programas al inicio: msconfig o Administrador de tareas.
+4. Desinstalar programas basura.
+5. Escanear con antivirus rápido.
+6. Revisar salud del disco con: 
+   - wmic diskdrive get status
+   - CrystalDiskInfo
+
+**RESULTADO:** rendimiento mejorado sin cambios invasivos.`
+},
+{
+  id: "st-presencial-red",
+  title: "Evaluación de fallas de red en sitio",
+  tags: ["red", "ethernet", "wifi"],
+  summary: "Diagnóstico rápido de conexión.",
+  content: `
+**PASOS:**
+1. Verificar si el equipo recibe IP:  
+   CMD → ipconfig
+2. Probar conexión a router:  
+   ping 192.168.1.1
+3. Probar conexión externa:  
+   ping google.com
+4. Revisar cable Ethernet o antena WiFi.
+5. Reiniciar adaptador desde Windows.
+6. Cambiar DNS por 8.8.8.8 / 1.1.1.1.
+
+**RESULTADO:** Identifica si la falla es del equipo, módem o proveedor.`
+},
+{
+  id: "st-presencial-impresoras",
+  title: "Soporte presencial para impresoras",
+  tags: ["impresoras", "soporte", "periféricos"],
+  summary: "Revisión básica y soluciones rápidas.",
+  content: `
+**PASOS:**
+1. Verificar estado en panel frontal.
+2. Revisar niveles de tinta o tóner.
+3. Eliminar atasco de papel manualmente.
+4. Reinstalar driver desde fabricante.
+5. Revisar cola de impresión → eliminar tareas trabadas.
+6. Probar impresión de diagnóstico desde la impresora.
+
+**RESULTADO:** Solución inmediata de 80% de fallas comunes.`
+},
+{
+  id: "st-presencial-reporte",
+  title: "Reporte técnico presencial",
+  tags: ["reporte", "soporte", "presencial"],
+  summary: "Cómo documentar la atención presencial.",
+  content: `
+**ELEMENTOS DEL REPORTE:**
+1. Datos del cliente.
+2. Descripción del problema.
+3. Acciones realizadas.
+4. Componentes sustituidos.
+5. Recomendaciones.
+6. Estado final del equipo.
+7. Firma del cliente.
+
+**BENEFICIO:** Registro profesional y seguimiento.`
+},
+{
+  id: "st-remoto-videollamada",
+  title: "Diagnóstico remoto por videollamada",
+  tags: ["remoto", "videollamada", "diagnóstico"],
+  summary: "Guía para atender problemas sin estar físicamente.",
+  content: `
+**PASOS:**
+1. Solicitar al usuario mostrar pantalla y componente afectado.
+2. Identificar síntomas: luces, cables, errores.
+3. Guiar paso a paso al usuario para pruebas básicas.
+4. Solicitar capturas o fotos si es necesario.
+5. Anotar acciones realizadas.
+
+**UTILIDAD:** Ahorra desplazamientos y tiempo.`
+},
+{
+  id: "st-remoto-control",
+  title: "Control remoto con AnyDesk o TeamViewer",
+  tags: ["remoto", "anydesk", "teamviewer"],
+  summary: "Guía para conectarse al equipo del usuario.",
+  content: `
+**PASOS:**
+1. Solicitar al usuario instalar AnyDesk/TeamViewer.
+2. Pedir ID de conexión y permiso.
+3. Conectarse y verificar control.
+4. Realizar diagnóstico: drivers, procesos, virus, errores.
+5. Configurar optimizaciones.
+6. Desconectarse y confirmar que el cliente quedó conforme.
+
+**SEGURIDAD:** no guardar contraseñas ni accesos permanentes.`
+},
+{
+  id: "st-remoto-red",
+  title: "Solución remota para fallas de red",
+  tags: ["red", "wifi", "remoto"],
+  summary: "Comandos de reparación remota.",
+  content: `
+**PASOS:**
+1. Ejecutar CMD como admin.
+2. Comandos esenciales:
+   - ipconfig /release
+   - ipconfig /renew
+   - ipconfig /flushdns
+   - netsh winsock reset
+3. Revisar adaptador en Administrador de dispositivos.
+4. Configurar DNS manualmente.
+
+**UTILIDAD:** Soluciona 70% de fallas de conexión.`
+},
+{
+  id: "st-remoto-virus",
+  title: "Eliminación remota de virus",
+  tags: ["virus", "malware", "seguridad"],
+  summary: "Limpieza remota sin formatear.",
+  content: `
+**PASOS:**
+1. Instalar Malwarebytes o Windows Defender Offline.
+2. Ejecutar análisis completo.
+3. Desactivar programas sospechosos del inicio.
+4. Eliminar temporales.
+5. Revisar extensiones del navegador.
+6. Restablecer configuración de red.
+
+**RESULTADO:** Sistema estable sin intervención física.`
+},
+{
+  id: "st-remoto-bios",
+  title: "Guía para entrar a BIOS de manera remota",
+  tags: ["bios", "remoto"],
+  summary: "Cómo ayudar al usuario a entrar al BIOS.",
+  content: `
+**PASOS:**
+1. Explicar cuál tecla presionar:  
+   - Del/F2 (común en PC)  
+   - Esc/F12 (portátiles)
+2. Pedir reiniciar equipo.
+3. Confirmar que no desconecte nada.
+4. Guiarlo dentro de BIOS para ver:
+   - Temperaturas
+   - Orden de arranque
+   - Memoria detectada
+5. Indicar cómo salir sin guardar cambios.
+
+**UTILIDAD:** Diagnóstico sin presencia física.`
+},
+{
+  id: "st-remoto-drivers",
+  title: "Guía remota para reinstalar drivers",
+  tags: ["drivers", "remoto", "reinstalar"],
+  summary: "Ayudar paso a paso al usuario a reinstalar controladores.",
+  content: `
+**PASOS:**
+1. Instruir al usuario que abra Administrador de dispositivos.
+2. Buscar controladores con símbolo amarillo.
+3. Indicar cómo desinstalar.
+4. Enviar link oficial de drivers.
+5. Verificar instalación correcta.
+6. Reiniciar sistema.
+
+**APLICA A:** sonido, red, gráficos, chipset.`
+},
+{
+  id: "st-remoto-config-soft",
+  title: "Configuración remota de software",
+  tags: ["software", "remoto", "configuración"],
+  summary: "Ayudar al usuario a configurar programas.",
+  content: `
+**APLICA A:** Office, navegadores, antivirus, impresoras, correo.
+
+**PASOS:**
+1. Ingresar al software mediante control remoto.
+2. Configurar ajustes pedidos.
+3. Explicar al usuario cómo usar la función.
+4. Dejar acceso rápido en el escritorio.
+5. Confirmar que funciona como desea.
+
+**BENEFICIO:** Usuario aprende sin necesidad de visita.`
+},
+{
+  id: "st-remoto-impresoras",
+  title: "Solución remota para impresoras",
+  tags: ["impresoras", "remoto", "periféricos"],
+  summary: "Guía para resolver problemas de impresión sin estar presente.",
+  content: `
+**PASOS:**
+1. Ver si aparece conectada en Dispositivos e impresoras.
+2. Revisar cola de impresión.
+3. Cancelar tareas atascadas.
+4. Reinstalar controlador.
+5. Indicar impresión de prueba.
+6. Restablecer spooler:
+   - net stop spooler
+   - net start spooler
+`
+},
+{
+  id: "st-remoto-hardware",
+  title: "Comprobación remota del hardware",
+  tags: ["hardware", "remoto"],
+  summary: "Validación remota del estado del hardware.",
+  content: `
+**HERRAMIENTAS:**
+- CPU-Z  
+- HWMonitor  
+- CrystalDiskInfo  
+
+**PASOS:**
+1. Pedir al usuario instalar herramientas.
+2. Solicitar capturas de:
+   - temperaturas
+   - voltajes
+   - velocidades de ventiladores
+   - estado del disco
+3. Diagnosticar en base a valores anormales.
+
+**RESULTADO:** Evaluación avanzada sin abrir el equipo.`
+},
+{
+    id: 'hw-identificacion-componentes',
+    title: 'Identificación de Componentes Internos del PC',
+    category: 'Hardware - Conceptos y Diagnóstico',
+    tags: ['componentes','identificación','gabinete','hardware'],
+    summary: 'Lista y ubicación de los componentes principales dentro del gabinete.',
+    content: `Paso a paso:
+1) Apaga el equipo y desconecta la fuente eléctrica. Presiona el botón de encendido 5s para descargar energía residual.
+2) Retira los paneles laterales del gabinete (normalmente con tornillos traseros) y apóyalos en superficie limpia.
+3) Localiza la tarjeta madre: es la placa grande sobre la que se conectan CPU, RAM, GPU y cables.
+4) Localiza el socket del CPU (cerca del centro superior), las ranuras DIMM (verticales, para RAM), y las ranuras PCIe (largas, para GPU y tarjetas).
+5) Identifica la fuente de poder (PSU) en la parte superior o inferior del gabinete y sigue sus cables: 24-pin ATX, 8/4-pin EPS (CPU), cables PCIe (GPU), y cables SATA.
+6) Localiza discos (HDD/SSD) en bahías o ranuras M.2 en la motherboard.
+7) Identifica conectores del panel frontal (POWER, RESET, HDD LED, USB, audio) ubicados en el borde inferior de la placa.
+Verificación:
+- Toma fotos o haz un esquema simple para futuras referencias.
+- Comprueba que no haya tornillos sueltos ni cables pellizcados.`
+  },
+  {
+    id: 'hw-instalacion-motherboard',
+    title: 'Instalación de la Tarjeta Madre',
+    category: 'Hardware - Conceptos y Diagnóstico',
+    tags: ['motherboard','instalacion','montaje','standoffs'],
+    summary: 'Cómo montar la placa base dentro del gabinete correctamente.',
+    content: `Paso a paso:
+1) Prepara el gabinete: instala los separadores (standoffs) en las posiciones que coincidan con los agujeros de la motherboard.
+2) Coloca la placa I/O shield (placa metálica trasera) en la abertura posterior del gabinete; asegúrate que encaje.
+3) Coloca la motherboard sobre los separadores alineando los agujeros; inserta tornillos sin apretar demasiado (cruza y aprieta en estrella).
+4) Conecta el cable principal ATX 24 pines y el EPS/CPU 8/4 pines (no obligar conectores).
+5) Asegura que la placa no toque el chasis metálico (evita cortocircuitos).
+6) Verifica que las ranuras PCIe y DIMM están accesibles y que el I/O shield no bloquee puertos.
+Verificación:
+- No debería haber contacto directo metal-metal entre placa y chasis.
+- Los cables 24p y 8p deben entrar con un clip audible.`
+  },
+  {
+    id: 'hw-instalacion-cpu',
+    title: 'Instalación del Procesador',
+    category: 'Hardware - Conceptos y Diagnóstico',
+    tags: ['cpu','procesador','socket','instalacion'],
+    summary: 'Colocación segura del CPU en el socket de la placa.',
+    content: `Paso a paso:
+1) Identifica el pin de referencia (triángulo) en el CPU y el correspondiente en el socket.
+2) Abre la palanca del socket o retira la tapa protectora según el tipo (LGA o PGA).
+3) Inserta el CPU con cuidado: no ejerzas fuerza lateral ni arrastres pines.
+4) Baja la palanca o coloca la tapa y asegúrala según el mecanismo del socket.
+5) Limpia la superficie del IHS del CPU si es necesario (alcohol isopropílico) antes de aplicar pasta térmica.
+6) Monta el sistema de refrigeración (ver pasos de pasta térmica y montaje del disipador).
+Verificación:
+- Palanca cerrada y nivel; no ver pines doblados.
+- La CPU queda asentada sin juego.`
+  },
+  {
+    id: 'hw-aplicacion-pasta-termica',
+    title: 'Aplicación de Pasta Térmica',
+    category: 'Hardware - Conceptos y Diagnóstico',
+    tags: ['pasta termica','thermal paste','cpu','disipador'],
+    summary: 'Técnica para aplicar pasta térmica entre CPU y disipador.',
+    content: `Paso a paso:
+1) Usa una pequeña cantidad: el tamaño de un grano de arroz o un punto central (según CPU).
+2) No extiendas con dedos; el apretado del disipador distribuirá la pasta.
+3) Coloca el disipador encima del CPU y atornilla en patrón cruzado (si aplica) o fijación recomendada por fabricante.
+4) No retires el disipador una vez instalado sin limpiar y reaplicar pasta.
+Verificación:
+- Monitorea temperaturas en BIOS al primer arranque; idle <50°C en sistemas bien refrigerados.
+- Si temperaturas elevadas, revisa aplicación y montaje.`
+  },
+  {
+    id: 'hw-instalacion-ram',
+    title: 'Instalación de Módulos RAM',
+    category: 'Hardware - Conceptos y Diagnóstico',
+    tags: ['ram','dimms','sodimm','dual-channel'],
+    summary: 'Cómo insertar módulos DIMM / SO-DIMM y configurar dual-channel.',
+    content: `Paso a paso:
+1) Consulta el manual de la placa para identificar ranuras recomendadas para dual-channel (ej. A2+B2).
+2) Abre los clips de las ranuras DIMM.
+3) Alinea la muesca del módulo con la ranura e inserta con presión uniforme hasta escuchar el clic.
+4) Verifica que ambos clips estén cerrados.
+5) Si es SO-DIMM (laptop), insertar con ángulo y presionar hasta encajar.
+Verificación:
+- Enciende y entra a BIOS para verificar la capacidad y frecuencia detectadas.
+- Si no detecta RAM, prueba módulo por módulo y ranura por ranura.`
+  },
+  {
+    id: 'hw-fuente-poder',
+    title: 'Instalación de la Fuente de Poder ATX',
+    category: 'Hardware - Conceptos y Diagnóstico',
+    tags: ['psu','fuente','energia','atx'],
+    summary: 'Montaje y conexión de la PSU y sus cables principales.',
+    content: `Paso a paso:
+1) Inserta la PSU en su lugar (inferior o superior) y asegura con tornillos.
+2) Conecta el cable ATX 24 pines a la motherboard (alineación correcta).
+3) Conecta el cable EPS 8/4 pines al conector de CPU en la placa.
+4) Conecta cables PCIe a la GPU si la tarjeta lo requiere.
+5) Conecta cables SATA a discos y unidades.
+6) Ordena el cableado para no obstruir flujo de aire.
+Verificación:
+- Antes de cerrar, test de POST: sólo CPU+RAM+GPU (si requiere) para confirmar encendido.
+- Mide voltajes con multímetro si hay inestabilidad.`
+  },
+  {
+    id: 'hw-tarjetas-pcie',
+    title: 'Instalación de Tarjetas PCIe (GPU, WiFi, sonido)',
+    category: 'Hardware - Conceptos y Diagnóstico',
+    tags: ['pcie','gpu','tarjeta','expansion'],
+    summary: 'Inserción y asegurado de tarjetas en ranuras PCIe.',
+    content: `Paso a paso:
+1) Retira el bracket de expansión del gabinete correspondiente a la ranura.
+2) Alinea la tarjeta con la ranura PCIe y presiona con firmeza hasta que encaje.
+3) Asegura la tarjeta con tornillo en el bracket.
+4) Si la tarjeta necesita alimentación adicional, conecta los cables PCIe de la PSU.
+5) Instala drivers desde el fabricante después del primer arranque.
+Verificación:
+- Enciende y verifica detección en BIOS/OS.
+- Revisa temperaturas y rendimiento en pruebas básicas.`
+  },
+  {
+    id: 'hw-cables-identificacion',
+    title: 'Identificación de Cables Internos (SATA, EPS, PCIe, Front Panel)',
+    category: 'Hardware - Conceptos y Diagnóstico',
+    tags: ['cables','sata','eps','front panel'],
+    summary: 'Cómo identificar y conectar correctamente los cables del sistema.',
+    content: `Paso a paso:
+1) Localiza y distingue cables: 24-pin (grande), EPS/CPU (8/4 pines), PCIe (6/8 pines), SATA (plano), Molex (antiguo).
+2) Consulta etiquetas impresas en conectores o el manual de la placa.
+3) Conecta frontend (USB, audio) a los pines front-panel según diagrama de la motherboard.
+4) Asegura conexiones firmes; evita forzar conectores en orientación incorrecta.
+Verificación:
+- Prueba funcionamiento de puertos USB frontales, audio frontal y botones POWER/RESET.`
+  },
+  {
+    id: 'hw-panel-frontal',
+    title: 'Conexiones del Panel Frontal (Power, Reset, LEDs)',
+    category: 'Hardware - Conceptos y Diagnóstico',
+    tags: ['panel frontal','power','reset','led'],
+    summary: 'Ubicar y conectar los cables del panel frontal en la placa base.',
+    content: `Paso a paso:
+1) Consulta el manual de la placa para la disposición de pines (POWER SW, RESET, HDD LED, PLED).
+2) Identifica los cables del panel frontal y organízalos sobre la parte inferior de la placa.
+3) Inserta cada conector en su pin correspondiente respetando polaridad (LED + y -).
+4) Conecta puertos USB y audio frontales en sus cabezales específicos (USB 2.0, USB 3.0).
+Verificación:
+- Presiona POWER y observa si el equipo enciende y los LEDs funcionan.
+- Si no funciona, intercambia cables POWER y RESET como prueba.`
+  },
+  {
+    id: 'hw-flujo-aire',
+    title: 'Flujo de Aire y Ventilación en el Gabinete',
+    category: 'Hardware - Conceptos y Diagnóstico',
+    tags: ['ventilacion','flujo aire','fans','cooling'],
+    summary: 'Cómo organizar ventiladores para un flujo de aire eficiente.',
+    content: `Paso a paso:
+1) Define flujo básico: ventiladores frontales como entrada (intake) y traseros/superiores como salida (exhaust).
+2) Coloca filtros en entradas para evitar polvo.
+3) Instala ventiladores con orientación correcta (flecha indica flujo).
+4) Mantén cables sujetos y alejados de ventiladores para evitar obstrucción.
+5) Considera presión positiva (más intake) para reducir polvo o negativa para mayor extracción.
+Verificación:
+- Mide temperatura ambiente vs CPU/GPU en idle y carga.
+- Ajusta fan curve en BIOS o software para equilibrio ruido/temperatura.`
+  },
+  {
+    id: 'hw-incompatibilidad',
+    title: 'Diagnóstico de Incompatibilidad de Hardware',
+    category: 'Hardware - Conceptos y Diagnóstico',
+    tags: ['incompatibilidad','compatibilidad','bios','qvl'],
+    summary: 'Cómo detectar y resolver incompatibilidades entre componentes.',
+    content: `Paso a paso:
+1) Verifica compatibilidad CPU-socket y del chipset en la página del fabricante.
+2) Comprueba lista de memoria soportada (QVL) de la placa para evitar módulos no compatibles.
+3) Asegura que la fuente de poder suministre suficiente amperaje para la GPU y CPU.
+4) Actualiza BIOS si la placa no reconoce componentes nuevos.
+5) Si persisten errores, prueba componentes de forma aislada (POST mínimo: CPU+RAM+GPU si necesita).
+Verificación:
+- Si POST no avanza, prueba con RAM en otra ranura y sin discos/USB conectados.`
+  },
+  {
+    id: 'hw-instalacion-ssd-m2',
+    title: 'Instalación de SSD M.2 / NVMe',
+    category: 'Hardware - Conceptos y Diagnóstico',
+    tags: ['m.2','nvme','ssd','almacenamiento'],
+    summary: 'Montaje físico y configuración de unidades M.2.',
+    content: `Paso a paso:
+1) Localiza ranura M.2 en la placa y retira tornillo de soporte.
+2) Inserta el SSD M.2 en ángulo (~30°) y baja hasta fijar con tornillo.
+3) Si la placa tiene disipador M.2, colócalo según instrucciones.
+4) Enciende y entra a BIOS; verifica que la unidad sea detectada.
+5) Si es NVMe, activa modo NVMe/PCIe en BIOS y configura orden de arranque si es necesario.
+Verificación:
+- En sistema operativo verifica velocidad con CrystalDiskMark o herramienta equivalente.`
+  },
+  {
+    id: 'hw-montaje-hdd',
+    title: 'Montaje de Discos Duros Mecánicos (HDD)',
+    category: 'Hardware - Conceptos y Diagnóstico',
+    tags: ['hdd','montaje','sata','almacenamiento'],
+    summary: 'Instalación física segura de HDD en bahías del gabinete.',
+    content: `Paso a paso:
+1) Inserta el HDD en la bahía correspondiente (bandeja o bahía fija).
+2) Alinea agujeros y asegura con tornillos o mecanismo de retención.
+3) Conecta cable SATA a la unidad y al puerto SATA de la placa.
+4) Conecta cable de alimentación SATA desde la PSU.
+5) Asegura que el HDD esté firmemente fijado para evitar vibraciones.
+Verificación:
+- Enciende y verifica detección en BIOS y en el administrador de discos del SO.`
+  },
+  {
+    id: 'hw-configuracion-bios',
+    title: 'Configuración Básica del BIOS/UEFI',
+    category: 'Hardware - Conceptos y Diagnóstico',
+    tags: ['bios','uefi','configuracion','arranque'],
+    summary: 'Ajustes iniciales recomendados en BIOS tras ensamblar el equipo.',
+    content: `Paso a paso:
+1) Enciende y presiona tecla indicada (Del/F2/F10) para entrar al BIOS.
+2) Verifica que CPU, RAM y discos aparezcan correctamente.
+3) Ajusta la fecha/hora y el modo SATA (AHCI recomendado para SSD).
+4) Si usas XMP en RAM, habilita XMP/DOCP para la frecuencia correcta.
+5) Establece orden de arranque: USB primero si vas a instalar SO.
+6) Habilita/Deshabilita Secure Boot según necesidad de instalación.
+Verificación:
+- Guarda y reinicia; si el sistema no arranca, restaura valores por defecto y prueba.`
+  },
+  {
+    id: 'hw-actualizacion-bios',
+    title: 'Actualización de BIOS (Procedimiento Seguro)',
+    category: 'Hardware - Conceptos y Diagnóstico',
+    tags: ['bios','flasheo','actualizacion','firmware'],
+    summary: 'Pasos para flashear BIOS sin riesgos.',
+    content: `Paso a paso:
+1) Descarga firmware oficial desde la web del fabricante exactamente para tu modelo.
+2) Formatea USB a FAT32 y copia el archivo del BIOS (rename si lo pide el fabricante).
+3) Ingresa al utilitario de actualización del BIOS (Q-Flash, EZ Flash).
+4) Selecciona la unidad USB y el archivo; inicia actualización sin interrumpir.
+5) No apagues ni reinicies hasta que el proceso finalice y el equipo se reinicie.
+Verificación:
+- Después, entra a BIOS y carga valores optimizados o predeterminados; verifica versión.`
+  },
+  {
+    id: 'hw-post-beeps',
+    title: 'Diagnóstico por Beeps y Códigos POST',
+    category: 'Hardware - Conceptos y Diagnóstico',
+    tags: ['post','beeps','errores','diagnostico'],
+    summary: 'Interpretación de señales sonoras y códigos al arrancar.',
+    content: `Paso a paso:
+1) Consulta el manual de la placa para mapa de beeps/códigos POST (cada fabricante difiere).
+2) Observa patrón: 1 beep corto = OK en muchas BIOS, beeps repetitivos indican RAM, largos indican GPU, etc.
+3) Si hay código numérico (7-seg o códigos LED), compara con la tabla del manual.
+4) Realiza pruebas mínimas: retirar discos, tarjetas, dejar CPU+RAM+GPU mínimo para aislar fallo.
+Verificación:
+- Cambia módulos RAM y prueba con otra placa si es posible para confirmar origen.`
+  },
+  {
+    id: 'hw-perifericos-pnp',
+    title: 'Instalación de Periféricos Plug & Play',
+    category: 'Hardware - Conceptos y Diagnóstico',
+    tags: ['perifericos','plug and play','usb','instalacion'],
+    summary: 'Conectar e instalar dispositivos externos de forma correcta.',
+    content: `Paso a paso:
+1) Conecta el periférico (USB, PS/2, Bluetooth) al puerto correspondiente.
+2) Enciende el equipo y verifica detección automática; deja que Windows instale drivers.
+3) Si no instala, descarga controlador del sitio del fabricante e instala manualmente.
+4) Para impresoras, instala driver y prueba con página de prueba.
+Verificación:
+- Comprueba en administrador de dispositivos que no aparezcan símbolos de error.`
+  },
+  {
+    id: 'hw-psu-seleccion',
+    title: 'Selección de Fuente de Poder según Sistema',
+    category: 'Hardware - Conceptos y Diagnóstico',
+    tags: ['psu','seleccion','watts','80plus'],
+    summary: 'Cómo calcular y elegir una PSU adecuada.',
+    content: `Paso a paso:
+1) Lista componentes que consumen energía: CPU, GPU, discos, ventiladores.
+2) Usa calculadora de PSU online o suma aproximada (CPU 65–150W, GPU 150–350W).
+3) Añade 25–30% de margen para estabilidad y futuras ampliaciones.
+4) Elige certificación 80 Plus (Bronze/Gold) según presupuesto.
+5) Verifica conectores: 24-pin, EPS 8-pin, PCIe 6/8-pin y SATA.
+Verificación:
+- Comprueba estabilidad con pruebas de carga; sin reinicios ni fluctuaciones.`
+  },
+  {
+    id: 'hw-diagnostico-termico',
+    title: 'Diagnóstico de Fallos Térmicos y Soluciones',
+    category: 'Hardware - Conceptos y Diagnóstico',
+    tags: ['temperatura','termico','throttling','enfriamiento'],
+    summary: 'Detectar sobrecalentamiento y cómo solucionarlo.',
+    content: `Paso a paso:
+1) Revisa temperaturas en BIOS o software (HWMonitor, CoreTemp) en idle y carga.
+2) Si CPU/GPU supera rangos seguros, apaga y revisa montaje del disipador y pasta térmica.
+3) Limpia polvo de ventiladores y filtros; verifica giro correcto.
+4) Asegura flujo de aire: intake frontal y exhaust trasero/superior.
+5) Ajusta curvas de ventiladores o revisa alimentación de la PSU.
+Verificación:
+- En load, temperaturas deben estar por debajo del Tjmax del componente; realiza stress test para confirmar.`
+  },
+  {
+    id: 'hw-ensamble-completo',
+    title: 'Ensamble Completo de un PC desde Cero',
+    category: 'Hardware - Conceptos y Diagnóstico',
+    tags: ['ensamble','guia','pc','montaje'],
+    summary: 'Procedimiento completo desde caja vacía hasta primer arranque.',
+    content: `Paso a paso:
+1) Prepara área de trabajo antiestática (pulsera o superficie aislante).
+2) Instala separadores en el gabinete y coloca I/O shield.
+3) Monta la motherboard y fija con tornillos.
+4) Instala CPU y aplica pasta térmica; monta disipador.
+5) Instala módulos RAM en ranuras recomendadas.
+6) Inserta GPU y otras tarjetas PCIe.
+7) Monta PSU y conecta cables principales.
+8) Instala unidades de almacenamiento y cables SATA o M.2.
+9) Conecta front panel, USB y audio frontal.
+10) Realiza primera comprobación: POST con mínimo (CPU+RAM+GPU si necesita).
+11) Si POST OK, instala sistema operativo desde USB y procede con drivers.
+Verificación:
+- Tras instalación del SO, instala controladores y realiza pruebas de estabilidad.`
+  },
+
           {
             id:'ram-troubleshoot', title:'Diagnóstico y test de memoria RAM', tags:['RAM','memtest'], summary:'Detectar fallas en memoria', content: `*Síntomas de RAM defectuosa:*
 - Pantallazos azules (BSOD) frecuentes
@@ -643,6 +1275,678 @@ Una vez que tengas el modelo de CPU (ej: AMD Ryzen 5 5600X, Intel Core i7-12700K
       - No arranca desde SSD → Verificar orden de boot en BIOS/UEFI
       - Partición de recuperación no copiada → Usar herramienta del fabricante`
     },
+{
+  id: "lan-dispositivos-basicos",
+  title: "Identificación de dispositivos de red",
+  tags: ["redes", "lan", "hardware", "dispositivos"],
+  summary: "Cómo identificar y diferenciar router, switch, módem y AP.",
+  content: `
+**OBJETIVO:** Reconocer el rol de cada dispositivo en una red LAN.
+
+**DISPOSITIVOS:**
+- **Módem:** Convierte señal de ISP → internet usable.
+- **Router:** Administra IPs, firewall, DHCP, red local.
+- **Switch:** Expande red por cable; distribuye conexión.
+- **Access Point:** Permite conexión WiFi.
+
+**PASO A PASO PARA IDENTIFICAR:**
+1. Revisar etiquetas en dispositivo.
+2. Ver puertos:
+   - Módem: coaxial/óptico + 1 salida LAN.
+   - Router: 1 puerto WAN + 4 LAN.
+   - Switch: 5/8/16/24 puertos LAN iguales.
+   - AP: antenas externas o indicador WiFi.
+3. Confirmar LEDs: Internet / LAN / WLAN.
+
+**RESULTADO:** Comprender cómo se interconectan.`
+},
+{
+  id: "lan-cables",
+  title: "Clasificación de cables de red",
+  tags: ["cables", "utp", "stp", "fibra"],
+  summary: "Tipos de cables y para qué se usan.",
+  content: `
+**TIPOS PRINCIPALES:**
+- **UTP:** Par trenzado sin blindaje (Cat5e / Cat6 / Cat6a).
+- **STP:** Con blindaje para interferencias.
+- **Fibra óptica:** Para grandes distancias y alta velocidad.
+
+**PASO A PASO PARA IDENTIFICAR:**
+1. Revisar impresión en el cable (Cat5e/Cat6).
+2. Ver si tiene malla metálica (STP).
+3. Si es fibra: conector LC/SC y cable delgado.
+
+**USO:**
+- UTP Cat5e: casas/escuelas.
+- Cat6: redes exigentes.
+- Fibra: backbone.`
+},
+{
+  id: "lan-conectores-rj45",
+  title: "Conectores RJ45 y estándar T568A/B",
+  tags: ["rj45", "redes", "conectores"],
+  summary: "Cómo identificar y crimpar cables RJ45.",
+  content: `
+**ESTÁNDARES:**
+- **T568A:** Verde como primario.
+- **T568B:** Naranja como primario (más usado).
+
+**PASO A PASO PARA ARMAR RJ45:**
+1. Pelar 2 cm de cable UTP.
+2. Separar los pares.
+3. Ordenar según estándar deseado.
+4. Cortar al mismo nivel.
+5. Insertar en conector RJ45.
+6. Crimpar firmemente.
+7. Probar continuidad con tester.`
+},
+{
+  id: "lan-topologias",
+  title: "Topologías de red LAN",
+  tags: ["topologías", "lan", "redes"],
+  summary: "Cómo identificar bus, estrella, anillo y malla.",
+  content: `
+**TIPOS:**
+- **Estrella:** Cada PC conecta a un switch (la más común).
+- **Bus:** Un solo cable compartido.
+- **Anillo:** Datos en círculo.
+- **Malla:** Cada nodo con múltiples nodos.
+
+**PASO PARA IDENTIFICAR:**
+1. Ver si todo conecta a un switch → estrella.
+2. Conexiones antiguas coaxiales → bus.
+3. Infraestructura industrial → malla.`
+},
+{
+  id: "lan-tipos-red",
+  title: "Clasificación LAN, MAN, WAN",
+  tags: ["lan", "wan", "man", "redes"],
+  summary: "Diferencias claras entre tipos de red.",
+  content: `
+**LAN:** Local. Edificio / aula / casa.  
+**MAN:** Urbana. Varias sedes.  
+**WAN:** Global. Internet.`
+},
+{
+  id: "lan-osi",
+  title: "Dispositivos por capas OSI",
+  tags: ["osi", "modelo", "capas"],
+  summary: "Cómo clasificar dispositivos en el modelo OSI.",
+  content: `
+**CLASIFICACIÓN:**
+- Capa 1: Cables, repetidores.
+- Capa 2: Switches.
+- Capa 3: Routers.
+- Capa 7: Firewalls avanzados.
+
+**USO:** Para analizar fallas por capas.`
+},
+{
+  id: "lan-ipv4",
+  title: "Conceptos de IPv4",
+  tags: ["ipv4", "ip", "redes"],
+  summary: "Cómo identificar IP, máscara y gateway.",
+  content: `
+**CONCEPTOS:**
+- IP: Identificador del dispositivo.
+- Máscara: Tamaño de red.
+- Gateway: Salida a internet.
+
+**PASO PARA LEER CONFIGURACIÓN:**
+1. CMD → ipconfig
+2. Identificar:
+   - IPv4
+   - Subnet mask
+   - Default gateway`
+},
+{
+  id: "lan-ip-priv-public",
+  title: "IP privadas y públicas",
+  tags: ["ipv4", "privada", "publica"],
+  summary: "Cómo identificar si una IP es interna o externa.",
+  content: `
+**PRIVADAS:**
+- 10.0.0.0 — 10.255.255.255
+- 172.16.0.0 — 172.31.255.255
+- 192.168.0.0 — 192.168.255.255
+
+**PÚBLICAS:** todas las demás.`
+},
+{
+  id: "lan-puertos",
+  title: "Puertos y protocolos LAN",
+  tags: ["puertos", "protocolos"],
+  summary: "Puertos más usados en redes.",
+  content: `
+**PRINCIPALES:**
+- HTTP: 80
+- HTTPS: 443
+- DNS: 53
+- DHCP: 67/68
+- FTP: 21
+- SSH: 22
+- RDP: 3389
+
+**USO:** Diagnóstico y apertura en firewall.`
+},
+{
+  id: "lan-dhcp",
+  title: "Funcionamiento de DHCP",
+  tags: ["dhcp", "ip", "automático"],
+  summary: "Cómo funciona la asignación automática de IP.",
+  content: `
+**PROCESO DORA:**
+1. **Discover:** El cliente busca servidor.
+2. **Offer:** DHCP ofrece una IP.
+3. **Request:** Cliente solicita IP.
+4. **Acknowledge:** Servidor confirma.
+
+**APLICACIÓN:** Conexión automática en LAN.`
+},
+{
+  id: "lan-levantamiento",
+  title: "Levantamiento físico del área",
+  tags: ["levantamiento", "diseño", "lan"],
+  summary: "Cómo analizar un lugar antes de diseñar la red.",
+  content: `
+**PASOS:**
+1. Medir dimensiones del área.
+2. Identificar obstáculos (paredes gruesas, metal).
+3. Ubicar tomas eléctricas.
+4. Identificar puntos donde irán switches y APs.
+5. Analizar número de dispositivos a conectar.
+
+**RESULTADO:** Plano base para diseño.`
+},
+{
+  id: "lan-nodos",
+  title: "Cálculo de nodos en una red LAN",
+  tags: ["nodos", "planificación"],
+  summary: "Cómo determinar cuántos puntos de red se necesitan.",
+  content: `
+**PASOS:**
+1. Contar:
+   - PCs
+   - Impresoras
+   - Switches secundarios
+   - APs
+2. Añadir 20% extra para expansión.
+3. Definir ubicación de cada nodo en el plano.
+
+**RESULTADO:** Número exacto de conexiones cableadas.`
+},
+{
+  id: "lan-diagrama-logico",
+  title: "Diagrama lógico de red",
+  tags: ["diagrama", "lógico", "red"],
+  summary: "Cómo diseñar la estructura conceptual de la red.",
+  content: `
+**DIAGRAMA INCLUYE:**
+- Módem → Router → Switch → PCs/APs
+- IPs asignadas
+- Roles de cada dispositivo
+
+**HERRAMIENTAS:**
+- Draw.io
+- Lucidchart
+- PowerPoint
+
+**PASOS:**
+1. Colocar dispositivos principales.
+2. Definir relaciones y flechas.
+3. Especificar IPs y funciones.`
+},
+{
+  id: "lan-diagrama-fisico",
+  title: "Diagrama físico de red",
+  tags: ["diagrama", "físico", "infraestructura"],
+  summary: "Representación de cableado y equipos.",
+  content: `
+**INCLUYE:**
+- Ruta de cables
+- Altura de accesos
+- Posición de APs
+- Ubicación de racks
+
+**PASOS:**
+1. Usar plano real del área.
+2. Trazar rutas de cable.
+3. Colocar equipos en ubicaciones reales.`,
+},
+{
+  id: "lan-seleccion-cable",
+  title: "Selección del tipo de cable correcto",
+  tags: ["cable", "selección"],
+  summary: "Cómo elegir el cable según velocidad/distancia.",
+  content: `
+**REGLAS:**
+- Hasta 1Gbps: Cat5e
+- Hasta 10Gbps: Cat6/Cat6a
+- Más de 100 m: fibra óptica
+
+**PASO A PASO:**
+1. Calcular distancias.
+2. Revisar velocidad requerida.
+3. Elegir categoría adecuada.
+
+**EVITAR:** cables planos o baratos.`
+},
+{
+  id: "lan-vlan",
+  title: "Planeación de VLANs",
+  tags: ["vlan", "segmentación"],
+  summary: "Cómo segmentar la red en grupos.",
+  content: `
+**OBJETIVO:** Crear redes separadas para seguridad y control.
+
+**PASOS:**
+1. Identificar áreas: administración, alumnos, invitados.
+2. Asignar rango IP por VLAN.
+3. Configurar VLAN en switch administrable.
+4. Configurar router para enrutamiento inter-VLAN.
+
+**BENEFICIO:** Control y seguridad aumentada.`
+},
+{
+  id: "lan-plan-ip",
+  title: "Plan de direccionamiento IP",
+  tags: ["ip", "planificación"],
+  summary: "Cómo asignar IPs estáticas y dinámicas.",
+  content: `
+**PASOS:**
+1. Elegir rango privado (192.168.x.x).
+2. Reservar IPs para:
+   - Router
+   - Switch administrable
+   - Servidores
+3. Definir pool DHCP para usuarios.
+4. Documentar todo en tabla.
+
+**BENEFICIO:** Red ordenada y manejable.`
+},
+{
+  id: "lan-ancho-banda",
+  title: "Cálculo de ancho de banda",
+  tags: ["ancho", "banda"],
+  summary: "Cómo calcular velocidad necesaria según número de usuarios.",
+  content: `
+**FORMULA BASE:**
+Total de usuarios × 3 Mbps (mínimo trabajo escolar/oficina)
+
+**PASOS:**
+1. Contar usuarios simultáneos.
+2. Añadir 30% de sobrecarga.
+3. Elegir paquete del ISP.
+
+**EJEMPLO:** 20 usuarios → 60–80 Mbps.`
+},
+{
+  id: "lan-switch",
+  title: "Selección del switch correcto",
+  tags: ["switch", "hardware"],
+  summary: "Cómo elegir un switch según la red.",
+  content: `
+**TIPOS:**
+- No administrable: simple, económico.
+- Administrable: VLANs, QoS, seguridad.
+
+**PASOS:**
+1. Calcular nodos.
+2. Considerar PoE si usarás APs.
+3. Elegir puertos Gigabit.
+
+**REGLA:** Nunca usar switches Fast Ethernet (100 Mbps).`
+},
+{
+  id: "lan-ubicacion-ap",
+  title: "Ubicación de Access Points",
+  tags: ["wifi", "ap", "inalámbrico"],
+  summary: "Cómo colocar APs para buena cobertura.",
+  content: `
+**PASOS:**
+1. Evitar paredes gruesas o metal.
+2. Colocar en puntos centrales.
+3. Altura recomendada: 2.5 metros.
+4. Evitar esconderlos en muebles.
+5. Usar mapa de calor con WiFi Analyzer.
+
+**RESULTADO:** Cobertura uniforme y estable.`
+},
+{
+  id: "lan-inst-fisica",
+  title: "Instalación física de la red LAN",
+  tags: ["instalación", "red", "fisica", "lan"],
+  summary: "Montaje físico del cableado y dispositivos principales.",
+  content: `
+**OBJETIVO:** Instalar correctamente todos los elementos hardware de una LAN.
+
+**PASOS:**
+1. Montar el rack o gabinete si se utiliza.
+2. Instalar el switch principal y asegurar ventilación.
+3. Pasar el cableado estructurado conforme al plano físico.
+4. Fijar canaletas o tuberías para proteger cables.
+5. Etiquetar ambos extremos de cada cable.
+6. Conectar patch cords desde el patch panel hacia el switch.
+7. Energizar los dispositivos y verificar LEDs de enlace.
+
+**RESULTADO:** Infraestructura física lista para configuración.`
+},
+{
+  id: "lan-config-router",
+  title: "Configuración inicial del router",
+  tags: ["router", "configuración", "wan", "lan"],
+  summary: "Cómo configurar el router para habilitar internet y DHCP.",
+  content: `
+**PASOS:**
+1. Conectar PC al router vía cable.
+2. Entrar al panel: http://192.168.0.1 o 192.168.1.1.
+3. Cambiar contraseña de administrador.
+4. Configurar internet:
+   - WAN DHCP (automático) o PPPoE (si lo pide el ISP).
+5. Configurar red LAN:
+   - IP base (ejemplo: 192.168.10.1).
+   - Rango DHCP y tiempo de concesión.
+6. Guardar y reiniciar.
+
+**RESULTADO:** Router listo para distribuir internet.`
+},
+{
+  id: "lan-inst-ap",
+  title: "Instalación de Access Points",
+  tags: ["wifi", "ap", "instalación"],
+  summary: "Montaje físico y configuración básica de puntos de acceso.",
+  content: `
+**PASOS FÍSICOS:**
+1. Instalar AP en el punto central definido.
+2. Conectar cable UTP hasta el switch.
+3. Usar switch PoE si el AP lo requiere.
+
+**PASOS LÓGICOS:**
+1. Entrar al panel del AP.
+2. Configurar SSID y contraseña.
+3. Seleccionar ancho de canal (20/40 MHz).
+4. Definir banda:
+   - 2.4 GHz para cobertura.
+   - 5 GHz para velocidad.
+5. Guardar configuración.
+
+**RESULTADO:** WiFi operativo.`
+},
+{
+  id: "lan-config-vlan-sw",
+  title: "Configuración de VLAN en switch",
+  tags: ["vlan", "switch", "configuración"],
+  summary: "Segmentación de la red LAN.",
+  content: `
+**PASOS:**
+1. Entrar al panel del switch administrable.
+2. Crear VLANs:
+   - VLAN 10 Administración
+   - VLAN 20 Alumnos
+   - VLAN 30 Invitados
+3. Asignar puertos:
+   - Puertos 1–4 → VLAN 10
+   - Puertos 5–12 → VLAN 20
+   - Puertos 13–16 → VLAN 30
+4. Configurar puertos “trunk” para uplink al router.
+
+**RESULTADO:** Tráfico segmentado y seguro.`
+},
+{
+  id: "lan-cert-cable",
+  title: "Certificación del cableado estructurado",
+  tags: ["cableado", "certificación", "tester"],
+  summary: "Cómo verificar la integridad del cableado.",
+  content: `
+**PASOS:**
+1. Usar un certificador o probador de red.
+2. Conectar extremos del cable en el tester.
+3. Verificar:
+   - Continuidad de los 8 hilos.
+   - Ausencia de cruces.
+   - Longitud del cable.
+   - Pérdida y ruido.
+4. Documentar los resultados.
+
+**RESULTADO:** Cableado validado y funcional.`
+},
+{
+  id: "lan-pruebas-conectividad",
+  title: "Pruebas de conectividad LAN",
+  tags: ["ping", "conectividad", "pruebas"],
+  summary: "Cómo comprobar comunicación entre dispositivos.",
+  content: `
+**PASOS:**
+1. Ver IP asignada → CMD: ipconfig.
+2. Hacer ping al router:
+   - ping 192.168.x.1
+3. Hacer ping a otra PC.
+4. Hacer ping externo:
+   - ping 8.8.8.8
+5. Verificar DNS:
+   - ping google.com
+
+**RESULTADO:** Conexión interna y externa confirmada.`
+},
+{
+  id: "lan-wifi-security",
+  title: "Seguridad WiFi",
+  tags: ["wifi", "seguridad"],
+  summary: "Establecer recomendaciones de protección.",
+  content: `
+**CONFIGURACIÓN:**
+1. Seleccionar WPA2 o WPA3.
+2. Contraseña de 12+ caracteres.
+3. Desactivar WPS.
+4. Separar red de invitados (guest).
+5. Limitar transmisión del SSID si es necesario.
+
+**RESULTADO:** WiFi seguro contra accesos no autorizados.`
+},
+{
+  id: "lan-balanceo",
+  title: "Balanceo de carga básico",
+  tags: ["balanceo", "router"],
+  summary: "Distribución del tráfico entre múltiples APs o routers.",
+  content: `
+**PASOS:**
+1. Dividir usuarios por AP para evitar saturación.
+2. Configurar canales distintos:
+   - AP1: Canal 1
+   - AP2: Canal 6
+   - AP3: Canal 11
+3. Limitar potencia en áreas muy pequeñas.
+4. Controlar ancho de banda por usuario si el router lo permite.
+
+**RESULTADO:** Red estable sin saturaciones.`
+},
+{
+  id: "lan-dhcp-static",
+  title: "Asignación DHCP estática",
+  tags: ["dhcp", "ip", "estática"],
+  summary: "Reservar IP fija basada en dirección MAC.",
+  content: `
+**PASOS:**
+1. Entrar al router.
+2. Buscar apartado “DHCP reservations”.
+3. Seleccionar el dispositivo.
+4. Asignarle una IP fija fuera del pool principal.
+5. Guardar cambios.
+
+**RESULTADO:** Equipo siempre tiene la misma IP.`
+},
+{
+  id: "lan-rack-org",
+  title: "Montaje ordenado del rack",
+  tags: ["rack", "organización"],
+  summary: "Buenas prácticas para organizar el rack.",
+  content: `
+**PASOS:**
+1. Colocar patch panel arriba.
+2. Switches debajo.
+3. Organizar cables en guías laterales.
+4. Usar velcro, evitar cinchos de plástico.
+5. Dejar espacio para ventilación.
+6. Etiquetar cada cable y puerto.
+
+**RESULTADO:** Rack limpio, accesible y profesional.`
+},
+{
+  id: "lan-monitoring",
+  title: "Monitoreo de la red LAN",
+  tags: ["monitoreo", "trafico", "red"],
+  summary: "Uso de herramientas básicas para observar el tráfico.",
+  content: `
+**HERRAMIENTAS:**
+- Fing
+- Angry IP Scanner
+- Wireshark (análisis avanzado)
+
+**PASOS:**
+1. Escanear dispositivos conectados.
+2. Identificar consumos altos.
+3. Revisar si hay dispositivos desconocidos.
+4. Documentar actividad.`
+},
+{
+  id: "lan-qos",
+  title: "Administración de ancho de banda (QoS)",
+  tags: ["qos", "red", "prioridades"],
+  summary: "Priorizar tráfico importante en la red.",
+  content: `
+**PASOS:**
+1. Entrar al router.
+2. Buscar apartado QoS.
+3. Priorizar:
+   - Clases en línea
+   - Videollamadas
+   - Navegación esencial
+4. Limitar streaming o descargas pesadas.
+
+**RESULTADO:** Red más equilibrada.`
+},
+{
+  id: "lan-admin-users",
+  title: "Administración de usuarios conectados",
+  tags: ["usuarios", "administración", "lan"],
+  summary: "Control básico de quién está dentro de la red.",
+  content: `
+**PASOS:**
+1. Entrar al router o AP.
+2. Ver lista de equipos conectados.
+3. Identificar por nombre, IP o MAC.
+4. Bloquear o limitar dispositivos si es necesario.
+5. Renombrar dispositivos para identificación clara.`
+},
+{
+  id: "lan-bottleneck",
+  title: "Detección de cuellos de botella",
+  tags: ["cuellos", "bottleneck", "red"],
+  summary: "Ubicar puntos de saturación.",
+  content: `
+**POSIBLES CAUSAS:**
+- AP saturado.
+- Switch Fast Ethernet.
+- Cable defectuoso.
+- Router insuficiente.
+
+**PASOS:**
+1. Ver velocidad del enlace en el switch (100 o 1000 Mbps).
+2. Revisar carga por AP.
+3. Reemplazar cables sospechosos.
+4. Distribuir equipos en más APs.`
+},
+{
+  id: "lan-reboot",
+  title: "Reinicio seguro de equipo de red",
+  tags: ["reinicio", "router", "switch"],
+  summary: "Cómo reiniciar sin perder configuración.",
+  content: `
+**PASOS:**
+1. Apagar dispositivo desde el botón físico.
+2. Esperar 10–15 segundos.
+3. Encender nuevamente.
+4. Verificar LEDs y conectividad.
+
+**IMPORTANTE:**  
+No presionar botón “Reset” a menos que se quiera borrar configuración.`
+},
+{
+  id: "lan-incidentes",
+  title: "Registro de incidentes de red",
+  tags: ["incidentes", "registro"],
+  summary: "Cómo documentar problemas de red.",
+  content: `
+**DATOS A REGISTRAR:**
+1. Fecha y hora del incidente.
+2. Usuario afectado.
+3. Tipo de falla.
+4. Pasos realizados.
+5. Solución aplicada.
+
+**BENEFICIO:** Seguimiento profesional y análisis futuro.`
+},
+{
+  id: "lan-firmware",
+  title: "Actualización de firmware de router/AP",
+  tags: ["firmware", "router", "wifi"],
+  summary: "Actualizar software interno del equipo de red.",
+  content: `
+**PASOS:**
+1. Entrar al panel.
+2. Buscar “Firmware Update”.
+3. Descargar archivo desde el sitio oficial.
+4. Subirlo al router/AP.
+5. Esperar sin apagar.
+6. Verificar versión actualizada.
+
+**BENEFICIO:** Mejor seguridad y rendimiento.`
+},
+{
+  id: "lan-diagnostico-wifi",
+  title: "Diagnóstico de fallas WiFi",
+  tags: ["wifi", "diagnóstico"],
+  summary: "Identificar problemas comunes inalámbricos.",
+  content: `
+**PASOS:**
+1. Revisar intensidad de señal con analizador.
+2. Cambiar canal si hay interferencia.
+3. Reiniciar AP.
+4. Verificar contraseña correcta.
+5. Verificar límite de usuarios.
+
+**RESULTADO:** Conexión inalámbrica restaurada.`
+},
+{
+  id: "lan-temp-red",
+  title: "Monitoreo de temperatura del equipo de red",
+  tags: ["temperatura", "switch", "router"],
+  summary: "Evitar sobrecalentamiento.",
+  content: `
+**PASOS:**
+1. Revisar ventilación en rack.
+2. Evitar encimar dispositivos.
+3. Limpiar polvo regularmente.
+4. Usar ventiladores si está en ambiente caliente.
+5. Revisar logs de temperatura (switch administrable).`
+},
+{
+  id: "lan-optimizacion",
+  title: "Optimización general de la red LAN",
+  tags: ["optimización", "red"],
+  summary: "Mejorar rendimiento sin modificar hardware.",
+  content: `
+**RECOMENDACIONES:**
+1. Reubicar APs según mapa de calor.
+2. Cambiar canales saturados.
+3. Activar QoS en router.
+4. Limpiar cables y asegurar conexiones.
+5. Actualizar firmware.
+6. Controlar usuarios no autorizados.
+7. Reemplazar cables defectuosos.
+
+**RESULTADO:** Red estable, rápida y sin interrupciones.`
+},
     {
       id: 'network-troubleshoot',
       title: 'Resolución de problemas de red',
@@ -1306,8 +2610,19 @@ Una vez que tengas el modelo de CPU (ej: AMD Ryzen 5 5600X, Intel Core i7-12700K
       },
       {
         id: 'os-maintenance',
-        title: 'Sistemas Operativos',
+        title: 'Sistemas Operativos y Dispositivos Externos',
         items: [
+  {
+    id: 'so-instalacion-drivers-linux',
+    title: 'Instalar Drivers en Linux (NVIDIA, WiFi, etc.)',
+    category: 'Sistemas Operativos',
+    tags: ['drivers','linux','controladores'],
+    summary: 'Instalar drivers adicionales.',
+    content: `Paso a paso:
+1) En Ubuntu/Mint: "Controladores adicionales".
+2) Instala NVIDIA propietario si es necesario.
+3) Para WiFi: apt install firmware-linux o equivalente.`
+  },
 { id:'win-install', title:'Instalar Windows 10/11 desde USB', tags:['windows','instalación'], summary:'Creación de USB booteable y consideraciones UEFI', content:`*PRE-INSTALACIÓN - PREPARACIÓN ESENCIAL:*
       
       *1. Backup de Datos:*
@@ -1424,6 +2739,1589 @@ efibootmgr -v
 - Crear partición /boot separada
 - Backup de configuración GRUB`
  },
+{
+  id: "mnt-limpieza-interna",
+  title: "Limpieza interna de PC",
+  tags: ["mantenimiento", "preventivo", "limpieza"],
+  summary: "Procedimiento completo de limpieza física interna.",
+  content: `
+**HERRAMIENTAS:**
+- Brochas suaves
+- Aire comprimido
+- Isopropílico (opcional)
+- Pulsera antiestática
+
+**PASOS:**
+1. Apagar y desconectar la PC.
+2. Retirar tapa lateral.
+3. Usar aire comprimido de adentro hacia afuera.
+4. Limpiar ventiladores con brocha.
+5. Revisar acumulación de polvo en disipador.
+6. Limpiar puertos, ranuras y bordes.
+7. Cerrar gabinete y encender.
+
+**RESULTADO:** Menor temperatura y mayor duración de componentes.`
+},
+{
+  id: "mnt-limpieza-perifericos",
+  title: "Limpieza de periféricos externos",
+  tags: ["limpieza", "perifericos", "teclado", "mouse"],
+  summary: "Cómo limpiar teclado, mouse, monitor y accesorios.",
+  content: `
+**PASOS:**
+1. Desconectar periféricos.
+2. Sacudir suavemente el teclado.
+3. Usar hisopos con alcohol para teclas.
+4. Limpiar mouse con paño húmedo.
+5. Limpiar monitor:
+   - Microfibra
+   - Nada de líquidos directos
+6. Conectar nuevamente.
+
+**RESULTADO:** Mejor higiene y funcionamiento.`
+},
+{
+  id: "mnt-temp",
+  title: "Revisión de temperaturas del sistema",
+  tags: ["temperatura", "diagnóstico", "preventivo"],
+  summary: "Monitorear temperaturas de CPU, GPU y discos.",
+  content: `
+**PASOS:**
+1. Instalar herramientas como HWMonitor o CoreTemp.
+2. Revisar temperaturas en reposo:
+   - CPU: 30–50°C
+   - GPU: 30–55°C
+3. Revisar en carga:
+   - CPU: 70–90°C
+   - GPU: 70–85°C
+4. Si están altas:
+   - Limpiar PC
+   - Cambiar pasta térmica
+   - Aumentar flujo de aire`
+},
+{
+  id: "mnt-disco",
+  title: "Verificación del estado de discos",
+  tags: ["ssd", "hdd", "smart", "almacenamiento"],
+  summary: "Cómo revisar salud del disco y prevenir pérdida de datos.",
+  content: `
+**PASOS:**
+1. Instalar CrystalDiskInfo.
+2. Revisar:
+   - Estado SMART
+   - Horas de uso
+   - Sectores reasignados
+3. Si muestra “Precaución”:
+   - Respaldar datos inmediatamente.
+4. Ejecutar CHKDSK si es necesario.
+
+**RESULTADO:** Prevención de fallas de almacenamiento.`
+},
+{
+  id: "mnt-drivers",
+  title: "Actualización de drivers",
+  tags: ["drivers", "controladores"],
+  summary: "Mantener drivers actualizados para evitar fallas.",
+  content: `
+**PASOS:**
+1. Ir a Administrador de dispositivos.
+2. Buscar advertencias amarillas.
+3. Descargar drivers desde fabricante:
+   - Chipset
+   - Gráficos
+   - Audio
+   - Red
+4. Instalar uno por uno.
+5. Reiniciar.
+
+**RESULTADO:** Mejor compatibilidad y rendimiento.`
+},
+{
+  id: "mnt-update-so",
+  title: "Actualización del sistema operativo",
+  tags: ["windows update", "so"],
+  summary: "Cómo mantener Windows actualizado.",
+  content: `
+**PASOS:**
+1. Configuración → Windows Update.
+2. Buscar actualizaciones.
+3. Instalar actualizaciones acumulativas.
+4. Reiniciar si se solicita.
+5. Revisión semanal.
+
+**VENTAJAS:** Seguridad, estabilidad, corrección de errores.`
+},
+{
+  id: "mnt-cableado",
+  title: "Organización del cableado externo",
+  tags: ["cableado", " organización"],
+  summary: "Evitar daños por tensión o enredos.",
+  content: `
+**PASOS:**
+1. Desenredar cables.
+2. Separar energía de datos.
+3. Usar velcro (no cinchos duros).
+4. Asegurar cables en escritorio o pared.
+5. Etiquetar si es necesario.
+
+**RESULTADO:** Menos fallas y apariencia profesional.`
+},
+{
+  id: "mnt-soft-opt",
+  title: "Limpieza y optimización del sistema operativo",
+  tags: ["optimización", "software", "limpieza"],
+  summary: "Eliminar archivos temporales y aplicaciones innecesarias.",
+  content: `
+**PASOS:**
+1. Ejecutar “Liberador de espacio”.
+2. Desinstalar apps no usadas.
+3. Eliminar temporales:
+   - %temp%
+   - temp
+   - prefetch
+4. Usar herramientas como:
+   - CCleaner
+   - Wise Cleaner
+
+**RESULTADO:** Sistema más rápido y estable.`
+},
+{
+  id: "mnt-psu",
+  title: "Revisión preventiva de la fuente de poder",
+  tags: ["psu", "fuente", "mantenimiento"],
+  summary: "Cómo evaluar estado de la fuente sin desmontarla.",
+  content: `
+**PASOS:**
+1. Revisar ruidos extraños.
+2. Oler si hay olor a quemado.
+3. Revisar ventilador funcionando.
+4. Verificar voltajes con multímetro si se puede.
+5. Ver logs de reinicios del sistema.
+
+**RESULTADO:** Evita fallas críticas inesperadas.`
+},
+{
+  id: "mnt-conexiones",
+  title: "Revisión de todas las conexiones internas",
+  tags: ["conectores", "placa madre"],
+  summary: "Asegurar que cables y componentes estén firmes.",
+  content: `
+**PASOS:**
+1. Revisar conexión ATX de 24 pines.
+2. Revisar CPU EPS 8 pines.
+3. Revisar cables SATA.
+4. Revisar RAM bien encajada.
+5. Revisar tarjeta gráfica firme.
+6. Revisar headers de panel frontal.
+
+**RESULTADO:** Evita problemas de reinicios o no arranque.`
+},
+{
+  id: "cor-falla-arranque",
+  title: "Diagnóstico de fallas de arranque",
+  tags: ["arranque", "diagnóstico", "post"],
+  summary: "Identificación de problemas cuando la PC no enciende.",
+  content: `
+**PASOS:**
+1. Revisar que la fuente encienda (LED o ventilador).
+2. Escuchar beeps:
+   - 1 largo y 2 cortos → video
+   - Repetitivos → RAM
+3. Retirar RAM y probar un módulo.
+4. Probar sin GPU (si hay integrada).
+5. Verificar alimentación a la placa.
+
+**RESULTADO:** Se identifica componente defectuoso.`
+},
+{
+  id: "cor-pasta-termica",
+  title: "Cambio de pasta térmica",
+  tags: ["pasta", "cpu", "temperatura"],
+  summary: "Reducción de temperatura mediante reemplazo de pasta.",
+  content: `
+**PASOS:**
+1. Apagar y desconectar.
+2. Retirar disipador.
+3. Limpiar residuos con alcohol isopropílico.
+4. Aplicar punto de pasta en el centro.
+5. Colocar disipador uniformemente.
+6. Encender y revisar temperaturas.
+
+**RESULTADO:** Mejor gestión térmica.`
+},
+{
+  id: "cor-ram",
+  title: "Reemplazo de módulos de RAM",
+  tags: ["ram", "memoria"],
+  summary: "Solución a fallas por memoria dañada.",
+  content: `
+**PASOS:**
+1. Apagar PC.
+2. Retirar módulo sospechoso.
+3. Probar en slot diferente.
+4. Probar módulo distinto.
+5. Confirmar con MemTest86.
+6. Instalar módulo nuevo.
+
+**RESULTADO:** Sistema estable sin BSOD.`
+},
+{
+  id: "cor-so-danado",
+  title: "Reparación de sistema operativo dañado",
+  tags: ["windows", "reparar"],
+  summary: "Recuperación de Windows sin formatear.",
+  content: `
+**PASOS:**
+1. Entrar a opciones avanzadas → Reparación de inicio.
+2. CMD:
+   - sfc /scannow
+   - dism /online /cleanup-image /restorehealth
+3. Restaurar sistema.
+4. Actualizar controladores.
+5. Reiniciar.
+
+**RESULTADO:** Windows funcional sin reinstalar.`
+},
+{
+  id: "cor-reemplazo-disco",
+  title: "Reemplazo de disco duro o SSD",
+  tags: ["hdd", "ssd", "reemplazo"],
+  summary: "Instalación de un nuevo disco y migración de datos.",
+  content: `
+**PASOS:**
+1. Revisar tamaño (2.5", M.2, SATA).
+2. Instalar físicamente.
+3. Entrar al BIOS para verificar detección.
+4. Clonar disco con Macrium Reflect.
+5. Configurar arranque desde nuevo disco.
+
+**RESULTADO:** Sistema funcionando en unidad nueva.`
+},
+{
+  id: "cor-fallas-red",
+  title: "Reparación de fallas de red",
+  tags: ["red", "fallas", "diagnóstico"],
+  summary: "Solución a problemas de conectividad.",
+  content: `
+**PASOS:**
+1. Ver LEDs del switch/router.
+2. Cambiar cable de red.
+3. Renovar IP:
+   - ipconfig /release
+   - ipconfig /renew
+4. Probar otro puerto del switch.
+5. Reinstalar driver de red.
+
+**RESULTADO:** Conexión restaurada.`
+},
+{
+  id: "cor-fuente",
+  title: "Sustitución de fuente de poder",
+  tags: ["psu", "reemplazo"],
+  summary: "Reemplazo seguro de PSU dañada.",
+  content: `
+**PASOS:**
+1. Desconectar todos los cables.
+2. Aflojar tornillos traseros.
+3. Retirar PSU.
+4. Instalar nueva y conectar:
+   - 24 pines ATX
+   - 8 pines CPU
+   - SATA/Molex
+5. Probar encendido.
+
+**RESULTADO:** Alimentación estable.`
+},
+{
+  id: "cor-reinstalacion-windows",
+  title: "Reinstalación completa de Windows",
+  tags: ["instalación", "formateo"],
+  summary: "Cómo reinstalar Windows desde cero.",
+  content: `
+**PASOS:**
+1. Crear USB booteable con Media Creation Tool.
+2. Arrancar desde USB.
+3. Eliminar particiones antiguas.
+4. Instalar Windows limpio.
+5. Instalar drivers y actualizaciones.
+
+**RESULTADO:** Sistema 100% renovado.`
+},
+{
+  id: "cor-conectores",
+  title: "Reparación de conectores internos sueltos",
+  tags: ["conectores", "hardware"],
+  summary: "Solución a fallas por cables flojos.",
+  content: `
+**PASOS:**
+1. Revisar SATA de discos.
+2. Revisar conectores de ventiladores.
+3. Revisar header de encendido/reset.
+4. Colocar nuevamente hasta escuchar clic.
+
+**RESULTADO:** Fallas intermitentes eliminadas.`
+},
+{
+  id: "cor-video",
+  title: "Reparación de fallas de pantalla o video",
+  tags: ["video", "gpu", "falla"],
+  summary: "Solución a problemas de video sin señal.",
+  content: `
+**PASOS:**
+1. Probar otro cable HDMI/DP.
+2. Revisar entrada correcta en monitor.
+3. Retirar y reinstalar GPU.
+4. Probar sin GPU (video integrado).
+5. Actualizar drivers.
+6. Probar en otro monitor.
+
+**RESULTADO:** Recuperación de salida de video.`
+},
+{
+      id: 'windows-performance-tweaks',
+      title: 'Optimización de rendimiento en Windows',
+      tags: ['windows', 'rendimiento', 'optimización', 'tweaks', 'velocidad'],
+      summary: 'Ajustes para mejorar velocidad y respuesta del sistema Windows',
+      content: `*OPTIMIZACIONES BÁSICAS DE RENDIMIENTO:*
+
+      *1. Ajustes Visuales:*
+      - Sistema → Acerca de → Configuración avanzada → Rendimiento → Ajustes
+      - Seleccionar "Ajustar para obtener el mejor rendimiento"
+      - O personalizar: mantener "Suavizar bordes de fuentes" y "Mostrar miniaturas"
+
+      *2. Inicio de Windows:*
+      - Ctrl+Shift+Esc → Inicio → Deshabilitar programas innecesarios
+      - Programas que consumen muchos recursos: Spotify, Skype, Adobe apps
+
+      *3. Servicios No Esenciales:*
+      - services.msc → Deshabilitar:
+        - Servicio de teléfono (Telnet)
+        - Cliente de seguimiento de vínculos distribuidos
+        - Publicación de recursos de detección de funciones
+
+      *4. Ajustes de Energía:*
+      - Panel control → Opciones energía → Alto rendimiento
+      - O crear plan personalizado con máximo rendimiento
+
+      *OPTIMIZACIONES AVANZADAS:*
+
+      *Registry Tweaks (Solo avanzados):*
+      - Deshabilitar telemetría y tracking
+      - Aumentar tamaño de cache de archivos
+      - Optimizar planificador de procesos
+
+      *SSD Optimization:*
+      - Desfragmentación automática desactivada para SSD
+      - TRIM habilitado: \fsutil behavior query DisableDeleteNotify\
+      - Prefetch/Superfetch ajustado para SSD
+
+      *HERRAMIENTAS DE MONITOREO:*
+      - *Task Manager:* Ver procesos y recursos en tiempo real
+      - *Resource Monitor:* Análisis detallado de recursos
+      - *Process Explorer:* Alternative avanzada de Microsoft`
+    },
+    {
+      id: 'windows-update-troubleshoot',
+      title: 'Solución de problemas de Windows Update',
+      tags: ['windows', 'update', 'actualizaciones', 'problemas', 'solución'],
+      summary: 'Diagnóstico y reparación de fallos en actualizaciones de Windows',
+      content: `*PROBLEMAS COMUNES WINDOWS UPDATE:*
+
+      *1. Updates que no se instalan:*
+      - Error 0x80070020, 0x8007000E, 0x80073712
+      - Updates que fallan repetidamente
+
+      *2. Updates atascados:*
+      - "Preparando actualizaciones" por horas
+      - Descarga que no progresa
+
+      *3. BSOD después de updates:*
+      - Pantalla azul tras instalar actualizaciones
+
+      *SOLUCIONES SISTEMÁTICAS:*
+
+      *Paso 1 - Soluciones Básicas:*
+      - Reiniciar el equipo
+      - Ejecutar Solución de problemas de Windows Update
+      - Verificar espacio en disco (mínimo 20GB libre)
+
+      *Paso 2 - Herramientas de Diagnóstico:*
+      - *Windows Update Troubleshooter:* Herramienta oficial Microsoft
+      - *SFC Scan:* \sfc /scannow\ en CMD como admin
+      - *DISM Repair:* \DISM /Online /Cleanup-Image /RestoreHealth\
+
+      *Paso 3 - Reset Windows Update:*
+      1. Detener servicios: \net stop wuauserv\, \net stop cryptSvc\, \net stop bits\, \net stop msiserver\
+      2. Renombrar carpetas SoftwareDistribution y Catroot2
+      3. Reiniciar servicios
+
+      *Paso 4 - Herramientas Avanzadas:*
+      - *Windows Update MiniTool:* Third-party tool para control manual
+      - *Show/Hide Updates Tool:* Microsoft tool para bloquear updates problemáticos
+      - *Manual Update Download:* Descargar e instalar updates manualmente desde Catalog
+
+      *PREVENCIÓN:*
+      - No apagar durante actualizaciones
+      - Hacer backup antes de updates mayores
+      - Posponer updates 1-2 días para ver si hay problemas reportados`
+    },
+    {
+      id: 'windows-boot-repair',
+      title: 'Reparación de arranque de Windows',
+      tags: ['windows', 'arranque', 'boot', 'reparación', 'mbr', 'bcd'],
+      summary: 'Métodos para reparar problemas de arranque en Windows',
+      content: `*SÍNTOMAS DE PROBLEMAS DE ARRANQUE:*
+
+      - "Bootmgr is missing" o "Operating System not found"
+      - Pantalla negra después de logo Windows
+      - Bucle de reinicio automático
+      - Error "Inaccessible boot device"
+
+      *MÉTODOS DE REPARACIÓN:*
+
+      *1. Reparación Automática:*
+      - Bootear desde USB de instalación Windows
+      - Seleccionar "Reparar equipo" → Solución de problemas → Opciones avanzadas
+      - Ejecutar "Startup Repair" (Reparación de inicio)
+
+      *2. Comandos CMD (Advanced):*
+      - Desde USB instalación → Símbolo del sistema
+      \\\`
+      bootrec /fixmbr          # Reparar MBR
+      bootrec /fixboot         # Reparar sector de arranque
+      bootrec /scanos          # Buscar instalaciones Windows
+      bootrec /rebuildbcd      # Reconstruir BCD
+      \\\`
+
+      *3. Reconstruir BCD Manualmente:*
+      \\\`
+      bcdedit /export C:\\BCD_Backup
+      attrib C:\\boot\\bcd -h -r -s
+      ren C:\\boot\\bcd bcd.old
+      bootrec /rebuildbcd
+      \\\`
+
+      *4. UEFI Specific:*
+      - Verificar que Secure Boot está habilitado
+      - Comprobar orden de arranque en UEFI
+      - Usar \bcdboot C:\\Windows /s S: /f UEFI\ (S: = partición EFI)
+
+      *HERRAMIENTAS:*
+      - *EasyBCD:* Gestor visual de BCD
+      - *Macrium Reflect:* Backup y recuperación de boot sector
+      - *Hiren's BootCD:* Herramientas de recuperación completas`
+    },
+{
+  id: "mnt-vrm",
+  title: "Revisión del VRM y capacitores de la placa madre",
+  tags: ["placa madre", "vrm", "capacitores"],
+  summary: "Cómo revisar si los capacitores están inflados o si el VRM está fallando.",
+  content: `
+**PASOS:**
+1. Apagar PC y quitar tapa lateral.
+2. Inspeccionar visualmente la zona del VRM.
+3. Verificar si alguno de estos síntomas aparece:
+   - Capacitores inflados
+   - Fugas amarillas o cafés
+   - Olor a quemado
+4. Si detectas alguno:
+   - No usar la PC bajo carga.
+   - Considerar reemplazo de placa madre.
+5. Registrar fotografías para evidencia.
+
+**RESULTADO:** Evita fallas graves por deterioro eléctrico.`
+},
+{
+  id: "mnt-stress",
+  title: "Test de estabilidad del sistema con stress testing",
+  tags: ["prueba", "estabilidad", "cpu", "gpu"],
+  summary: "Cómo comprobar que la PC funciona correctamente en cargas pesadas.",
+  content: `
+**PASOS:**
+1. Instalar:
+   - CPU → Prime95
+   - GPU → FurMark o Unigine Heaven
+2. Ejecutar pruebas de 5–15 minutos.
+3. Monitorear temperaturas con HWMonitor.
+4. Observar si hay:
+   - Pantallazos
+   - Congelamientos
+   - Reinicios
+5. Si falla:
+   - Revisar pasta térmica
+   - Verificar fuente de poder
+   - Comprobar RAM
+
+**RESULTADO:** Se confirma estabilidad del sistema completo.`
+},
+{
+  id: "mnt-particiones",
+  title: "Recuperación de particiones dañadas con TestDisk",
+  tags: ["disco", "particiones", "recuperación"],
+  summary: "Cómo recuperar particiones eliminadas o dañadas sin formatear.",
+  content: `
+**PASOS:**
+1. Descargar TestDisk.
+2. Ejecutarlo como administrador.
+3. Seleccionar el disco afectado.
+4. Elegir "Analyze" → "Quick Search".
+5. Si encuentra particiones:
+   - Restaurarlas con “Write”.
+6. Reiniciar la PC y verificar acceso.
+7. Respaldar datos inmediatamente.
+
+**RESULTADO:** Recuperación de particiones perdidas.`
+},
+{
+  id: "cor-windowsupdate",
+  title: "Reparación de daños en Windows Update",
+  tags: ["windows", "update", "correctivo"],
+  summary: "Cómo reparar errores comunes en Windows Update.",
+  content: `
+**PASOS:**
+1. Ejecutar en CMD como admin:
+   - net stop wuauserv
+   - net stop bits
+2. Renombrar carpeta SoftwareDistribution:
+   - ren C:\\Windows\\SoftwareDistribution SoftwareDistribution.old
+3. Iniciar servicios:
+   - net start wuauserv
+   - net start bits
+4. Buscar actualizaciones nuevamente.
+
+**RESULTADO:** Corrección de errores persistentes de actualización.`
+},
+{
+  id: "cor-apagados",
+  title: "Diagnóstico de apagados repentinos",
+  tags: ["apagado", "psu", "temperatura"],
+  summary: "Identificar causas comunes de apagados inesperados.",
+  content: `
+**POSIBLES CAUSAS:**
+- Sobrecalentamiento
+- Fuente de poder defectuosa
+- Corto en periféricos USB
+- Drivers dañados
+
+**PASOS:**
+1. Revisar temperaturas máximas.
+2. Usar otra fuente de poder para probar.
+3. Desconectar todos los USB externos.
+4. Ver registros:
+   - Visor de eventos → System → Kernel-Power 41.
+5. Probar estabilidad con stress test.
+
+**RESULTADO:** Identificación de la causa raíz.`
+},
+{
+  id: "cor-perfiles",
+  title: "Reparación de perfiles de usuario dañados en Windows",
+  tags: ["perfil", "windows", "correctivo"],
+  summary: "Solución cuando Windows carga un perfil temporal.",
+  content: `
+**PASOS:**
+1. Crear un usuario nuevo.
+2. Copiar contenido del perfil viejo excepto:
+   - NTUSER.DAT
+3. Eliminar claves del registro:
+   - HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList
+4. Asignar ruta correcta al nuevo perfil.
+5. Reiniciar.
+
+**RESULTADO:** Recuperación del perfil del usuario.`
+},
+{
+  id: "cor-sonido",
+  title: "Diagnóstico de fallas de sonido",
+  tags: ["audio", "drivers", "diagnóstico"],
+  summary: "Solución a problemas de audio que no se escucha.",
+  content: `
+**PASOS:**
+1. Verificar dispositivo predeterminado.
+2. Probar con audífonos y bocinas.
+3. Reinstalar driver de audio (Realtek/Intel).
+4. Revisar servicios:
+   - Audio de Windows
+5. Probar la salida en otro puerto.
+6. Instalar driver desde la página del fabricante.
+
+**RESULTADO:** Audio funcional nuevamente.`
+},
+{
+  id: "cor-recuperacion-archivos",
+  title: "Recuperación de archivos borrados con Recuva",
+  tags: ["recuperación", "archivos", "correctivo"],
+  summary: "Cómo recuperar archivos eliminados accidentalmente.",
+  content: `
+**PASOS:**
+1. Descargar Recuva.
+2. Seleccionar tipo de archivos a recuperar.
+3. Elegir ruta de búsqueda.
+4. Realizar escaneo profundo.
+5. Seleccionar archivos recuperables.
+6. Guardar en una unidad diferente.
+
+**RESULTADO:** Recuperación de datos eliminados.`
+},
+{
+  id: "cor-sectores",
+  title: "Reparación de sectores dañados en disco HDD",
+  tags: ["hdd", "sectores dañados", "correctivo"],
+  summary: "Cómo intentar reparar sectores defectuosos.",
+  content: `
+**PASOS:**
+1. Abrir CMD como admin.
+2. Ejecutar:
+   - chkdsk /f /r
+3. Confirmar reinicio.
+4. Esperar escaneo completo.
+5. Revisar informe:
+   - Sectores reasignados
+   - Sectores recuperados
+6. Si aumentan → cambiar disco.
+
+**RESULTADO:** Disco funcional temporalmente o diagnóstico para reemplazo.`
+},
+{
+      id: 'windows-cleanup-tools',
+      title: 'Limpieza y mantenimiento de Windows',
+      tags: ['windows', 'limpieza', 'mantenimiento', 'optimización', 'herramientas'],
+      summary: 'Herramientas y técnicas para limpieza y mantenimiento del sistema',
+      content: `*LIMPIEZA MANUAL BÁSICA:*
+
+      *1. Disk Cleanup:*
+      - Ejecutar \cleanmgr\ como administrador
+      - Seleccionar todas las opciones, especialmente "Archivos temporales"
+      - "Limpiar archivos de sistema" para updates antiguos
+
+      *2. Temp Files:*
+      - Borrar manualmente \%temp%\ y \C:\\Windows\\Temp\
+      - Precaución: No borrar archivos en uso
+
+      *3. Cache Navegadores:*
+      - Chrome: Ctrl+H → Limpiar datos de navegación
+      - Firefox: Options → Privacy & Security → Clear Data
+
+      *HERRAMIENTAS AUTOMÁTIZADAS:*
+
+      *1. CCleaner (Free):*
+      - Limpieza registry y archivos temporales
+      - Gestión programas inicio
+      - Precaución: No usar "Registry Cleaner" agresivamente
+
+      *2. BleachBit:*
+      - Alternativa open-source a CCleaner
+      - Más configurable, menos "user-friendly"
+
+      *3. Windows Built-in:*
+      - *Storage Sense:* Automatiza limpieza
+      - *Defragmentación:* Programar semanalmente (solo HDD)
+
+      *MANTENIMIENTO PROGRAMADO:*
+
+      *1. Task Scheduler:*
+      - Crear tareas para limpieza regular
+      - Ejecutar Disk Cleanup mensualmente
+
+      *2. Scripts Personalizados:*
+      \\\`batch
+      @echo off
+      del /q /f /s %temp%\\*
+      ipconfig /flushdns
+      \\\`
+
+      *PRECAUCIONES:*
+      - No eliminar archivos de los que no estés seguro
+      - Hacer punto de restauración antes de limpiezas grandes
+      - Evitar "registry cleaners" agresivos`
+    },
+    {
+      id: 'windows-task-scheduler',
+      title: 'Uso avanzado del Programador de tareas',
+      tags: ['windows', 'tareas', 'programador', 'automatización', 'scripts'],
+      summary: 'Automatización de tareas y mantenimiento usando Task Scheduler',
+      content: `*USOS COMUNES DEL PROGRAMADOR DE TAREAS:*
+
+      *1. Mantenimiento Automático:*
+      - Limpieza de archivos temporales
+      - Ejecución de backups
+      - Actualización de software
+
+      *2. Tareas Personalizadas:*
+      - Ejecutar scripts al inicio/apagado
+      - Lanzar programas en horarios específicos
+      - Enviar notificaciones recordatorios
+
+      *CONFIGURACIÓN DE TAREAS:*
+
+      *Triggers (Desencadenadores):*
+      - Al iniciar sesión/equipo
+      - En horario específico
+      - Cuando se produce evento del sistema
+      - Al conectarse/disconectarse de red
+
+      *Actions (Acciones):*
+      - Iniciar programa
+      - Enviar correo (configurar SMTP)
+      - Mostrar mensaje
+
+      *Condiciones:*
+      - Solo si hay red disponible
+      - Solo si está enchufado (no batería)
+      - Despertar equipo para ejecutar tarea
+
+      *EJEMPLOS PRÁCTICOS:*
+
+      *Backup Automático:*
+      - Trigger: Diario a las 2:00 AM
+      - Action: Ejecutar script robocopy o herramienta backup
+      - Condition: Solo si conectado a red eléctrica
+
+      *Limpieza Semanal:*
+      - Trigger: Todos los domingos a las 3:00 AM
+      - Action: Ejecutar cleanmgr con parámetros
+
+      *HERRAMIENTAS:*
+      - *taskschd.msc:* Interfaz gráfica del programador
+      - *schtasks.exe:* Línea de comandos para automatización
+      - *PowerShell:* Cmdlets para gestión avanzada`
+    },
+
+    // NUEVOS ÍTEMS - LINUX
+    {
+      id: 'linux-package-management',
+      title: 'Gestión de paquetes en distribuciones Linux',
+      tags: ['linux', 'paquetes', 'apt', 'yum', 'pacman', 'gestión'],
+      summary: 'Sistemas de gestión de paquetes en diferentes distribuciones Linux',
+      content: `*SISTEMAS DE GESTIÓN DE PAQUETES:*
+
+      *Debian/Ubuntu (APT):*
+      \\\`bash
+      # Actualizar lista de paquetes
+      sudo apt update
+
+      # Actualizar paquetes instalados
+      sudo apt upgrade
+
+      # Actualizar distribución completa
+      sudo apt dist-upgrade
+
+      # Instalar paquete
+      sudo apt install nombre-paquete
+
+      # Remover paquete
+      sudo apt remove nombre-paquete
+
+      # Buscar paquete
+      apt search término
+
+      # Información paquete
+      apt show nombre-paquete
+      \\\`
+
+      *RedHat/CentOS (YUM/DNF):*
+      \\\`bash
+      # Instalar paquete
+      sudo yum install nombre-paquete
+      sudo dnf install nombre-paquete  # Más moderno
+
+      # Actualizar sistema
+      sudo yum update
+
+      # Buscar paquete
+      yum search término
+      \\\`
+
+      *Arch Linux (Pacman):*
+      \\\`bash
+      # Sincronizar e actualizar
+      sudo pacman -Syu
+
+      # Instalar paquete
+      sudo pacman -S nombre-paquete
+
+      # Buscar en repositorios
+      pacman -Ss término
+
+      # Remover paquete
+      sudo pacman -R nombre-paquete
+      \\\`
+
+      *GESTIÓN DE REPOSITORIOS:*
+
+      *Ubuntu:* \/etc/apt/sources.list\ y \/etc/apt/sources.list.d/\
+      *CentOS:* \/etc/yum.repos.d/\
+      *Arch:* \/etc/pacman.conf\
+
+      *HERRAMIENTAS GRÁFICAS:*
+      - *Synaptic:* Gestor gráfico para Debian/Ubuntu
+      - *Discover:* Centro de software en KDE
+      - *GNOME Software:* Centro software GNOME`
+    },
+    {
+      id: 'linux-permissions-management',
+      title: 'Gestión de permisos y usuarios en Linux',
+      tags: ['linux', 'permisos', 'usuarios', 'chmod', 'chown', 'acl'],
+      summary: 'Sistema de permisos POSIX y gestión avanzada de usuarios',
+      content: `*PERMISOS BÁSICOS POSIX:*
+
+      *Estructura de permisos:*
+      - *Usuario (u):* Dueño del archivo
+      - *Grupo (g):* Grupo asignado
+      - *Otros (o):* Todos los demás usuarios
+
+      *Tipos de permisos:*
+      - *Lectura (r):* 4 - Ver contenido
+      - *Escritura (w):* 2 - Modificar
+      - *Ejecución (x):* 1 - Ejecutar como programa
+
+      *NOTACIÓN SIMBÓLICA Y NUMÉRICA:*
+      \\\`bash
+      # Permisos: rwxr-xr--
+      # Usuario: rwx (7), Grupo: r-x (5), Otros: r-- (4)
+      chmod 754 archivo.txt
+
+      # Notación simbólica
+      chmod u=rwx,g=rx,o=r archivo.txt
+      chmod o+x archivo.txt  # Agregar ejecución a otros
+      chmod g-w archivo.txt  # Quitar escritura a grupo
+      \\\`
+
+      *GESTIÓN DE USUARIOS Y GRUPOS:*
+
+      \\\`bash
+      # Crear usuario
+      sudo useradd -m -s /bin/bash usuario
+
+      # Crear usuario con home directory
+      sudo useradd -m usuario
+
+      # Cambiar contraseña
+      sudo passwd usuario
+
+      # Crear grupo
+      sudo groupadd migrupo
+
+      # Agregar usuario a grupo
+      sudo usermod -aG migrupo usuario
+
+      # Cambiar dueño y grupo
+      sudo chown usuario:grupo archivo.txt
+      \\\`
+
+      *PERMISOS AVANZADOS:*
+
+      *Sticky Bit:* \chmod +t directorio\ - Solo dueño puede borrar
+      *SetUID:* \chmod u+s archivo\ - Ejecuta con permisos del dueño
+      *SetGID:* \chmod g+s directorio\ - Archivos heredan grupo del directorio
+
+      *ACL (Access Control Lists):*
+      \\\`bash
+      # Ver ACL
+      getfacl archivo.txt
+
+      # Establecer ACL
+      setfacl -m u:usuario:rwx archivo.txt
+      setfacl -m g:grupo:rx archivo.txt
+      \\\``
+    },
+    {
+      id: 'linux-service-management',
+      title: 'Gestión de servicios y systemd en Linux',
+      tags: ['linux', 'servicios', 'systemd', 'systemctl', 'init'],
+      summary: 'Administración de servicios usando systemd y sistemas init',
+      content: `*SYSTEMD - SISTEMA MODERNO:*
+
+      *Comandos Básicos systemctl:*
+      \\\`bash
+      # Estado servicio
+      sudo systemctl status nombre-servicio
+
+      # Iniciar servicio
+      sudo systemctl start nombre-servicio
+
+      # Detener servicio
+      sudo systemctl stop nombre-servicio
+
+      # Reiniciar servicio
+      sudo systemctl restart nombre-servicio
+
+      # Habilitar inicio automático
+      sudo systemctl enable nombre-servicio
+
+      # Deshabilitar inicio automático
+      sudo systemctl disable nombre-servicio
+
+      # Recargar configuración
+      sudo systemctl daemon-reload
+      \\\`
+
+      *SERVICIOS COMUNES:*
+      - *ssh:* Servidor SSH
+      - *apache2/httpd:* Servidor web Apache
+      - *nginx:* Servidor web Nginx
+      - *mysql/mariadb:* Base de datos
+      - *docker:* Contenedores Docker
+
+      *GESTIÓN AVANZADA:*
+
+      *Ver logs de servicio:*
+      \\\`bash
+      journalctl -u nombre-servicio
+      journalctl -u nombre-servicio -f  # Follow en tiempo real
+      journalctl --since "1 hour ago"
+      \\\`
+
+      *Crear servicio personalizado:*
+      \\\`bash
+      # Crear archivo en /etc/systemd/system/mi-servicio.service
+      sudo nano /etc/systemd/system/mi-servicio.service
+      \\\`
+
+      *Ejemplo servicio:*
+      \\\`ini
+      [Unit]
+      Description=Mi Servicio Personalizado
+      After=network.target
+
+      [Service]
+      Type=simple
+      ExecStart=/ruta/a/mi/script.sh
+      Restart=always
+      User=mi-usuario
+
+      [Install]
+      WantedBy=multi-user.target
+      \\\`
+
+      *SISTEMAS INIT LEGACY:*
+
+      *SysV Init:*
+      \\\`bash
+      sudo service nombre-servicio start
+      sudo /etc/init.d/nombre-servicio start
+      \\\`
+
+      *Upstart (Ubuntu antiguo):*
+      \\\`bash
+      sudo start nombre-servicio
+      sudo stop nombre-servicio
+      \\\``
+    },
+{
+      id: 'linux-network-config',
+      title: 'Configuración de red en Linux',
+      tags: ['linux', 'red', 'network', 'ip', 'dns', 'routing'],
+      summary: 'Configuración manual y gestión de red en distribuciones Linux',
+      content: `*CONFIGURACIÓN BÁSICA DE RED:*
+
+      *Comandos de Diagnóstico:*
+      \\\`bash
+      # Información interfaces
+      ip addr show
+      ifconfig        # Legacy, pero común
+
+      # Tabla de routing
+      ip route show
+      route -n        # Legacy
+
+      # DNS
+      cat /etc/resolv.conf
+
+      # Conexiones activas
+      ss -tuln        # Modern replacement de netstat
+      netstat -tuln   # Legacy
+      \\\`
+
+      *CONFIGURACIÓN MANUAL:*
+
+      *Temporal (hasta reinicio):*
+      \\\`bash
+      # Configurar IP
+      sudo ip addr add 192.168.1.100/24 dev eth0
+
+      # Agregar gateway
+      sudo ip route add default via 192.168.1.1
+
+      # Configurar DNS temporal
+      echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
+      \\\`
+
+      *CONFIGURACIÓN PERSISTENTE:*
+
+      *Debian/Ubuntu (netplan):*
+      \\\`yaml
+      # /etc/netplan/01-netcfg.yaml
+      network:
+        version: 2
+        renderer: networkd
+        ethernets:
+          eth0:
+            addresses: [192.168.1.100/24]
+            gateway4: 192.168.1.1
+            nameservers:
+              addresses: [8.8.8.8, 1.1.1.1]
+      \\\`
+      Aplicar: \sudo netplan apply\
+
+      *RedHat/CentOS (NetworkManager):*
+      \\\`bash
+      # Archivo en /etc/sysconfig/network-scripts/ifcfg-eth0
+      sudo nmcli con add type ethernet con-name "eth0-static" ifname eth0 \
+        ipv4.addresses 192.168.1.100/24 ipv4.gateway 192.168.1.1 \
+        ipv4.dns "8.8.8.8,1.1.1.1" ipv4.method manual
+      \\\`
+
+      *HERRAMIENTAS GRÁFICAS:*
+      - *nmtui:* Interfaz texto para NetworkManager
+      - *nm-connection-editor:* Interfaz gráfica
+      - *network-admin:* Herramienta gráfica en algunas distribuciones`
+    },
+    {
+      id: 'linux-disk-management',
+      title: 'Gestión de discos y particiones en Linux',
+      tags: ['linux', 'discos', 'particiones', 'lvm', 'filesystem'],
+      summary: 'Administración avanzada de discos, particiones y LVM',
+      content: `*HERRAMIENTAS DE PARTICIÓN:*
+
+      *fdisk (MBR):*
+      \\\`bash
+      sudo fdisk -l                    # Listar particiones
+      sudo fdisk /dev/sdb              # Editar particiones disco
+      # Comandos dentro de fdisk: n (nueva), d (borrar), w (escribir)
+      \\\`
+
+      *gdisk (GPT):*
+      \\\`bash
+      sudo gdisk /dev/sdb              # Para discos GPT
+      \\\`
+
+      *parted (Avanzado):*
+      \\\`bash
+      sudo parted /dev/sdb print       # Ver particiones
+      sudo parted /dev/sdb mklabel gpt # Crear tabla GPT
+      \\\`
+
+      *SISTEMAS DE ARCHIVOS:*
+
+      *Crear sistemas de archivos:*
+      \\\`bash
+      # ext4 (estándar Linux)
+      sudo mkfs.ext4 /dev/sdb1
+
+      # XFS (alto rendimiento)
+      sudo mkfs.xfs /dev/sdb1
+
+      # Btrfs (características avanzadas)
+      sudo mkfs.btrfs /dev/sdb1
+
+      # FAT32 (compatibilidad)
+      sudo mkfs.fat -F32 /dev/sdb1
+      \\\`
+
+      *Montaje:*
+      \\\`bash
+      # Montaje temporal
+      sudo mount /dev/sdb1 /mnt/mydisk
+
+      # Montaje persistente (/etc/fstab)
+      # /dev/sdb1 /mnt/mydisk ext4 defaults 0 2
+      sudo nano /etc/fstab
+
+      # Ver montajes
+      mount | grep sdb1
+      df -h
+      \\\`
+
+      *LVM (Logical Volume Manager):*
+      \\\`bash
+      # Crear Physical Volume
+      sudo pvcreate /dev/sdb1
+
+      # Crear Volume Group
+      sudo vgcreate myvg /dev/sdb1
+
+      # Crear Logical Volume
+      sudo lvcreate -L 10G -n mylv myvg
+
+      # Formatear y montar
+      sudo mkfs.ext4 /dev/myvg/mylv
+      sudo mount /dev/myvg/mylv /mnt/mydisk
+      \\\``
+    },
+
+    // NUEVOS ÍTEMS - MULTIPLATAFORMA
+    {
+      id: 'dual-boot-configuration',
+      title: 'Configuración Dual Boot Windows-Linux',
+      tags: ['dual-boot', 'windows', 'linux', 'grub', 'uefi'],
+      summary: 'Instalación y configuración de sistemas dual boot',
+      content: `*PREPARACIÓN DUAL BOOT:*
+
+      *Requisitos:*
+      - Windows instalado primero (recomendado)
+      - Espacio libre no particionado para Linux
+      - USB booteable con distribución Linux
+      - Backup de datos importantes
+
+      *PROCEDIMIENTO SEGURO:*
+
+      *1. Preparar espacio en Windows:*
+      - Administración de discos → Reducir volumen C:
+      - Dejar 20GB+ mínimo para Linux
+      - Crear espacio no particionado
+
+      *2. Instalar Linux:*
+      - Bootear desde USB Linux
+      - En instalación, elegir "Instalar junto a Windows"
+      - O modo manual: usar espacio no particionado
+      - Crear particiones: / (20GB+), swap (2-8GB), /home (resto)
+
+      *3. Configuración UEFI:*
+      - Verificar que ambos SO instalados en modo UEFI
+      - GRUB debería detectar Windows automáticamente
+      - Si no aparece: \sudo update-grub\
+
+      *PROBLEMAS COMUNES:*
+
+      *Windows no aparece en GRUB:*
+      \\\`bash
+      sudo os-prober
+      sudo update-grub
+      \\\`
+
+      *Solo arranca Windows:*
+      - Reparar GRUB desde Live USB
+      - Verificar orden de arranque en UEFI
+
+      *HORA INCORRECTA:*
+      - Windows usa hora local, Linux UTC
+      - Solución: \timedatectl set-local-rtc 1\ en Linux
+      - O cambiar Windows a UTC: regedit
+
+      *HERRAMIENTAS:*
+      - *EasyBCD:* Gestor arranque Windows
+      - *GRUB Customizer:* Personalizar menú GRUB
+      - *Boot-Repair:* Reparación automática`
+    },
+    {
+      id: 'virtualization-setup',
+      title: 'Virtualización con VirtualBox y VMware',
+      tags: ['virtualización', 'virtualbox', 'vmware', 'vm', 'hypervisor'],
+      summary: 'Configuración y optimización de máquinas virtuales',
+      content: `*VIRTUALBOX VS VMWARE:*
+
+      *VirtualBox (Oracle - Free):*
+      - Ventaja: Gratuito, multiplataforma
+      - Desventaja: Menor rendimiento, menos características enterprise
+
+      *VMware Workstation/Fusion (Pago):*
+      - Ventaja: Mejor rendimiento, más características
+      - Desventaja: De pago (excepto Player)
+
+      *CONFIGURACIÓN ÓPTIMA MÁQUINA VIRTUAL:*
+
+      *Asignación de Recursos:*
+      - *CPU:* 2-4 cores (no asignar todos los cores físicos)
+      - *RAM:* 25-50% de RAM física disponible
+      - *Video Memory:* Máximo permitido por hipervisor
+      - *Storage:* 20GB+ dinámico o fixed size
+
+      *Guest Additions/VMware Tools:*
+      - Instalar para mejor rendimiento y características
+      - Clipboard compartido, drag & drop, resolución automática
+
+      *CONFIGURACIONES AVANZADAS:*
+
+      *VirtualBox:*
+      - Habilitar PAE/NX si SO guest lo requiere
+      - Paravirtualization Interface: Default o KVM
+      - Hardware Clock in UTC Time
+
+      *VMware:*
+      - Memory Reservation para garantizar RAM
+      - CPU Reservation para aplicaciones críticas
+      - Enable virtualized MMU
+
+      *TIPOS DE RED:*
+      - *NAT:* Comparte IP host, guest aislado
+      - *Bridged:* Guest en misma red que host
+      - *Host-only:* Solo comunicación host-guest
+      - *Internal:* Solo entre VMs
+
+      *SNAPSHOTS Y BACKUPS:*
+      - Crear snapshot antes de cambios importantes
+      - Clonar VMs para testing
+      - Exportar/Importar appliances`
+    },
+{
+      id: 'software-deployment',
+      title: 'Despliegue y distribución de software',
+      tags: ['software', 'despliegue', 'instalación', 'paquetes', 'distribución'],
+      summary: 'Métodos para empaquetar y distribuir software',
+      content: `*FORMATOS DE PAQUETES:*
+
+      *Windows:*
+      - *MSI:* Windows Installer - estándar empresarial
+      - *EXE:* Instaladores personalizados
+      - *AppX:* Microsoft Store packages
+
+      *Linux:*
+      - *DEB:* Debian/Ubuntu (\.deb\)
+      - *RPM:* RedHat/CentOS/Fedora (\.rpm\)
+      - *Snap:* Universal (Canonical)
+      - *Flatpak:* Universal (comunidad)
+
+      *macOS:*
+      - *DMG:* Disk images
+      - *PKG:* Installer packages
+      - *App Bundle:* Aplicaciones auto-contenidas
+
+      *HERRAMIENTAS DE EMPAQUETADO:*
+
+      *Windows:*
+      - *WiX Toolset:* Crear MSI desde XML
+      - *Inno Setup:* Crear instaladores EXE
+      - *NSIS:* Nullsoft Scriptable Install System
+
+      *Linux:*
+      - *dpkg-deb:* Crear paquetes DEB
+      - *rpmbuild:* Crear paquetes RPM
+      - *snapcraft:* Crear snaps
+      - *flatpak-builder:* Crear flatpaks
+
+      *DISTRIBUCIÓN:*
+
+      *Repositorios:*
+      - Crear repositorio propio (APT/YUM)
+      - Publicar en stores oficiales
+
+      *Instaladores Web:*
+      - Descargar pequeño installer que descarga el resto
+      - Útil para aplicaciones grandes
+
+      *Actualizaciones Automáticas:*
+      - Implementar sistema de auto-update
+      - Usar frameworks como Squirrel (Windows) o update-notifier (Linux)`
+    },
+    {
+      id: 'os-troubleshooting-methodology',
+      title: 'Metodología de troubleshooting de SO',
+      tags: ['troubleshooting', 'metodología', 'diagnóstico', 'solución'],
+      summary: 'Enfoque sistemático para diagnóstico de problemas de sistema operativo',
+      content: `*METODOLOGÍA SISTEMÁTICA DE TROUBLESHOOTING:*
+
+      *1. Identificación del Problema:*
+      - ¿Qué exactamente no funciona?
+      - ¿Cuándo empezó el problema?
+      - ¿Qué cambió recientemente (updates, hardware, software)?
+      - ¿El problema es reproducible?
+
+      *2. Recopilación de Información:*
+      - Logs del sistema (Event Viewer, journalctl, syslog)
+      - Mensajes de error específicos
+      - Comportamiento del sistema antes/durante/después del problema
+      - Condiciones específicas cuando ocurre
+
+      *3. Análisis de Causa Raíz:*
+      - Hipótesis de posibles causas
+      - Priorizar por probabilidad e impacto
+      - Verificar cada hipótesis sistemáticamente
+
+      *4. Aplicación de Soluciones:*
+      - Comenzar con soluciones menos invasivas
+      - Probar una solución a la vez
+      - Documentar cada cambio y resultado
+
+      *HERRAMIENTAS DE DIAGNÓSTICO:*
+
+      *Windows:*
+      - *Event Viewer:* \eventvwr.msc\
+      - *Reliability Monitor:* \perfmon /rel\
+      - *Resource Monitor:* \resmon\
+      - *Process Explorer:* Microsoft Sysinternals
+
+      *Linux:*
+      - *journalctl:* Logs systemd
+      - *dmesg:* Mensajes del kernel
+      - */var/log/:* Archivos de log tradicionales
+      - *htop/top:* Monitorización procesos
+
+      *TÉCNICAS AVANZADAS:*
+
+      *Boot Modo Seguro:*
+      - Windows: F8 o Shift+Reiniciar
+      - Linux: Editar parámetros GRUB (single user mode)
+
+      *System File Check:*
+      - Windows: \sfc /scannow\
+      - Linux: \dpkg --verify\ (Debian)
+
+      *Performance Monitoring:*
+      - Windows Performance Monitor
+      - Linux sar, vmstat, iostat`
+    },
+    {
+      id: 'os-security-hardening',
+      title: 'Hardening de seguridad en sistemas operativos',
+      tags: ['seguridad', 'hardening', 'windows', 'linux', 'protección'],
+      summary: 'Configuraciones para mejorar seguridad de sistemas operativos',
+      content: `*HARDENING BÁSICO WINDOWS:*
+
+      *1. Configuración de Usuario:*
+      - Usar cuenta estándar para uso diario (no administrador)
+      - Contraseñas complejas y cambio regular
+      - Deshabilitar cuentas no utilizadas
+
+      *2. Configuración del Sistema:*
+      - Habilitar Windows Defender/Firewall
+      - Configurar UAC al nivel máximo
+      - Deshabilitar servicios no esenciales
+      - Habilitar BitLocker para cifrado disco
+
+      *3. Actualizaciones:*
+      - Actualizaciones automáticas habilitadas
+      - Mantener software de terceros actualizado
+
+      *HARDENING BÁSICO LINUX:*
+
+      *1. Configuración SSH:*
+      \\\`bash
+      # /etc/ssh/sshd_config
+      PermitRootLogin no
+      PasswordAuthentication no  # Usar solo keys
+      Port 2222                  # Cambiar puerto estándar
+      \\\`
+
+      *2. Firewall:*
+      \\\`bash
+      # UFW (Ubuntu)
+      sudo ufw enable
+      sudo ufw allow ssh
+      sudo ufw default deny incoming
+
+      # firewalld (RedHat)
+      sudo firewall-cmd --permanent --add-service=ssh
+      sudo firewall-cmd --reload
+      \\\`
+
+      *3. Seguridad del Sistema:*
+      - Deshabilitar cuentas no utilizadas
+      - Configurar sudoers apropiadamente
+      - Instalar y configurar fail2ban
+      - Habilitar SELinux/AppArmor
+
+      *HERRAMIENTAS DE AUDITORÍA:*
+
+      *Windows:*
+      - Microsoft Security Compliance Toolkit
+      - Local Security Policy (\secpol.msc\)
+
+      *Linux:*
+      - *Lynis:* Auditoría de seguridad
+      - *OpenSCAP:* Evaluación compliance
+      - *chkrootkit/rkhunter:* Detección rootkits
+
+      *PRÁCTICAS RECOMENDADAS:*
+      - Principio de mínimo privilegio
+      - Seguridad en capas (defense in depth)
+      - Monitoreo y logging continuo
+      - Backup y plan de recuperación`
+    },
+    {
+      id: 'backup-recovery-strategies',
+      title: 'Estrategias de backup y recuperación',
+      tags: ['backup', 'recuperación', 'estrategia', 'disaster-recovery'],
+      summary: 'Planificación e implementación de estrategias de backup efectivas',
+      content: `*TIPOS DE BACKUP:*
+
+      *1. Completo (Full):*
+      - Copia todos los datos seleccionados
+      - Más lento, requiere más espacio
+      - Recuperación más rápida y simple
+
+      *2. Incremental:*
+      - Copia solo lo cambiado desde último backup de cualquier tipo
+      - Más rápido, menos espacio
+      - Recuperación más lenta (necesita cadena completa)
+
+      *3. Diferencial:*
+      - Copia lo cambiado desde último backup completo
+      - Balance entre espacio y velocidad de recuperación
+
+      *ESTRATEGIA 3-2-1:*
+      - *3* copias de los datos
+      - *2* medios de almacenamiento diferentes
+      - *1* copia fuera del sitio (off-site)
+
+      *HERRAMIENTAS POR PLATAFORMA:*
+
+      *Windows:*
+      - *File History:* Backup incremental de archivos
+      - *Windows Backup:* Backup completo del sistema
+      - *Veeam Agent:* Empresarial gratuito para uso personal
+      - *Macrium Reflect:* Imágenes de disco completas
+
+      *Linux:*
+      - *rsync:* Sincronización de archivos
+      - *Timeshift:* Snapshots del sistema (similar a System Restore)
+      - *BorgBackup:* Backup deduplicado eficiente
+      - *Duplicity:* Backup encriptado incremental
+
+      *macOS:*
+      - *Time Machine:* Backup automático integrado
+      - *Carbon Copy Cloner:* Clonado de discos avanzado
+
+      *AUTOMATIZACIÓN Y MONITOREO:*
+
+      *Programación:*
+      - Backup completo semanal
+      - Backup incremental diario
+      - Verificación mensual de integridad
+
+      *Retención:*
+      - Backup diarios: 7-30 días
+      - Backup semanales: 1-3 meses
+      - Backup mensuales: 6-12 meses
+
+      *PRUEBAS DE RECUPERACIÓN:*
+      - Probar recuperación regularmente
+      - Documentar procedimientos de recuperación
+      - Mantener backups fuera del sitio actualizados`
+    },
+    {
+      id: 'remote-access-solutions',
+      title: 'Soluciones de acceso remoto',
+      tags: ['acceso-remoto', 'rdp', 'ssh', 'vnc', 'teamviewer'],
+      summary: 'Configuración y uso de herramientas de acceso remoto',
+      content: `*SOLUCIONES DE ACCESO REMOTO:*
+
+      *Windows Remote Desktop (RDP):*
+      - *Ventaja:* Integrado en Windows Pro/Enterprise
+      - *Configuración:* 
+        - Habilitar en System → Remote Desktop
+        - Configurar firewall para puerto 3389
+        - Usuarios con permisos de acceso remoto
+      - *Cliente:* mstsc.exe (built-in) o Microsoft Remote Desktop
+
+      *SSH (Secure Shell):*
+      - *Linux/Windows:* Acceso seguro por línea de comandos
+      - *Configuración servidor Linux:*
+      \\\`bash
+      sudo apt install openssh-server
+      sudo systemctl enable ssh
+      sudo systemctl start ssh
+      \\\`
+      - *Windows:* Instalar OpenSSH Server (Windows Features)
+
+      *VNC (Virtual Network Computing):*
+      - *Ventaja:* Multiplataforma, acceso a escritorio gráfico
+      - *Desventaja:* Menos seguro que RDP/SSH
+      - *Implementaciones:* RealVNC, TightVNC, TigerVNC
+
+      *SOLUCIONES DE TERCEROS:*
+
+      *TeamViewer:*
+      - Multiplataforma, fácil configuración
+      - Gratuito para uso personal
+      - Funciona detrás de NAT/firewalls
+
+      *AnyDesk:*
+      - Alternativa ligera a TeamViewer
+      - Buen rendimiento, gratuita para uso personal
+
+      *Chrome Remote Desktop:*
+      - Integrado con cuenta Google
+      - Fácil configuración, multiplataforma
+
+      *CONFIGURACIÓN SEGURA:*
+
+      *Mejores Prácticas:*
+      - Usar conexiones encriptadas (SSL/TLS, SSH)
+      - Cambiar puertos por defecto
+      - Usar autenticación de dos factores
+      - Limitar acceso por IP
+      - Mantener software actualizado
+
+      *Túneles SSH:*
+      \\\`bash
+      # Tunnel para VNC through SSH
+      ssh -L 5901:localhost:5900 usuario@servidor
+
+      # Tunnel para RDP through SSH
+      ssh -L 3389:localhost:3389 usuario@servidor
+      \\\``
+    },
+{
+      id: 'os-migration-techniques',
+      title: 'Técnicas de migración entre sistemas operativos',
+      tags: ['migración', 'windows', 'linux', 'macos', 'transferencia'],
+      summary: 'Métodos para migrar datos y configuraciones entre diferentes SO',
+      content: `*ESCENARIOS DE MIGRACIÓN COMUNES:*
+
+      *Windows a Windows:*
+      - *User State Migration Tool (USMT):* Herramienta empresarial Microsoft
+      - *Windows Easy Transfer:* Descontinuado, pero alternativas disponibles
+      - *Manual:* Copiar perfiles de usuario, documentos, configuraciones
+
+      *Windows a Linux:*
+      - *Datos:* Copiar documentos, fotos, música
+      - *Email:* Exportar/Importar via formatos estándar (PST, MBOX)
+      - *Configuraciones:* Algunas aplicaciones multiplataforma permiten exportar
+
+      *Linux a Linux:*
+      - *Home Directory:* Copiar /home completo
+      - *Configuraciones:* /etc/, dotfiles en home
+      - *Lista de paquetes:* Exportar lista instalada, instalar en nuevo sistema
+
+      *HERRAMIENTAS DE MIGRACIÓN:*
+
+      *Multiplataforma:*
+      - *rsync:* Sincronización eficiente de archivos
+      - *Unison:* Sincronización bidireccional
+      - *FreeFileSync:* Interfaz gráfica para sincronización
+
+      *Específicas Windows:*
+      - *Laplink PCmover:* Migración comercial completa
+      - *Transwiz:* Transferencia perfiles de usuario
+
+      *Específicas Linux:*
+      \\\`bash
+      # Exportar lista paquetes instalados (Debian/Ubuntu)
+      dpkg --get-selections > package-list.txt
+
+      # En nuevo sistema
+      sudo dpkg --set-selections < package-list.txt
+      sudo apt-get dselect-upgrade
+      \\\`
+
+      *MIGRACIÓN DE CONFIGURACIONES:*
+
+      *Navegadores:*
+      - Chrome/Firefox: Sincronizar con cuenta o exportar perfiles
+      - Bookmarks: Exportar HTML estándar
+
+      *Email:*
+      - Thunderbird: Copiar carpeta de perfil completa
+      - Outlook: Exportar PST, importar en nuevo sistema
+
+      *Desarrolladores:*
+      - Configuraciones IDE: Exportar/Importar settings
+      - SSH keys: Copiar ~/.ssh/
+      - Git config: ~/.gitconfig
+
+      *PLANIFICACIÓN DE MIGRACIÓN:*
+
+      *Pre-migración:*
+      - Inventario de software y datos
+      - Backup completo del sistema original
+      - Verificar compatibilidad de software
+
+      *Post-migración:*
+      - Verificar integridad de datos transferidos
+      - Configurar nuevo sistema
+      - Mantener sistema original hasta verificar funcionamiento`
+    }
 
 ]
       }
@@ -2008,7 +4906,504 @@ Procedimientos:
 - Verificar cables flojos
   `
 },
-
+{
+  id: "motherboard",
+  title: "Placa base (Motherboard)",
+  tags: ["motherboard", "placa", "hardware"],
+  content: "Circuito principal donde se conectan todos los componentes del equipo."
+},
+{
+  id: "cpu-socket",
+  title: "Socket de CPU",
+  tags: ["socket", "cpu", "procesador"],
+  content: "Conector físico donde se instala el procesador sobre la placa base."
+},
+{
+  id: "chipset",
+  title: "Chipset",
+  tags: ["chipset", "motherboard"],
+  content: "Conjunto de circuitos que gestionan la comunicación entre CPU, RAM y periféricos."
+},
+{
+  id: "bios",
+  title: "BIOS",
+  tags: ["bios", "firmware"],
+  content: "Firmware básico que inicia el hardware y permite arrancar el sistema."
+},
+{
+  id: "uefi",
+  title: "UEFI",
+  tags: ["uefi", "firmware"],
+  content: "Versión moderna del BIOS con interfaz gráfica y funciones avanzadas."
+},
+{
+  id: "post",
+  title: "POST",
+  tags: ["post", "diagnóstico", "arranque"],
+  content: "Prueba de encendido que verifica que los componentes funcionen correctamente."
+},
+{
+  id: "psu",
+  title: "Fuente de poder (PSU)",
+  tags: ["psu", "fuente", "energia"],
+  content: "Dispositivo que convierte corriente alterna en energía para el equipo."
+},
+{
+  id: "voltage-rails",
+  title: "Raíles de voltaje (12V/5V/3.3V)",
+  tags: ["voltaje", "psu"],
+  content: "Líneas de voltaje proveídas por la fuente de poder para los componentes."
+},
+{
+  id: "pcie",
+  title: "PCI Express",
+  tags: ["pcie", "expansion"],
+  content: "Interfaz de alta velocidad usada por tarjetas gráficas y otros dispositivos."
+},
+{
+  id: "dimm",
+  title: "DIMM",
+  tags: ["dimm", "ram"],
+  content: "Formato de módulos de memoria RAM usado en computadoras de escritorio."
+},
+{
+  id: "sodimm",
+  title: "SO-DIMM",
+  tags: ["sodimm", "ram", "laptop"],
+  content: "Formato pequeño de módulos RAM usado en laptops y mini PCs."
+},
+{
+  id: "dual-channel",
+  title: "Dual Channel",
+  tags: ["ram", "dual"],
+  content: "Modo que permite duplicar el ancho de banda de memoria al usar 2 módulos iguales."
+},
+{
+  id: "nvme",
+  title: "NVMe",
+  tags: ["nvme", "ssd"],
+  content: "Protocolo de alta velocidad para unidades SSD modernas conectado vía PCIe."
+},
+{
+  id: "m2",
+  title: "M.2",
+  tags: ["m2", "ssd"],
+  content: "Formato físico pequeño usado por SSDs modernos y otros dispositivos."
+},
+{
+  id: "sata",
+  title: "SATA",
+  tags: ["sata", "almacenamiento"],
+  content: "Interfaz tradicional para discos duros y unidades SSD SATA."
+},
+{
+  id: "tdp",
+  title: "TDP",
+  tags: ["tdp", "cpu"],
+  content: "Medida del calor que genera un procesador bajo carga típica."
+},
+{
+  id: "rpm",
+  title: "RPM del ventilador",
+  tags: ["rpm", "cooler"],
+  content: "Velocidad de rotación del ventilador que influye en enfriamiento."
+},
+{
+  id: "thermal-paste",
+  title: "Pasta térmica",
+  tags: ["pasta", "termica"],
+  content: "Material que mejora la transferencia de calor entre CPU y disipador."
+},
+{
+  id: "drivers",
+  title: "Drivers",
+  tags: ["drivers", "controladores"],
+  content: "Software que permite que el sistema operativo se comunique con el hardware."
+},
+{
+  id: "pnp",
+  title: "Plug and Play",
+  tags: ["plug", "play"],
+  content: "Tecnología que detecta dispositivos automáticamente sin configuración manual."
+},
+{
+  id: "periferico",
+  title: "Periférico",
+  tags: ["periferico", "dispositivo"],
+  content: "Dispositivo externo que complementa el funcionamiento del equipo."
+},
+{
+  id: "firmware",
+  title: "Firmware",
+  tags: ["firmware"],
+  content: "Software interno integrado dentro del hardware."
+},
+{
+  id: "overclock",
+  title: "Overclocking",
+  tags: ["overclock", "cpu"],
+  content: "Aumento manual de la frecuencia del hardware para mayor rendimiento."
+},
+{
+  id: "underclock",
+  title: "Underclocking",
+  tags: ["underclock", "energia"],
+  content: "Reducción de frecuencia para disminuir consumo y calor."
+},
+{
+  id: "so",
+  title: "Sistema operativo",
+  tags: ["sistema", "operativo"],
+  content: "Software principal que controla el hardware y permite ejecutar programas."
+},
+{
+  id: "partition",
+  title: "Partición",
+  tags: ["particion", "disco"],
+  content: "División lógica en un disco para organizar datos o sistemas."
+},
+{
+  id: "format",
+  title: "Formateo",
+  tags: ["formatear", "disco"],
+  content: "Proceso de preparar un disco para ser utilizado por un sistema."
+},
+{
+  id: "iso",
+  title: "Imagen ISO",
+  tags: ["iso", "instalacion"],
+  content: "Archivo que contiene una copia completa de un sistema o instalador."
+},
+{
+  id: "boot",
+  title: "Boot",
+  tags: ["arranque", "boot"],
+  content: "Proceso de carga del sistema operativo al encender el equipo."
+},
+{
+  id: "legacy",
+  title: "Modo Legacy",
+  tags: ["legacy", "boot"],
+  content: "Método de arranque tradicional previo a UEFI."
+},
+{
+  id: "secure-boot",
+  title: "Secure Boot",
+  tags: ["secure", "boot"],
+  content: "Función UEFI que impide la ejecución de software no autorizado."
+},
+{
+  id: "dualboot",
+  title: "Dual Boot",
+  tags: ["dual", "boot"],
+  content: "Configuración donde se instalan dos sistemas operativos en un mismo equipo."
+},
+{
+  id: "variables",
+  title: "Variables de entorno",
+  tags: ["variables", "sistema"],
+  content: "Parámetros del sistema que afectan cómo se ejecutan programas."
+},
+{
+  id: "registry",
+  title: "Registro de Windows",
+  tags: ["registro", "windows"],
+  content: "Base de datos interna con configuraciones del sistema."
+},
+{
+  id: "services",
+  title: "Servicios de Windows",
+  tags: ["servicios", "windows"],
+  content: "Procesos de fondo que permiten el funcionamiento de funciones del sistema."
+},
+{
+  id: "taskmgr",
+  title: "Administrador de tareas",
+  tags: ["task", "tareas"],
+  content: "Herramienta para gestionar procesos, rendimiento y aplicaciones."
+},
+{
+  id: "antivirus",
+  title: "Antivirus",
+  tags: ["antivirus", "seguridad"],
+  content: "Software que detecta y elimina malware."
+},
+{
+  id: "firewall",
+  title: "Firewall",
+  tags: ["firewall", "seguridad"],
+  content: "Sistema que controla el tráfico de red y bloquea accesos no autorizados."
+},
+{
+  id: "powershell",
+  title: "PowerShell",
+  tags: ["powershell", "cmd"],
+  content: "Consola avanzada de administración en Windows."
+},
+{
+  id: "cmd",
+  title: "CMD",
+  tags: ["cmd", "comandos"],
+  content: "Línea de comandos clásica de Windows."
+},
+{
+  id: "license",
+  title: "Licencia digital",
+  tags: ["licencia", "windows"],
+  content: "Método de activación del sistema operativo mediante cuenta o hardware."
+},
+{
+  id: "clean-install",
+  title: "Instalación limpia",
+  tags: ["instalacion", "windows"],
+  content: "Instalación del sistema desde cero borrando particiones previas."
+},
+{
+  id: "mantenimiento-preventivo",
+  title: "Mantenimiento preventivo",
+  tags: ["mantenimiento", "preventivo"],
+  content: "Acciones realizadas para evitar fallas futuras."
+},
+{
+  id: "mantenimiento-correctivo",
+  title: "Mantenimiento correctivo",
+  tags: ["mantenimiento", "correctivo"],
+  content: "Acciones para reparar fallas ya presentes en el sistema."
+},
+{
+  id: "limpieza-interna",
+  title: "Limpieza interna",
+  tags: ["limpieza", "hardware"],
+  content: "Remoción de polvo y suciedad del interior del equipo."
+},
+{
+  id: "limpieza-externa",
+  title: "Limpieza externa",
+  tags: ["limpieza"],
+  content: "Aseo de carcasa, monitor, teclado y periféricos."
+},
+{
+  id: "diagnostico-fisico",
+  title: "Diagnóstico físico",
+  tags: ["diagnostico", "hardware"],
+  content: "Revisión visual de cables, conexiones y componentes."
+},
+{
+  id: "pruebas-funcionales",
+  title: "Pruebas funcionales",
+  tags: ["pruebas", "hardware"],
+  content: "Tests para asegurar el funcionamiento de los componentes."
+},
+{
+  id: "smart",
+  title: "SMART",
+  tags: ["smart", "disco"],
+  content: "Sistema que reporta la salud del disco duro o SSD."
+},
+{
+  id: "memtest",
+  title: "MemTest86",
+  tags: ["memtest", "ram"],
+  content: "Herramienta que prueba la memoria RAM en busca de errores."
+},
+{
+  id: "throttling",
+  title: "Thermal throttling",
+  tags: ["temperatura", "cpu"],
+  content: "Reducción automática de rendimiento por exceso de calor."
+},
+{
+  id: "backup",
+  title: "Backup",
+  tags: ["backup", "respaldo"],
+  content: "Copia de seguridad de archivos o configuraciones."
+},
+{
+  id: "restore",
+  title: "Restauración del sistema",
+  tags: ["restauracion", "windows"],
+  content: "Volver el sistema a un estado anterior sin borrar archivos."
+},
+{
+  id: "stress-test",
+  title: "Prueba de estrés",
+  tags: ["stress", "hardware"],
+  content: "Evaluación de componentes bajo carga máxima."
+},
+{
+  id: "helpdesk",
+  title: "Mesa de ayuda (Help Desk)",
+  tags: ["helpdesk", "soporte"],
+  content: "Área que gestiona problemas técnicos de los usuarios."
+},
+{
+  id: "ticket",
+  title: "Ticket de servicio",
+  tags: ["ticket", "soporte"],
+  content: "Registro formal de un problema o solicitud técnica."
+},
+{
+  id: "diagnostico-remoto",
+  title: "Diagnóstico remoto",
+  tags: ["soporte", "remoto"],
+  content: "Revisión a distancia de fallos o configuraciones."
+},
+{
+  id: "acceso-remoto",
+  title: "Acceso remoto",
+  tags: ["remoto", "control"],
+  content: "Control del equipo del usuario desde otra computadora."
+},
+{
+  id: "teamviewer",
+  title: "TeamViewer",
+  tags: ["teamviewer", "remoto"],
+  content: "Software popular para asistencia técnica remota."
+},
+{
+  id: "anydesk",
+  title: "AnyDesk",
+  tags: ["anydesk", "remoto"],
+  content: "Herramienta ligera para controlar equipos a distancia."
+},
+{
+  id: "rdp",
+  title: "Remote Desktop (RDP)",
+  tags: ["rdp", "windows"],
+  content: "Conexión remota integrada en Windows para administración."
+},
+{
+  id: "logs",
+  title: "Logs del sistema",
+  tags: ["logs", "eventos"],
+  content: "Registros de fallos y actividades del sistema."
+},
+{
+  id: "ping",
+  title: "Ping",
+  tags: ["ping", "red"],
+  content: "Prueba de comunicación entre dos dispositivos."
+},
+{
+  id: "latencia",
+  title: "Latencia",
+  tags: ["latencia", "red"],
+  content: "Tiempo que tarda un paquete en llegar a su destino."
+},
+{
+  id: "tracert",
+  title: "Tracert",
+  tags: ["tracert", "ruta"],
+  content: "Herramienta que muestra la ruta que sigue un paquete en la red."
+},
+{
+  id: "sla",
+  title: "Nivel de servicio (SLA)",
+  tags: ["sla", "soporte"],
+  content: "Compromiso de tiempo y calidad para resolver incidentes."
+},
+{
+  id: "funcionalidad",
+  title: "Prueba de funcionalidad",
+  tags: ["prueba", "funcionalidad"],
+  content: "Verificación de que un dispositivo o sistema funciona tras repararse."
+},
+{
+  id: "lan",
+  title: "LAN",
+  tags: ["lan", "red"],
+  content: "Red local que conecta dispositivos dentro de un área pequeña."
+},
+{
+  id: "topologia",
+  title: "Topología de red",
+  tags: ["topologia", "red"],
+  content: "Estructura física o lógica de una red."
+},
+{
+  id: "estrella",
+  title: "Topología estrella",
+  tags: ["estrella", "topologia"],
+  content: "Red donde todos los dispositivos se conectan a un switch central."
+},
+{
+  id: "bus",
+  title: "Topología bus",
+  tags: ["bus", "topologia"],
+  content: "Conexión lineal donde todos los equipos comparten un mismo canal."
+},
+{
+  id: "anillo",
+  title: "Topología anillo",
+  tags: ["anillo", "topologia"],
+  content: "Dispositivos conectados en forma de círculo para redundancia."
+},
+{
+  id: "ip",
+  title: "Dirección IP",
+  tags: ["ip", "red"],
+  content: "Identificador único de un dispositivo dentro de una red."
+},
+{
+  id: "subred",
+  title: "Máscara de red",
+  tags: ["subred", "red"],
+  content: "Define cuántos dispositivos pueden estar en una red."
+},
+{
+  id: "gateway",
+  title: "Puerta de enlace (Gateway)",
+  tags: ["gateway", "red"],
+  content: "Dispositivo que conecta la red local con internet."
+},
+{
+  id: "dns",
+  title: "DNS",
+  tags: ["dns", "red"],
+  content: "Servicio que traduce nombres de dominio en direcciones IP."
+},
+{
+  id: "switch",
+  title: "Switch",
+  tags: ["switch", "red"],
+  content: "Dispositivo que interconecta múltiples equipos dentro de una LAN."
+},
+{
+  id: "router",
+  title: "Router",
+  tags: ["router", "red"],
+  content: "Equipo que gestiona direcciones IP y distribuye conexión a internet."
+},
+{
+  id: "patchcord",
+  title: "Patch cord",
+  tags: ["patch", "cord"],
+  content: "Cable corto de red usado para conectar dispositivos."
+},
+{
+  id: "patchpanel",
+  title: "Patch panel",
+  tags: ["patch", "panel"],
+  content: "Panel usado para organizar cables de red en instalaciones grandes."
+},
+{
+  id: "crimpado",
+  title: "Crimpado",
+  tags: ["crimpar", "rj45"],
+  content: "Proceso de instalar conectores RJ-45 en cables Ethernet."
+},
+{
+  id: "ethernet",
+  title: "Ethernet",
+  tags: ["ethernet", "red"],
+  content: "Tecnología estándar para conexiones de red cableadas."
+},
+{
+  id: "canalizacion",
+  title: "Canalización",
+  tags: ["canalizacion", "red"],
+  content: "Ruta física donde se instala cableado de red."
+},
 {
   id:"gpu-fallas",
   title:"Fallas comunes de GPU",
