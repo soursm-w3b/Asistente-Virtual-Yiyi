@@ -4368,7 +4368,754 @@ Diferencias clave:
 - Compatibilidad con motherboard
   `
 },
+{
+  id:"cpu",
+  title:"¿Qué es el CPU?",
+  tags:["cpu","hardware","procesador"],
+  content:`
+El CPU es el cerebro del equipo.  
+Ejecuta instrucciones, procesa datos y coordina todo el sistema.  
+Su rendimiento depende de núcleos, hilos y frecuencia.`
+},
 
+{
+  id:"gpu",
+  title:"Tarjeta gráfica GPU",
+  tags:["gpu","video","hardware"],
+  content:`
+Procesa gráficos e imágenes.  
+Usada para juegos, edición, IA y cálculos paralelos.  
+Puede ser integrada o dedicada (NVIDIA/AMD).`
+},
+
+{
+  id:"placa-base",
+  title:"Placa madre o tarjeta madre",
+  tags:["motherboard","hardware","pc"],
+  content:`
+Conecta CPU, RAM, almacenamiento y periféricos.  
+Determina compatibilidad del procesador y ranuras.  
+Componentes clave: chipset, zócalo, VRM.`
+},
+
+{
+  id:"ram",
+  title:"Memoria RAM",
+  tags:["ram","hardware","memoria"],
+  content:`
+Memoria temporal para procesos activos.  
+A mayor capacidad y velocidad, mejor rendimiento.  
+Tipos: DDR3, DDR4, DDR5.`
+},
+
+{
+  id:"psu",
+  title:"Fuente de poder PSU",
+  tags:["psu","energia","hardware"],
+  content:`
+Convierte corriente AC en DC para el PC.  
+Debe tener potencia suficiente y certificación 80 Plus.  
+Crucial para evitar fallas eléctricas.`
+},
+
+{
+  id:"bios",
+  title:"¿Qué es la BIOS?",
+  tags:["bios","arranque","firmware"],
+  content:`
+Firmware inicial de las computadoras antiguas.  
+Configura hardware básico y permite arrancar el sistema.  
+Ha sido reemplazada en gran parte por UEFI.`
+},
+
+{
+  id:"formateo",
+  title:"Formateo de disco",
+  tags:["formateo","almacenamiento","windows"],
+  content:`
+Proceso que borra todos los datos y crea un sistema de archivos nuevo.  
+Formatos comunes: NTFS, FAT32, exFAT.`
+},
+
+{
+  id:"sistema-archivos",
+  title:"Sistema de archivos",
+  tags:["filesystem","almacenamiento"],
+  content:`
+Define cómo se organizan los datos en un disco.  
+Ejemplos: NTFS, EXT4, APFS.  
+Cada uno tiene ventajas según el sistema operativo.`
+},
+
+{
+  id:"drivers",
+  title:"Controladores del sistema",
+  tags:["drivers","software","windows"],
+  content:`
+Software que permite al hardware funcionar correctamente.  
+Sin drivers actualizados, puede haber fallos y mal rendimiento.`
+},
+
+{
+  id:"backup",
+  title:"¿Qué es un backup?",
+  tags:["backup","seguridad","datos"],
+  content:`
+Copia de seguridad para prevenir pérdida de datos.  
+Puede ser local, en la nube o en unidades externas.`
+},
+
+{
+  id:"malware",
+  title:"Malware",
+  tags:["malware","seguridad","virus"],
+  content:`
+Software malicioso que afecta el sistema.  
+Tipos: virus, troyanos, ransomware, spyware.  
+Se previene con antivirus y navegación segura.`
+},
+
+{
+  id:"tcp",
+  title:"Protocolo TCP",
+  tags:["tcp","protocolos","redes"],
+  content:`
+Protocolo confiable de comunicación.  
+Verifica que los datos lleguen completos.  
+Usado en web, correo y transferencia segura.`
+},
+
+{
+  id:"udp",
+  title:"Protocolo UDP",
+  tags:["udp","protocolos","redes"],
+  content:`
+Más rápido que TCP pero sin verificación.  
+Usado en juegos, streaming y videollamadas.`
+},
+
+{
+  id:"wan",
+  title:"Red WAN",
+  tags:["wan","redes","internet"],
+  content:`
+Red amplia que conecta ciudades o países.  
+Internet es el ejemplo más grande de WAN.`
+},
+
+{
+  id:"lan",
+  title:"Red LAN",
+  tags:["lan","redes","local"],
+  content:`
+Red local como la de una casa o escuela.  
+Usa switches, routers y cableado Ethernet.`
+},
+
+{
+  id:"ssid",
+  title:"SSID",
+  tags:["wifi","ssid","inalambrico"],
+  content:`
+Es el nombre de una red WiFi.  
+Puede ocultarse para mayor seguridad.`
+},
+
+{
+  id:"dhcp",
+  title:"¿Qué es DHCP?",
+  tags:["dhcp","ip","router"],
+  content:`
+Protocolo que asigna IP automáticamente.  
+Facilita la administración de redes domésticas.`
+},
+
+{
+  id:"proxy",
+  title:"Servidor Proxy",
+  tags:["proxy","seguridad","redes"],
+  content:`
+Intermediario entre tu dispositivo e Internet.  
+Permite filtrar contenido y mejorar privacidad.`
+},
+
+{
+  id:"https",
+  title:"¿Qué es HTTPS?",
+  tags:["https","seguridad","web"],
+  content:`
+Protocolo seguro para páginas web.  
+Cifra datos usando TLS/SSL.  
+Es obligatorio en sitios modernos.`
+},
+{
+  id:"ethernet",
+  title:"Cable Ethernet",
+  tags:["ethernet","redes","cableado"],
+  content:`
+Cable de red usado para conectar computadoras, routers o switches.  
+Estándares comunes: Cat5e, Cat6, Cat6a.  
+Permite mayor estabilidad que WiFi y baja latencia.`
+},
+
+{
+  id:"ipv4",
+  title:"¿Qué es IPv4?",
+  tags:["ipv4","ip","redes"],
+  content:`
+Formato de dirección IP de 32 bits, ej: 192.168.1.1.  
+Es el estándar más usado pero limitado en cantidad de direcciones.`
+},
+
+{
+  id:"ipv6",
+  title:"¿Qué es IPv6?",
+  tags:["ipv6","ip","redes"],
+  content:`
+Nueva versión del protocolo IP con direcciones de 128 bits.  
+Permite millones de millones de direcciones únicas.`
+},
+
+{
+  id:"dns",
+  title:"Sistema DNS",
+  tags:["dns","internet","navegacion"],
+  content:`
+Traduce nombres de dominio como google.com a direcciones IP.  
+Si falla, no se pueden abrir páginas web.`
+},
+
+{
+  id:"firewall",
+  title:"Firewall",
+  tags:["firewall","seguridad","redes"],
+  content:`
+Sistema que filtra tráfico no autorizado.  
+Puede ser en software (Windows Defender) o hardware (routers).`
+},
+
+{
+  id:"ping",
+  title:"Comando PING",
+  tags:["ping","redes","diagnostico"],
+  content:`
+Prueba conectividad con otro dispositivo.  
+Mide latencia y si hay pérdida de paquetes.`
+},
+
+{
+  id:"switch",
+  title:"Switch de red",
+  tags:["switch","lan","redes"],
+  content:`
+Dispositivo que distribuye paquetes dentro de una red LAN.  
+Puede ser administrable o no administrable.`
+},
+
+{
+  id:"router",
+  title:"Router",
+  tags:["router","wifi","lan"],
+  content:`
+Dirige tráfico entre dispositivos y la red externa (Internet).  
+Incluye DHCP, WiFi, firewall y puertos Ethernet.`
+},
+
+{
+  id:"ssd",
+  title:"Unidad SSD",
+  tags:["ssd","almacenamiento","hardware"],
+  content:`
+Almacenamiento rápido basado en chips.  
+Ventajas: velocidad, silencio, durabilidad.  
+Tipos: SATA, M.2 NVMe.`
+},
+
+{
+  id:"hdd",
+  title:"Disco duro HDD",
+  tags:["hdd","almacenamiento","hardware"],
+  content:`
+Almacenamiento mecánico de alto espacio.  
+Más lento que un SSD pero económico.  
+Ideal para archivos pesados.`
+},
+
+{
+  id:"vpn",
+  title:"¿Qué es una VPN?",
+  tags:["vpn","seguridad","internet"],
+  content:`
+Crea un túnel encriptado entre tu dispositivo e Internet.  
+Protege privacidad y permite conexiones remotas seguras.`
+},
+
+{
+  id:"latencia",
+  title:"Latencia",
+  tags:["latencia","internet","medicion"],
+  content:`
+Tiempo que tarda un paquete en viajar de origen a destino.  
+Importante en juegos, videollamadas y servicios en tiempo real.`
+},
+
+{
+  id:"packet-loss",
+  title:"Pérdida de paquetes",
+  tags:["packet loss","internet","diagnostico"],
+  content:`
+Ocurre cuando datos no llegan a destino.  
+Causas: mala conexión, interferencias, saturación de red.`
+},
+
+{
+  id:"smtp",
+  title:"Protocolo SMTP",
+  tags:["smtp","correo","internet"],
+  content:`
+Protocolo usado para enviar correos electrónicos.  
+Trabaja junto con POP3 e IMAP.`
+},
+
+{
+  id:"formatos-video",
+  title:"Formatos de video digitales",
+  tags:["video","mp4","mkv"],
+  content:`
+MP4, MKV y AVI son contenedores para video y audio.  
+MP4 es el estándar por su compatibilidad.`
+},
+
+{
+  id:"bluetooth",
+  title:"Tecnología Bluetooth",
+  tags:["bluetooth","inalambrico","perifericos"],
+  content:`
+Protocolo inalámbrico de corto alcance.  
+Usado en audífonos, teclados, controles y accesorios.`
+},
+
+{
+  id:"hid",
+  title:"Dispositivos HID",
+  tags:["hid","usb","perifericos"],
+  content:`
+Human Interface Device: teclados, mouse, gamepads.  
+Plug and play, funcionan sin drivers especiales.`
+},
+
+{
+  id:"overclock",
+  title:"Overclock",
+  tags:["overclock","cpu","gpu","rendimiento"],
+  content:`
+Aumentar la velocidad del CPU o GPU.  
+Mejora rendimiento pero aumenta calor y consumo.`
+},
+
+{
+  id:"throttling",
+  title:"Thermal Throttling",
+  tags:["throttling","temperatura","cpu","gpu"],
+  content:`
+Reducción automática de rendimiento para bajar temperatura.  
+Ocurre si el sistema se calienta demasiado.`
+},
+{
+  id:"ram-ddr",
+  title:"Tipos de memoria RAM DDR",
+  tags:["ram","ddr","hardware","memoria"],
+  content:`
+Series DDR incluyen DDR2, DDR3, DDR4 y DDR5.  
+Cada generación aumenta velocidad y reduce consumo.  
+Son incompatibles entre sí por ranuras y voltajes.`
+},
+
+{
+  id:"psu-watts",
+  title:"¿Qué potencia debe tener una fuente de poder?",
+  tags:["psu","fuente","energia"],
+  content:`
+Depende del CPU, GPU y periféricos.  
+Lo ideal es sumar consumo total y agregar un 20–30% extra.  
+Se recomienda certificación 80 Plus.`
+},
+
+{
+  id:"ethernet-types",
+  title:"Tipos de cables Ethernet (Cat5e, Cat6, Cat6a)",
+  tags:["ethernet","cables","lan"],
+  content:`
+Cat5e → hasta 1Gbps  
+Cat6 → hasta 10Gbps en distancias cortas  
+Cat6a → 10Gbps estable hasta 100m`
+},
+
+{
+  id:"mac-address",
+  title:"¿Qué es una dirección MAC?",
+  tags:["mac","redes","identificador"],
+  content:`
+Identificador único de 48 bits asignado a tarjetas de red.  
+Nunca cambia y se usa para filtrado o control de acceso.`
+},
+
+{
+  id:"format-fat32",
+  title:"Sistema de archivos FAT32",
+  tags:["fat32","almacenamiento","formatos"],
+  content:`
+Compatible con casi todos los dispositivos.  
+Límite: archivos máximos de 4GB.  
+Ideal para USBs universales.`
+},
+
+{
+  id:"format-ntfs",
+  title:"Sistema de archivos NTFS",
+  tags:["ntfs","windows","discos"],
+  content:`
+Soporta archivos grandes, permisos y seguridad avanzada.  
+Es el estándar en Windows moderno.`
+},
+
+{
+  id:"bios-reset",
+  title:"Resetear BIOS/UEFI",
+  tags:["bios","uefi","reset","hardware"],
+  content:`
+Se puede hacer retirando la pila CMOS o usando "Load Defaults".  
+Útil cuando la PC no arranca correctamente.`
+},
+
+{
+  id:"wifi-standards",
+  title:"Estándares WiFi (b/g/n/ac/ax)",
+  tags:["wifi","wireless","lan"],
+  content:`
+802.11n → hasta 300Mbps  
+802.11ac → hasta 1Gbps  
+802.11ax (WiFi 6) → mejor velocidad y estabilidad.`
+},
+
+{
+  id:"usb-types",
+  title:"Tipos de USB (2.0, 3.0, 3.2, C)",
+  tags:["usb","puertos","estandares"],
+  content:`
+USB 2.0 → 480Mbps  
+USB 3.0 → 5Gbps  
+USB-C → reversible y rápido, usado en móviles y laptops.`
+},
+
+{
+  id:"ip-static",
+  title:"¿Qué es una IP estática?",
+  tags:["ip","redes","configuracion"],
+  content:`
+Dirección IP fija asignada manualmente.  
+Se usa para servidores, impresoras y dispositivos críticos.`
+},
+
+{
+  id:"ip-dynamic",
+  title:"IP dinámica",
+  tags:["ip","dhcp","redes"],
+  content:`
+Dirección asignada automáticamente por el router (DHCP).  
+Ideal para usuarios domésticos.`
+},
+
+{
+  id:"ports",
+  title:"Puertos de red TCP y UDP",
+  tags:["puertos","tcp","udp","redes"],
+  content:`
+TCP → Confiable, orientado a conexión  
+UDP → Rápido, sin verificación  
+Ejemplos: 80 (HTTP), 443 (HTTPS), 53 (DNS)`
+},
+
+{
+  id:"html",
+  title:"¿Qué es HTML?",
+  tags:["html","web","programacion"],
+  content:`
+Lenguaje base de las páginas web.  
+Define estructura, textos, imágenes y se complementa con CSS/JS.`
+},
+
+{
+  id:"css",
+  title:"CSS",
+  tags:["css","diseño","web"],
+  content:`
+Lenguaje que define el estilo visual de sitios web.  
+Colores, tamaños, posiciones, animaciones y tipografías.`
+},
+
+{
+  id:"javascript",
+  title:"JavaScript",
+  tags:["javascript","web","codigo"],
+  content:`
+Lenguaje que añade interactividad a páginas:  
+chatbots, botones, animaciones, validaciones, etc.`
+},
+
+{
+  id:"backup",
+  title:"Respaldos de información",
+  tags:["backup","seguridad","datos"],
+  content:`
+Es una copia de seguridad en disco, nube o USB.  
+Debe actualizarse regularmente para evitar pérdida de datos.`
+},
+
+{
+  id:"drivers",
+  title:"¿Qué son los drivers?",
+  tags:["drivers","controladores","hardware"],
+  content:`
+Programas que permiten que el sistema operativo reconozca el hardware.  
+Ej: WiFi, sonido, gráficos, chipset.`
+},
+
+{
+  id:"linux-distro",
+  title:"Distribuciones Linux",
+  tags:["linux","distro","software"],
+  content:`
+Variantes de Linux como Ubuntu, Fedora, Debian, Mint.  
+Cada una tiene herramientas, escritorios y repositorios distintos.`
+},
+
+{
+  id:"cloud-computing",
+  title:"Computación en la nube",
+  tags:["nube","cloud","internet"],
+  content:`
+Uso de servidores remotos para almacenar, procesar y gestionar datos.  
+Ejemplos: Google Drive, AWS, OneDrive.`
+},
+
+{
+  id:"malware",
+  title:"Tipos de malware",
+  tags:["malware","seguridad","virus"],
+  content:`
+Incluye virus, troyanos, spyware, ransomware, gusanos.  
+Usan ingeniería social o descargas para infectar sistemas.`
+},
+{
+  id:"benchmark",
+  title:"Benchmark",
+  tags:["benchmark","rendimiento","hardware"],
+  content:`
+Prueba que mide rendimiento del CPU, GPU o sistema completo.  
+Ejemplos: Cinebench, 3DMark.`
+},
+{
+  id:"realtek",
+  title:"Controladores Realtek",
+  tags:["drivers","realtek","audio","red"],
+  content:`
+Marca popular de chips de audio y red.  
+Es común instalar manualmente sus controladores en Windows.`
+},
+{
+  id:"fibra-optica",
+  title:"¿Qué es la fibra óptica?",
+  tags:["fibra","internet","redes"],
+  content:`
+La fibra óptica transmite datos mediante pulsos de luz a través de hilos de vidrio.  
+Ofrece alta velocidad, baja latencia y no sufre interferencias.  
+Es la tecnología más rápida y estable para Internet actual.`
+},
+
+{
+  id:"cable-utp",
+  title:"Cable UTP",
+  tags:["utp","ethernet","lan"],
+  content:`
+Cable de pares trenzados usado para redes LAN.  
+Categorias comunes: Cat5e (1Gbps), Cat6 (10Gbps), Cat6a (10Gbps estable).  
+Sirve para conectar PCs, routers, switches y más.`
+},
+
+{
+  id:"direccion-ip",
+  title:"¿Qué es una dirección IP?",
+  tags:["ip","internet","tcpip"],
+  content:`
+Identificador único en una red.  
+Puede ser privada, pública, dinámica o estática.  
+Versión IPv4 (32 bits) e IPv6 (128 bits).`
+},
+
+{
+  id:"dns",
+  title:"Sistema DNS",
+  tags:["dns","internet","dominios"],
+  content:`
+Convierte nombres como google.com en direcciones IP.  
+Si falla, las páginas no cargan.  
+Ejemplos: DNS Google 8.8.8.8, Cloudflare 1.1.1.1.`
+},
+
+{
+  id:"router",
+  title:"Router",
+  tags:["router","wifi","lan"],
+  content:`
+Dispositivo que conecta tu red local con Internet.  
+Asigna IPs, gestiona WiFi, firewall y puertos.  
+Es el centro de una red doméstica.`
+},
+
+{
+  id:"switch",
+  title:"Switch de red",
+  tags:["switch","lan"],
+  content:`
+Conecta varios dispositivos dentro de una LAN.  
+Funciona usando direcciones MAC.  
+Puede ser gestionable o no gestionable.`
+},
+
+{
+  id:"modem",
+  title:"¿Qué es un módem?",
+  tags:["modem","internet","wan"],
+  content:`
+Convierte la señal del proveedor en datos para el router.  
+Puede ser de fibra (ONT), cable coaxial o DSL.  
+Sin módem no hay acceso a Internet.`
+},
+
+{
+  id:"mac",
+  title:"Dirección MAC",
+  tags:["mac","lan","identificador"],
+  content:`
+Identificador físico único de una tarjeta de red.  
+Sirve para control de acceso y administración de red.`
+},
+
+{
+  id:"ping",
+  title:"Comando ping",
+  tags:["ping","diagnostico","redes"],
+  content:`
+Prueba conexión y latencia hacia un servidor.  
+Muestra tiempo de respuesta y pérdida de paquetes.  
+Herramienta clásica de diagnóstico.`
+},
+
+{
+  id:"velocidad-internet",
+  title:"Velocidad de Internet",
+  tags:["internet","mbps","velocidad"],
+  content:`
+Se mide en Mbps o Gbps.  
+Incluye descarga, subida y latencia.  
+Puede verse afectada por tipo de conexión y saturación.`
+},
+
+{
+  id:"firewall",
+  title:"Firewall",
+  tags:["seguridad","firewall"],
+  content:`
+Sistema que permite o bloquea tráfico en una red.  
+Protege de accesos no autorizados y controla puertos.`
+},
+
+{
+  id:"wifi-24",
+  title:"WiFi 2.4 GHz",
+  tags:["wifi","2.4ghz"],
+  content:`
+Mayor alcance pero menor velocidad.  
+Mejor para distancias grandes o paredes.`
+},
+
+{
+  id:"wifi-5",
+  title:"WiFi 5 GHz",
+  tags:["wifi","5ghz"],
+  content:`
+Mayor velocidad y menos interferencias.  
+Ideal para habitaciones cercanas al router.`
+},
+
+{
+  id:"ssd",
+  title:"Unidad SSD",
+  tags:["ssd","almacenamiento"],
+  content:`
+Almacenamiento rápido basado en chips.  
+Acelera arranque y carga de programas.  
+Tipos: SATA y NVMe.`
+},
+
+{
+  id:"hdd",
+  title:"Disco HDD",
+  tags:["hdd","almacenamiento"],
+  content:`
+Almacena datos en discos mecánicos.  
+Mayor capacidad, menor velocidad.  
+Ideal para copias y archivos pesados.`
+},
+
+{
+  id:"nat",
+  title:"NAT",
+  tags:["nat","router","puertos"],
+  content:`
+Traduce IPs privadas a una IP pública.  
+Modos: abierto, moderado, estricto.  
+Afecta juegos y servidores.`
+},
+
+{
+  id:"puertos-red",
+  title:"Puertos de red",
+  tags:["puertos","tcp","udp"],
+  content:`
+Identifican servicios en una red.  
+Ejemplos: 80 HTTP, 443 HTTPS, 53 DNS.  
+Se abren con port forwarding.`
+},
+
+{
+  id:"bluetooth",
+  title:"Tecnología Bluetooth",
+  tags:["bluetooth","inalambrico"],
+  content:`
+Conexión inalámbrica de corto alcance.  
+Usada en audífonos, teclados y accesorios.`
+},
+
+{
+  id:"latencia",
+  title:"¿Qué es la latencia?",
+  tags:["latencia","ping","internet"],
+  content:`
+Tiempo que tarda un dato en viajar.  
+Se mide en ms.  
+Crucial para juegos y videollamadas.`
+},
+
+{
+  id:"ethernet",
+  title:"¿Qué es Ethernet?",
+  tags:["ethernet","lan","cableado"],
+  content:`
+Estándar de conexión por cable para redes LAN.  
+Más estable que WiFi y alcanza mayores velocidades.`
+},
 {
   id:"que-es-rom",
   title:"¿Qué es la ROM?",
